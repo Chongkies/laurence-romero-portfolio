@@ -22,10 +22,16 @@ window.SITE = {
     "University of San Carlos": "images/school_logo.png",
     "Concentrix": "images/organizations/concentrix.png",
     "Remotasks": "images/organizations/remotasks.png",
+    "Semrush Academy": "images/tools/semrush.svg",
   },
 
   // Local logos for named software in skills, tools and project stacks.
   softwareLogos: {
+    "PHP": "images/tools/php.svg",
+    "Codex": "images/tools/chatgpt.svg",
+    "React Native": "images/tools/react.svg",
+    "Expo": "images/tools/expo.svg",
+    "FFmpeg": "images/tools/ffmpeg.svg",
     "Loom": "images/tools/loom.svg",
     "Notion": "images/tools/notion.svg",
     "Discord": "images/tools/discord.svg",
@@ -38,7 +44,7 @@ window.SITE = {
     "Wix SEO tools": "images/tools/wix.svg",
     "Rich Results Test": "images/tools/google.svg",
     "Meta Business Suite": "images/tools/meta.svg",
-    "ChatGPT": "images/tools/openai.svg",
+    "ChatGPT": "images/tools/chatgpt.svg",
     "Google Gemini": "images/tools/googlegemini.svg",
     "Claude": "images/tools/claude.svg",
     "GitHub Copilot": "images/tools/githubcopilot.svg",
@@ -70,7 +76,7 @@ window.SITE = {
     "DaVinci Resolve": "images/tools/davinciresolve.svg",
     "Ahrefs Webmaster Tools": "images/tools/ahrefs-webmaster-tools.png",
     "Screaming Frog": "images/tools/screaming-frog.png",
-    "GrandRanker": "images/tools/grandranker.png",
+    "GrandRanker": "images/tools/grandranker.webp",
     "Canva": "images/tools/canva.svg",
     "Adobe Photoshop": "images/tools/adobephotoshop.svg",
     "Adobe Lightroom": "images/tools/adobelightroom.svg",
@@ -134,6 +140,7 @@ window.SITE = {
     { title: "SEO Specialist", org: "Prolink Property Support (part-time)", dates: "Sept 2026 – Present", tag: "seo" },
     { title: "IT Operations Intern", org: "Concentrix", dates: "Mar 2023 – Jun 2023", tag: "dev" },
     { title: "Freelance Graphic Designer", org: "Small businesses and local events", dates: "Freelance", tag: "multimedia" },
+    { title: "Freelance Video Editor", org: "Freelance", dates: "", tag: "multimedia" },
     { title: "Data Annotation Associate", org: "Remotasks", dates: "2019 – 2020", tag: "dev" },
   ],
 
@@ -149,6 +156,15 @@ window.SITE = {
       blurb: "Technical SEO, content strategy and reporting. See how a new site grew from 8 to 692 weekly Google impressions in five weeks.",
       tags: ["Technical SEO", "Keyword strategy", "Reporting"],
       ctaSubject: "SEO / marketing work",
+
+      certificates: [
+        {
+          title: "Semrush SEO Crash Course with Brian Dean",
+          org: "Semrush Academy",
+          pdf: "docs/semrush-certificate.pdf",
+          source: "https://static.semrush.com/academy/certificates/bc902fe71f/jose-laurence-romero_2.pdf",
+        },
+      ],
 
       caseStudy: {
         title: "Case study: new UK B2B site, from invisible to ranking",
@@ -288,6 +304,10 @@ window.SITE = {
         },
         {
           title: "LGU Treasury Collections System",
+          previewLabel: "View desktop UI",
+          previews: [
+            { src: "images/dev/lgu-dashboard.jpg", alt: "Sample treasurer office encoder dashboard with receipt-entry forms, drafts, receipt search and account management", device: "laptop", label: "Windows laptop — encoder dashboard", browser: { tab: "Treasury Collections", address: "Local network preview" } },
+          ],
           subtitle: "Full-stack app for a municipal Treasurer's Office in the Philippines; in development ahead of a pilot",
           stack: ["Laravel", "React", "TypeScript", "Inertia.js", "Tailwind CSS", "shadcn/ui", "MySQL"],
           bullets: [
@@ -305,6 +325,12 @@ window.SITE = {
         },
         {
           title: "Pickleball Player Platform",
+          previewLabel: "View mobile & laptop UI",
+          previews: [
+            { src: "images/dev/pickleball-laptop.jpg", alt: "Leyte Pickleball Player Directory desktop layout with location filters, rating summary and player cards", device: "laptop", label: "Windows laptop viewport" },
+            { src: "images/dev/pickleball-iphone.jpg", alt: "Leyte Pickleball Player Directory mobile layout with navigation and search filters", device: "iphone", label: "iPhone viewport" },
+            { src: "images/dev/pickleball-iphone-players.jpg", alt: "Mobile directory summary with player counts, average rating and player cards below", device: "iphone", label: "iPhone — directory & players" },
+          ],
           subtitle: "Player profiles, skill ratings and matchmaking",
           stack: ["React.js", "Firebase", "Tailwind CSS"],
           bullets: [
@@ -316,16 +342,32 @@ window.SITE = {
           demo: "",
           image: "",
         },
+        {
+          // TODO: choose the app's final name; add repository, demo and screenshots when available.
+          title: "Pickleball Match Recorder & Auto-Editor",
+          subtitle: "Planned iOS and Android app — development not started; stack listed below is proposed",
+          stack: ["React Native", "Expo", "Python", "FFmpeg", "Audio signal processing"],
+          bullets: [
+            "Planned mobile app to record pickleball matches, remove downtime between points and turn long rallies into shareable highlights.",
+            "Proposed approach: detect paddle hits from audio and group them into rallies, aiming to support different camera angles without relying on players being visible.",
+            "First planned step: validate a Python audio-processing prototype against real match footage before building the mobile app.",
+            "Planned on-device processing would keep footage on the phone. Later ideas include line-call assistance for 60 fps cameras, stats and a free tier with subscriptions; feasibility is not yet validated.",
+          ],
+          github: "",
+          demo: "",
+          image: "",
+        },
       ],
 
       skills: [
-        { group: "Languages", items: ["JavaScript", "Python", "C", "C++"] },
-        { group: "Frontend", items: ["React.js", "HTML5", "CSS3", "Tailwind CSS", "Vite"] },
+        { group: "Languages", items: ["JavaScript", "TypeScript", "PHP", "Python", "C", "C++"] },
+        { group: "Frontend", items: ["React.js", "HTML5", "CSS3", "Tailwind CSS", "shadcn/ui", "Inertia.js", "Vite"] },
         { group: "Backend & APIs", items: ["Laravel", "REST APIs"] },
         { group: "Databases", items: ["MySQL", "Firebase"] },
         { group: "Tools", items: ["Git", "GitHub", "VS Code"] },
-        { group: "AI-assisted development", items: ["GitHub Copilot", "Microsoft Copilot", "Claude Code", "Cursor", "Windsurf", "ChatGPT", "Google Gemini"] },
+        { group: "AI-assisted development", items: ["GitHub Copilot", "Microsoft Copilot", "Claude Code", "Codex", "Cursor", "Windsurf", "ChatGPT", "Google Gemini"] },
         { group: "Technical operations", items: ["IT troubleshooting", "System documentation", "Data quality / validation", "User acceptance testing", "Technical support"] },
+        { group: "Planned project technologies (not yet used)", items: ["React Native", "Expo", "FFmpeg", "Audio signal processing"] },
         { group: "Communication & documentation", items: ["Loom", "Notion", "Discord", "Microsoft Office", "Google Workspace"] },
       ],
 
@@ -421,6 +463,17 @@ window.SITE = {
             "Created travel and outdoor thumbnails that combine destination photography with prominent titles and trip details.",
             "Designed downhill-race number plates with rider names, race numbers and sponsor logos arranged around a clear event identity.",
             "Created destination posters that pair outdoor photography with prominent location names and clear typography.",
+          ],
+        },
+        {
+          title: "Freelance Video Editor",
+          org: "Freelance",
+          dates: "", // TODO: add freelance video editing dates when provided; update the home timeline too.
+          bullets: [
+            "Edited long-form videos with a focus on storytelling, arranging scenes and pacing to give the footage a clear progression.",
+            "Used on-screen subtitles to carry the story and add context rather than dubbed narration.",
+            "Created outdoor video edits covering exploration hikes, climbs, point-of-view footage and time-lapse sequences.",
+            "Edited short-form content, including shoe unboxing and UGC videos, alongside longer edits.",
           ],
         },
       ],

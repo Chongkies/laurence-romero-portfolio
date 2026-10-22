@@ -390,6 +390,19 @@
         </div>
       </section>
 
+      ${r.certificates && r.certificates.length ? `<section class="section">
+        <div class="wrap">
+          <h2 class="section-title reveal">Certificates</h2>
+          ${r.certificates.map((certificate) => `<article class="exp reveal">
+            <div class="exp-head"><div><h3>${esc(certificate.title)}</h3>${organizationName(certificate.org)}</div></div>
+            <div class="btn-row">
+              <a class="btn ghost" href="${esc(asset(certificate.pdf))}" target="_blank" rel="noopener noreferrer">View certificate (PDF)</a>
+              <a class="btn ghost" href="${esc(certificate.source)}" target="_blank" rel="noopener noreferrer">View on Semrush</a>
+            </div>
+          </article>`).join("")}
+        </div>
+      </section>` : ""}
+
       ${contactBlock("seo", r.ctaSubject)}
     `;
   }
@@ -399,10 +412,11 @@
     const r = S.roles.dev;
     const projects = r.projects
       .map(
-        (p) => `
+        (p, projectIndex) => `
       <article class="project reveal">
         ${p.image ? `<img class="project-img" loading="lazy" src="${asset(p.image)}" alt="${esc(p.title)} screenshot">` : ""}
-        <div class="project-body">
+        <div class="project-body${p.previews && p.previews.length ? " has-project-view" : ""}">
+          ${p.previews && p.previews.length ? `<button class="btn ghost project-view" type="button" data-project-preview="${projectIndex}" aria-label="View UI previews: ${esc(p.title)}">${svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}<span>View</span></button>` : ""}
           <p class="meta">${esc(p.subtitle)}</p>
           <h3>${esc(p.title)}</h3>
           ${chips(p.stack, true)}
@@ -458,7 +472,35 @@
       </section>
 
       ${contactBlock("dev", r.ctaSubject)}
+      <dialog class="project-preview-dialog" id="project-preview-dialog" aria-labelledby="project-preview-heading">
+        <div class="project-preview-header"><h2 id="project-preview-heading"></h2><button class="btn ghost" type="button" id="project-preview-close">Close</button></div>
+        <div class="project-preview-devices" id="project-preview-devices"></div>
+      </dialog>
     `;
+    const previewDialog = $("#project-preview-dialog");
+    $$("[data-project-preview]").forEach((button) => button.addEventListener("click", () => {
+      const project = r.projects[Number(button.dataset.projectPreview)];
+      $("#project-preview-heading").textContent = project.title;
+      $("#project-preview-devices").classList.toggle("single-preview", project.previews.length === 1);
+      $("#project-preview-devices").innerHTML = project.previews.map((preview) => `<figure class="project-device-preview">
+        <div class="device-frame device-${preview.device === "iphone" ? "iphone" : "laptop"}">
+          ${preview.browser ? `<div class="preview-browser" aria-hidden="true">
+            <div class="preview-browser-tabs"><span class="preview-browser-tab">${esc(preview.browser.tab)} <span>×</span></span><span class="preview-browser-new">+</span><span class="preview-browser-window">− &nbsp; □ &nbsp; ×</span></div>
+            <div class="preview-browser-toolbar"><span>← &nbsp; → &nbsp; ↻</span><span class="preview-browser-address">${esc(preview.browser.address)}</span><span>⋮</span></div>
+          </div>` : ""}
+          <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(preview.label)}: open full-size screenshot in a new tab"><img src="${esc(asset(preview.src))}" alt="${esc(preview.alt)}" decoding="async"></a>
+        </div><figcaption>${esc(preview.label)} · <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer">Open full size</a></figcaption>
+      </figure>`).join("");
+      previewDialog.showModal();
+      document.body.classList.add("noscroll");
+      $("#project-preview-close").focus();
+    }));
+    $("#project-preview-close").addEventListener("click", () => previewDialog.close());
+    previewDialog.addEventListener("close", () => document.body.classList.remove("noscroll"));
+    previewDialog.addEventListener("click", (event) => {
+      const bounds = previewDialog.getBoundingClientRect();
+      if (event.target === previewDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) previewDialog.close();
+    });
   }
 
   /* ----------------------------------------------------- MULTIMEDIA */
