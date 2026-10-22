@@ -1,0 +1,13 @@
+# Local dependencies, temporary checks and operating-system files.
+node_modules/
+.asset-tools/
+.qa-*.cjs
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Keep credentials out of history.
+.env
+.env.*
+!.env.example
