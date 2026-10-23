@@ -415,8 +415,8 @@
         (p, projectIndex) => `
       <article class="project reveal">
         ${p.image ? `<img class="project-img" loading="lazy" src="${asset(p.image)}" alt="${esc(p.title)} screenshot">` : ""}
-        <div class="project-body${p.previews && p.previews.length ? " has-project-view" : ""}">
-          ${p.previews && p.previews.length ? `<button class="btn ghost project-view" type="button" data-project-preview="${projectIndex}" aria-label="View UI previews: ${esc(p.title)}">${svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}<span>View</span></button>` : ""}
+        <div class="project-body${p.caseStudy || (p.previews && p.previews.length) ? " has-project-view" : ""}">
+          ${p.caseStudy ? `<a class="btn ghost project-view" href="${esc(asset(p.caseStudy.path + (isFile ? "index.html" : "")))}" aria-label="View case study: ${esc(p.title)}">${svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}<span>View</span></a>` : p.previews && p.previews.length ? `<button class="btn ghost project-view" type="button" data-project-preview="${projectIndex}" aria-label="View UI previews: ${esc(p.title)}">${svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}<span>View</span></button>` : ""}
           <p class="meta">${esc(p.subtitle)}</p>
           <h3>${esc(p.title)}</h3>
           ${chips(p.stack, true)}
@@ -690,6 +690,7 @@
   document.body.setAttribute("data-view", view);
   renderNav();
   if (view === "seo") renderSeo();
+  else if (view === "dev" && document.body.dataset.caseStudy === "credit-scoring") window.renderCreditScoringCaseStudy({ S, esc, asset, url, chips });
   else if (view === "dev") renderDev();
   else if (view === "multimedia") renderMultimedia();
   else if (view === "about") renderAbout();

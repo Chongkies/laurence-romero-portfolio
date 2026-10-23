@@ -291,13 +291,299 @@ window.SITE = {
       projects: [
         {
           title: "Credit Scoring Platform",
-          subtitle: "Thesis project with predictive analysis",
+          subtitle: "Undergraduate group thesis · internal validation and research",
           stack: ["React.js", "Laravel", "MySQL", "Tailwind CSS"],
           bullets: [
-            "Full-stack credit scoring platform for a rural bank with role-based authentication, automated credit evaluation, predictive analysis, dashboards and PDF report generation.",
-            "Began as my Computer Engineering thesis, then was tested extensively with the bank and brought to a production-ready state.",
-            "Refined features with stakeholder feedback during user acceptance testing (UAT).",
+            "Wrote most of the later implementation for a dynamic credit scoring platform: lenders configure models and predictive-analysis tiers without code changes, alongside audit logs and PDF reports.",
+            "Completed with a three-person thesis team and refined through three UAT rounds and panel feedback.",
+            "Accepted by the partner bank for internal validation and research; not a live production deployment.",
           ],
+          caseStudy: {
+            "path": "developer/credit-scoring/",
+            "title": "Development of a Framework for a Credit Scoring Platform",
+            "subtitle": "Credit Scoring System with Predictive Analysis",
+            "summary": "A dynamic, model-driven credit scoring platform with configurable predictive analysis. Lenders choose scoring models and assign criterion tiers without changing application code.",
+            "type": "Undergraduate group thesis · Computer Engineering · University of San Carlos, Cebu City",
+            "partner": "Rural Bank of Hindang (Leyte), Inc.",
+            "status": "Accepted for internal validation and research. Not a live production deployment.",
+            "confidentiality": "Details generalised to respect confidentiality with the partner institution.",
+            "stack": [
+              "React.js",
+              "Vite",
+              "React Router",
+              "Axios",
+              "Tailwind CSS",
+              "Flowbite React",
+              "Recharts",
+              "Laravel",
+              "REST APIs",
+              "MySQL",
+              "WampServer",
+              "VS Code",
+              "Git"
+            ],
+            "stats": [
+              {
+                "value": "15",
+                "label": "anonymized borrower profiles"
+              },
+              {
+                "value": "3",
+                "label": "bank staff in UAT"
+              },
+              {
+                "value": "4.67–5.00",
+                "label": "UAT means · 5-point scale · Very satisfied"
+              },
+              {
+                "value": "3",
+                "label": "UAT rounds plus panel feedback"
+              }
+            ],
+            "problem": "The bank assessed loan applicants on paper forms and in Excel. Each application took 45 minutes to 1 hour; results were inconsistent and records were difficult to manage. Four Cebu microfinance firms—Asialink, RAFI, Guilmark and Exquisite Lending—reported slow computation and difficulty storing and retrieving records. All four said they would consider a better system.",
+            "solution": "Lenders define their own credit and risk scoring models without code changes. The platform scores borrowers, calculates configurable predictive indicators and preserves records of changes. It supports assessment and review; its indicators are rule-based, not machine learning.",
+            "stages": [
+              {
+                "title": "1. Initial screening",
+                "text": "Weighted eligibility criteria cover applicant circumstances, loan context and collateral. A total of 12 points or more passes screening. Proprietary scoring forms and option-level point values are omitted."
+              },
+              {
+                "title": "2. Credit risk rating",
+                "text": "Capacity to pay, character and management, condition, and collateral feed a 100-point rating. The result maps to five credit-risk levels, from Very Low to Very High.",
+                "formula": "RiskScore = Σ(Wᵢ × Xᵢ)",
+                "note": "Wᵢ is a criterion weight; Xᵢ is its assigned score."
+              },
+              {
+                "title": "3. Dynamic predictive analysis",
+                "text": "Repayment Likelihood and Default Probability are calculated from the selected credit/risk model pair and its assigned criterion tiers. Different model configurations can produce different indicators; an application-specific tier override takes priority. The module is configurable and rule-based, not a trained ML model."
+              }
+            ],
+            "formulas": [
+              {
+                "title": "Repayment Likelihood",
+                "expression": "L = (Σ sᵢ·wᵢ) / (Σ max_sᵢ·wᵢ) × 100",
+                "tiers": "Primary 0.50 · Secondary 0.35 · Low 0.15 · None excluded",
+                "meaning": "sᵢ is the criterion score, max_sᵢ its maximum and wᵢ its tier weight."
+              },
+              {
+                "title": "Default Probability",
+                "expression": "P_d = (Σ (max_sⱼ − sⱼ)·rwⱼ) / S_rmax × 100",
+                "tiers": "Critical 0.60 · Contingency 0.30 · Behavioral 0.10 · None excluded",
+                "meaning": "The weighted gap to each maximum is normalised by S_rmax, the maximum weighted risk-gap total."
+              }
+            ],
+            "tierNote": "Tiers are configured per credit/risk model pair. A per-application override takes priority over that configuration.",
+            "features": [
+              {
+                "title": "Dynamic configuration, explainable output",
+                "text": "Administrators assign predictive tiers to criteria for each credit/risk model pair, with None excluding a criterion. Per-application overrides allow a different tier configuration for an individual assessment. Gauges, badges, recommendations and breakdown tables present the resulting calculations.",
+                "image": "images/dev/credit-scoring/predictive-gauges.webp",
+                "alt": "Predictive Analysis interface with repayment and default gauges, interpretation badges, PDF export and a recommendation banner",
+                "width": 1217,
+                "height": 612,
+                "caption": "Application UI example. The displayed values and application count are not presented as validation results; the 15-profile validation results are reported separately below."
+              },
+              {
+                "title": "Breakdowns that expose the calculation",
+                "text": "Tables connect each score to its tier, weight and weighted contribution. The illustration below uses symbolic placeholders; the bank's actual scoring tables and criterion point values are not reproduced.",
+                "illustration": "breakdown"
+              },
+              {
+                "title": "Models that change without code",
+                "text": "Create, edit, duplicate, archive, restore and soft-delete credit and risk models. The interface separates model management from application scoring.",
+                "image": "images/dev/credit-scoring/model-manager.webp",
+                "alt": "Model manager with Credit Score and Risk Score tabs, search, Create Model and row action menus; bank branding replaced with a neutral label",
+                "width": 1916,
+                "height": 904,
+                "caption": "Full-frame application UI. Bank branding has been replaced with a neutral label."
+              },
+              {
+                "title": "Records that retain their history",
+                "text": "Loan edits archive the old record and create a new one. Archive and Recycle Bin workflows support retrieval; activity logs record the user, action, module, old/new values and IP."
+              },
+              {
+                "title": "Access, reporting and daily use",
+                "text": "Role-based, branch-scoped access, dashboard pie charts, PDF report export and dark mode support staff workflows."
+              }
+            ],
+            "architecture": [
+              {
+                "title": "React SPA",
+                "detail": "Vite · React Router · Axios · Tailwind CSS · Flowbite React · Recharts",
+                "responsibility": "Forms, navigation, visualisations and report interaction."
+              },
+              {
+                "title": "Laravel REST API",
+                "detail": "Authentication · validation · computation · logging",
+                "responsibility": "Scoring, predictive calculations and application rules."
+              },
+              {
+                "title": "MySQL",
+                "detail": "Soft deletes · archiving",
+                "responsibility": "Users, borrowers, loan applications, credit score models, risk score models, model combination tiers and activity logs."
+              }
+            ],
+            "development": "Developed on WampServer using VS Code and Git. The frontend, API and database form a decoupled three-tier design.",
+            "results": [
+              "Validation data: 15 anonymized borrower profiles from the bank.",
+              "Risk distribution: 40% Very Low (6), 26.7% Low (4), 33.3% Moderate (5), 0% High or Very High.",
+              "Mean Repayment Likelihood: 93.6% (Very Low risk group) vs 73.4% (Moderate group). Default Probability in the Moderate group ran from 25% to 39%.",
+              "User acceptance testing: 3 bank staff (president, loans clerk, audit staff), 5-point Likert scale. Means ranged 4.67 to 5.00 across efficiency, ease of use, security, features, predictive analysis and overall potential.",
+              "Three UAT rounds plus panel feedback led to the edit/archive features, a corrected default-probability formula, and dynamic tier assignment."
+            ],
+            "distribution": [
+              {
+                "label": "Very Low",
+                "percent": 40,
+                "display": "40%",
+                "count": 6
+              },
+              {
+                "label": "Low",
+                "percent": 26.7,
+                "display": "26.7%",
+                "count": 4
+              },
+              {
+                "label": "Moderate",
+                "percent": 33.3,
+                "display": "33.3%",
+                "count": 5
+              },
+              {
+                "label": "High",
+                "percent": 0,
+                "display": "0%",
+                "count": 0
+              },
+              {
+                "label": "Very High",
+                "percent": 0,
+                "display": "0%",
+                "count": 0
+              }
+            ],
+            "limitations": [
+              "Rule-based and dependent on administrator-configured weights. No trained ML model or long-term repayment dataset was used.",
+              "Tested on 15 profiles in a rural-bank context; results may not generalise.",
+              "Data sharing between administrators was prepared but not validated and is not presented as a finished feature.",
+              "The bank accepted the deliverables for internal validation and research, not live production deployment or adoption."
+            ],
+            "nextSteps": "Recommended next steps: cloud deployment, ML validation on larger datasets, a borrower portal, 2FA and stronger security, and multi-bank support.",
+            "logos": {
+              "React Router": {
+                "src": "images/dev/credit-scoring/icons/reactrouter.svg"
+              },
+              "Axios": {
+                "src": "images/dev/credit-scoring/icons/axios.svg"
+              },
+              "Flowbite React": {
+                "src": "images/dev/credit-scoring/icons/flowbite.png",
+                "originalColor": true
+              },
+              "Recharts": {
+                "src": "images/dev/credit-scoring/icons/recharts.svg"
+              },
+              "WampServer": {
+                "src": "images/dev/credit-scoring/icons/wampserver.png",
+                "originalColor": true
+              }
+            },
+            "gallery": [
+              {
+                "src": "images/dev/credit-scoring/login-form.webp",
+                "title": "Login form",
+                "alt": "Email and password fields with sign-in and password-reset links; bank logo replaced with a neutral label",
+                "width": 1916,
+                "height": 905
+              },
+              {
+                "src": "images/dev/credit-scoring/password-reset.webp",
+                "title": "Password reset",
+                "alt": "Empty email field and Send Reset Link button",
+                "width": 1909,
+                "height": 901
+              },
+              {
+                "src": "images/dev/credit-scoring/dashboard.webp",
+                "title": "Dashboard",
+                "alt": "Dashboard tiles for users, credit data, predictive analysis, models, evaluation, loans and activity logs",
+                "width": 1890,
+                "height": 821
+              },
+              {
+                "src": "images/dev/credit-scoring/services.webp",
+                "title": "Products and services",
+                "alt": "Three-column interface for loans, deposits and services; bank branding replaced with a neutral label",
+                "width": 1916,
+                "height": 905
+              },
+              {
+                "src": "images/dev/credit-scoring/credit-data.webp",
+                "title": "Credit score data",
+                "alt": "Risk-distribution pie chart, report controls and records with numbered borrower placeholders",
+                "width": 1904,
+                "height": 910
+              },
+              {
+                "src": "images/dev/credit-scoring/credit-analysis.webp",
+                "title": "Credit score analysis",
+                "alt": "Analysis view with a risk-distribution pie chart and collapsed criterion groups",
+                "width": 1895,
+                "height": 867
+              },
+              {
+                "src": "images/dev/credit-scoring/predictive-gauges.webp",
+                "title": "Predictive analysis",
+                "alt": "Repayment and default gauges with interpretation badges and a recommendation banner",
+                "width": 1217,
+                "height": 612
+              },
+              {
+                "src": "images/dev/credit-scoring/model-manager.webp",
+                "title": "Model manager",
+                "alt": "Credit and risk model tabs, search, Create Model and action menus",
+                "width": 1916,
+                "height": 904
+              },
+              {
+                "src": "images/dev/credit-scoring/credit-evaluation.webp",
+                "title": "Credit evaluation",
+                "alt": "Empty applicant and amount fields followed by model selection cards",
+                "width": 1914,
+                "height": 903
+              },
+              {
+                "src": "images/dev/credit-scoring/risk-model-selection.webp",
+                "title": "Risk model selection",
+                "alt": "Risk model cards and Start Processing control",
+                "width": 1911,
+                "height": 588
+              },
+              {
+                "src": "images/dev/credit-scoring/loan-records.webp",
+                "title": "Loan records",
+                "alt": "Loan listing with numbered borrower placeholders, risk ratings, search and export controls",
+                "width": 1556,
+                "height": 783
+              },
+              {
+                "src": "images/dev/credit-scoring/recycle-bin.webp",
+                "title": "Recycle Bin",
+                "alt": "Archived application with a numbered borrower placeholder and restore and delete actions",
+                "width": 1233,
+                "height": 723
+              },
+              {
+                "src": "images/dev/credit-scoring/audit-log.webp",
+                "title": "Activity log",
+                "alt": "Activity log showing generic Admin account actions; bank branding replaced with a neutral label",
+                "width": 1892,
+                "height": 865
+              }
+            ],
+            "galleryNote": "Browse full-frame screenshots with the arrows, keyboard or a horizontal swipe. Each image keeps its original dimensions and proportions; click to open full size. Bank branding is replaced with a neutral label. Screens containing personal data or proprietary scoring values are excluded. Interface values are not additional validation results."
+          },
           github: "", // e.g. "https://github.com/Chongkies/credit-scoring"
           demo: "",
           image: "", // e.g. "images/dev/credit-scoring.png"

@@ -12,7 +12,7 @@ The home page asks "What are you hiring for?" and opens a portfolio matched to t
 | Path | What you'll find |
 | --- | --- |
 | **SEO & Marketing** | A case study on a new UK B2B site (Prolink Property Support): weekly Google impressions grew from 8 to 692 and indexed pages from 10 to 51 after fixing a site-wide noindex block. Includes before/after tables, rankings, tools and honest limits. |
-| **Software Developer** | Credit Scoring Platform (thesis project with predictive analysis, built with React, Laravel and MySQL, tested at a bank and production-ready), an internal encoding system for an LGU treasurer's office, and a pickleball player platform. |
+| **Software Developer** | Credit Scoring Platform (thesis project with predictive analysis, built with React, Laravel and MySQL, tested for internal validation and research, not deployed in production), an internal encoding system for an LGU treasurer's office, and a pickleball player platform. |
 | **Multimedia** | Posters, logos, thumbnails, photography and other design work in a filterable gallery with a full-screen viewer. |
 
 ## Skills at a glance
