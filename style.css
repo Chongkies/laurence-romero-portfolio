@@ -57,8 +57,8 @@ body[data-view="seo"] { --accent: var(--seo); --accent-soft: color-mix(in srgb, 
 body[data-view="dev"] { --accent: var(--dev); --accent-soft: color-mix(in srgb, var(--dev) 12%, transparent); }
 body[data-view="multimedia"] { --accent: var(--multimedia); --accent-soft: color-mix(in srgb, var(--multimedia) 12%, transparent); }
 
-@view-transition { navigation: auto; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.28s; }
+
+
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 84px; -webkit-text-size-adjust: 100%; }
@@ -118,13 +118,15 @@ ul { padding: 0; list-style: none; }
 .chips li { padding: 4px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 500; }
 
 /* ---------- reveal animation ---------- */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.reveal { opacity: 1; transform: none; }
+.js-motion .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
+.js-motion .reveal { transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
 
 /* ---------- hero ---------- */
 .hero { position: relative; overflow: hidden; padding: clamp(72px, 12vw, 140px) 0 clamp(56px, 8vw, 96px); }
-.hero::before { content: ""; position: absolute; inset: -20% -10% auto auto; width: 620px; height: 620px; background: radial-gradient(closest-side, var(--accent-soft), transparent); filter: blur(10px); animation: drift 16s ease-in-out infinite alternate; pointer-events: none; }
-@keyframes drift { to { transform: translate(-60px, 40px) scale(1.1); } }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto auto; width: 620px; height: 620px; background: radial-gradient(closest-side, var(--accent-soft), transparent); filter: blur(10px); transform: translateX(var(--circle-x, 0px)); pointer-events: none; }
+
 .hero-in { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 350px); gap: clamp(24px, 5vw, 64px); align-items: center; }
 .hero-portrait { width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 50%; border: 1px solid var(--line); box-shadow: var(--shadow); }
 .hero-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 70%; transform: scale(1.6); transform-origin: center 70%; }
@@ -512,3 +514,59 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); 
 .search-chart.chart-playing .search-chart-curtain { animation: search-chart-draw 1.8s cubic-bezier(.25,.1,.25,1) forwards; }
 @keyframes search-chart-draw { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 @media (prefers-reduced-motion: reduce) { .search-chart.motion-ready .search-chart-curtain { display: none; animation: none; } }
+
+/* Calm, progressive motion. These classes are enabled only by JavaScript. */
+.js-motion .reveal.reveal-left:not(.in) { transform: translate(-28px, 12px); }
+.js-motion .reveal.reveal-right:not(.in) { transform: translate(28px, 12px); }
+.section { overflow-x: clip; }
+.hero::before, .page-head::before { animation: none; transform: translateX(var(--circle-x, 0px)); }
+.title-line::after { content: ''; display: block; width: 48px; height: 2px; margin-top: 10px; background: var(--accent); transform-origin: left; }
+.js-motion .reveal:not(.in).title-line::after, .js-motion .reveal:not(.in) .title-line::after { transform: scaleX(0); }
+.js-motion .title-line::after { transition: transform 600ms var(--ease); }
+.timeline-toggle { margin-top: 9px; padding: 4px 12px; color: var(--accent); background: transparent; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; font: inherit; font-size: 13px; }
+.timeline-details { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 450ms var(--ease), opacity 450ms var(--ease); }
+.timeline-details > div { overflow: hidden; }
+.timeline-details.is-open { grid-template-rows: 1fr; opacity: 1; }
+.timeline-details .bullets { padding-top: 12px; }
+.timeline-details .bullets li { font-size: 14px; }
+.portrait-pending { opacity: 0; }
+.cube-stage { position: fixed; inset: 64px 0 0; z-index: 40; overflow: clip; perspective: 1800px; background: var(--bg); pointer-events: none; }
+.cube-face { position: absolute; inset: 0; background: var(--bg); overflow: hidden; backface-visibility: hidden; transform-style: preserve-3d; }
+.cube-face #main { min-height: 100%; }
+.cube-stage .reveal { transition-delay: 0s !important; }
+.site-intro { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background-color: #070b14; background-image: linear-gradient(#60a5fa0a 1px, transparent 1px), linear-gradient(90deg,#60a5fa0a 1px,transparent 1px); background-size: 36px 36px; animation: intro-aperture 1800ms ease-in-out forwards; }
+.intro-art { width: min(600px, 95vw); height: auto; }
+.intro-traces path { stroke-dasharray: 420; stroke-dashoffset: 420; animation: intro-trace 600ms ease-out forwards; }
+.intro-node { stroke: #60a5fa; stroke-width: 1.8; fill: #070b14; transform-box: view-box; opacity: 0; }
+.intro-node-seo { animation: intro-seo 1200ms var(--ease) forwards; }
+.intro-node-dev { animation: intro-dev 1200ms var(--ease) forwards; }
+.intro-node-camera { animation: intro-camera 1200ms var(--ease) forwards; }
+.intro-monogram { opacity: 0; transform-origin: 300px 180px; animation: intro-logo 1200ms var(--ease) forwards; }
+.intro-skip { position: fixed; z-index: 201; right: 24px; top: 24px; border: 1px solid #60a5fa; border-radius: 999px; padding: 8px 20px; color: #fff; background: #070b14; font: inherit; cursor: pointer; }
+@keyframes intro-trace { to { stroke-dashoffset: 0; } }
+@keyframes intro-seo { 20% { opacity: 0; } 50% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translate(170px,80px) scale(.98); } }
+@keyframes intro-dev { 20% { opacity: 0; } 50% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translate(-170px,80px) scale(.98); } }
+@keyframes intro-camera { 20% { opacity: 0; } 50% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-100px) scale(.98); } }
+@keyframes intro-logo { 50% { opacity: 0; transform: scale(.85); } 100% { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .js-motion .reveal:not(.in), .js-motion .reveal.reveal-left:not(.in), .js-motion .reveal.reveal-right:not(.in) { opacity: 1; transform: none; }
+  .title-line::after { transform: none !important; }
+  .hero::before, .page-head::before { transform: none; }
+  .site-intro, .intro-skip { display: none; }
+  .portrait-pending { opacity: 1; }
+}
+
+@keyframes intro-aperture { 0%, 66.67% { clip-path: polygon(evenodd, 0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,50.00% 50.00%,0% 0%); } 100% { clip-path: polygon(evenodd, 0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,200.00% 50.00%,198.15% 73.47%,192.66% 96.35%,183.65% 118.10%,171.35% 138.17%,156.07% 156.07%,138.17% 171.35%,118.10% 183.65%,96.35% 192.66%,73.47% 198.15%,50.00% 200.00%,26.53% 198.15%,3.65% 192.66%,-18.10% 183.65%,-38.17% 171.35%,-56.07% 156.07%,-71.35% 138.17%,-83.65% 118.10%,-92.66% 96.35%,-98.15% 73.47%,-100.00% 50.00%,-98.15% 26.53%,-92.66% 3.65%,-83.65% -18.10%,-71.35% -38.17%,-56.07% -56.07%,-38.17% -71.35%,-18.10% -83.65%,3.65% -92.66%,26.53% -98.15%,50.00% -100.00%,73.47% -98.15%,96.35% -92.66%,118.10% -83.65%,138.17% -71.35%,156.07% -56.07%,171.35% -38.17%,183.65% -18.10%,192.66% 3.65%,198.15% 26.53%,200.00% 50.00%,0% 0%); } }
+
+/* Static page fallbacks remain usable when JavaScript is unavailable. */
+html:not(.js-motion) .timeline-toggle, html:not(.js-motion) .theme, html:not(.js-motion) .burger { display: none; }
+html:not(.js-motion) .timeline-details { grid-template-rows: 1fr; opacity: 1; }
+html:not(.js-motion) .bar { height: calc(var(--n) * 1.7px); }
+@media (max-width: 1060px) {
+  html:not(.js-motion) .nav-in { height: auto; min-height: 64px; display: flex; flex-wrap: wrap; padding-block: 12px; }
+  html:not(.js-motion) .links { position: static; display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; padding: 0; opacity: 1; visibility: visible; transform: none; border: 0; }
+  html:not(.js-motion) .nav-pages { flex-direction: row; flex-wrap: wrap; }
+}
+
+.cube-rotor { position: absolute; inset: 0; transform-style: preserve-3d; }
+.cube-stage { perspective: 2400px; }

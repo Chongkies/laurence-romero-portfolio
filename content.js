@@ -143,11 +143,11 @@ window.SITE = {
 
   // One master timeline: every job appears once, tagged by area. Newest first.
   timeline: [
-    { title: "SEO Specialist", org: "Prolink Property Support", dates: "Sept 2026 – Present", tag: "seo" },
-    { title: "IT Operations Intern", org: "Concentrix", dates: "Mar 2023 – Jun 2023", tag: "dev" },
-    { title: "Freelance Graphic Designer", org: "Small businesses and local events", dates: "Freelance", tag: "multimedia" },
-    { title: "Freelance Video Editor", org: "Freelance", dates: "Freelance", tag: "multimedia" },
-    { title: "Data Annotation Associate", org: "Remotasks", dates: "2019 – 2020", tag: "dev" },
+    { id: "seo-prolink", title: "SEO Specialist", org: "Prolink Property Support", dates: "Sept 2026 – Present", tag: "seo" },
+    { id: "it-concentrix", title: "IT Operations Intern", org: "Concentrix", dates: "Mar 2023 – Jun 2023", tag: "dev" },
+    { id: "design-freelance", title: "Freelance Graphic Designer", org: "Small businesses and local events", dates: "Freelance", tag: "multimedia" },
+    { id: "video-freelance", title: "Freelance Video Editor", org: "Freelance", dates: "Freelance", tag: "multimedia" },
+    { id: "annotation-remotasks", title: "Data Annotation Associate", org: "Remotasks", dates: "2019 – 2020", tag: "dev" },
   ],
 
   workFacts: [

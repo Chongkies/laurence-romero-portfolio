@@ -3,8 +3,8 @@
   "use strict";
 
   const S = window.SITE;
-  const view = document.body.getAttribute("data-view") || "home";
-  const root = document.body.getAttribute("data-root") || ".";
+  let view = document.body.getAttribute("data-view") || "home";
+  const root = new URL((document.body.getAttribute("data-root") || ".") + "/", location.href).href.replace(/\/$/, "");
   const isFile = location.protocol === "file:";
   const PATHS = { home: "", seo: "seo/", dev: "developer/", multimedia: "multimedia/", about: "about/" };
   const ROLE_IDS = ["seo", "dev", "multimedia"];
@@ -40,11 +40,10 @@
         <nav class="links" id="navlinks">
           <div class="nav-pages">
           ${ROLE_IDS.map((id) => `<a href="${url(id)}" class="${view === id ? "active" : ""}">${esc(S.roles[id].nav)}</a>`).join("")}
-          <a href="${url("about")}" class="${view === "about" ? "active" : ""}"${view === "about" ? ' aria-current="page"' : ""}>${esc(S.personalAbout.nav)}</a>
           </div>
           <div class="nav-actions">
           <button class="theme" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">${svg('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>')}</button>
-          <a class="nav-contact" href="${url("home", "#contact")}">Contact</a>
+          <a class="nav-contact" href="#contact">Contact</a>
           </div>
         </nav>
       </div>`;
@@ -145,19 +144,17 @@
         </a>`;
     }).join("");
 
-    const timeline = S.timeline
-      .map(
-        (t) => `
-        <li class="tl-item reveal">
-          <span class="tl-dot" data-role="${t.tag}"></span>
-          <div>
-            <h4>${esc(t.title)}</h4>
-            ${organizationName(t.org)}
-          </div>
-          <span class="tl-date">${esc(t.dates)}</span>
-        </li>`
-      )
-      .join("");
+    const timeline = S.timeline.map((t) => {
+      const job = (S.roles[t.tag]?.experience || []).find((e) => e.title === t.title && e.org === t.org);
+      const bullets = job?.bullets || [];
+      return `<li class="tl-item reveal" id="${esc(t.id)}">
+        <span class="tl-dot" data-role="${t.tag}"></span>
+        <div><h4>${esc(t.title)}</h4>${organizationName(t.org)}
+          ${bullets.length ? `<button class="timeline-toggle" type="button" aria-expanded="false" aria-controls="${esc(t.id)}-details">View<span class="sr-only"> ${esc(t.title)}</span></button>
+          <div class="timeline-details" id="${esc(t.id)}-details" inert><div><ul class="bullets">${bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></div>` : ''}
+        </div><span class="tl-date">${esc(t.dates)}</span>
+      </li>`;
+    }).join('');
 
     $("#main").innerHTML = `
       <section class="hero">
@@ -172,7 +169,7 @@
             <a class="btn ghost" href="#contact">Get in touch</a>
           </div>
           </div>
-          ${S.hero.image ? `<div class="hero-portrait reveal"><img src="${esc(asset(S.hero.image.src))}" alt="${esc(S.hero.image.alt)}" width="1000" height="1333" fetchpriority="high" decoding="async"></div>` : ""}
+          ${S.hero.image ? `<div class="hero-portrait"><img src="${esc(asset(S.hero.image.src))}" alt="${esc(S.hero.image.alt)}" width="1000" height="1333" fetchpriority="high" decoding="async"></div>` : ""}
         </div>
       </section>
 
@@ -721,6 +718,7 @@
         }),
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
     );
+    motionCleanups.push(() => io.disconnect());
     els.forEach((el, i) => {
       el.style.transitionDelay = Math.min((i % 4) * 60, 180) + "ms";
       io.observe(el);
@@ -741,27 +739,237 @@
         }).catch(() => chart.classList.remove('motion-ready'));
       });
     }, { threshold: 0.25 });
+    motionCleanups.push(() => observer.disconnect());
     charts.forEach((chart) => {
       chart.classList.add('motion-ready');
       observer.observe(chart);
     });
   }
 
-  /* ----------------------------------------------------------- boot */
-  document.body.setAttribute("data-view", view);
-  renderNav();
-  if (view === "seo") renderSeo();
-  else if (view === "dev" && document.body.dataset.caseStudy === "credit-scoring") window.renderCreditScoringCaseStudy({ S, esc, asset, url, chips });
-  else if (view === "dev") renderDev();
-  else if (view === "multimedia") renderMultimedia();
-  else if (view === "about") renderAbout();
-  else renderHome();
-  if (!$("#contact")) $("#main").insertAdjacentHTML("beforeend", contactBlock(view === "about" ? "home" : view, S.roles[view] ? S.roles[view].ctaSubject : "Work inquiry"));
-  renderFooter();
-  wireCopy();
-  wireLightbox();
-  reveal();
-  if (view === "seo") animateSearchCharts();
+  /* Motion enhances rendered HTML; the underlying documents remain real pages. */
+  const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  let motionCleanups = [];
+  function clearPageMotion() {
+    motionCleanups.forEach((cleanup) => cleanup());
+    motionCleanups = [];
+  }
+  function wireTimeline() {
+    $$('.timeline-toggle').forEach((button) => button.addEventListener('click', () => {
+      const open = button.getAttribute('aria-expanded') !== 'true';
+      button.setAttribute('aria-expanded', String(open));
+      const panel = document.getElementById(button.getAttribute('aria-controls'));
+      panel.inert = !open;
+      panel.classList.toggle('is-open', open);
+      button.firstChild.textContent = open ? 'Hide' : 'View';
+    }));
+  }
+  function enhanceScroll() {
+    const alternating = $$('.skill.reveal, .did.reveal, .project.reveal, .tl-item.reveal, .exp.reveal, .role-card.reveal');
+    alternating.forEach((el, i) => el.classList.add(i % 2 ? 'reveal-right' : 'reveal-left'));
+    $$('.section-title').forEach((title) => title.classList.add('title-line'));
+    if (motionQuery.matches || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const el = entry.target;
+      const final = el.textContent;
+      // Animate only the visible final number; preserve arrows, decimals and suffixes.
+      const match = final.match(/^(.*?)(\d[\d,]*(?:\.\d+)?)([^\d]*)$/);
+      if (!match) return;
+      const target = Number(match[2].replaceAll(',', ''));
+      const decimals = (match[2].split('.')[1] || '').length;
+      const accessible = document.createElement('span');
+      accessible.className = 'sr-only'; accessible.textContent = final;
+      const visual = document.createElement('span'); visual.setAttribute('aria-hidden', 'true');
+      el.replaceChildren(accessible, visual);
+      const start = performance.now(); let frame;
+      const tick = (now) => {
+        const progress = Math.min(1, (now - start) / 650);
+        const number = target * (1 - Math.pow(1 - progress, 3));
+        visual.textContent = match[1] + number.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + match[3];
+        if (progress < 1) frame = requestAnimationFrame(tick);
+        else el.textContent = final;
+      };
+      frame = requestAnimationFrame(tick);
+      motionCleanups.push(() => { cancelAnimationFrame(frame); el.textContent = final; });
+    }), { threshold: 0.5 });
+    $$('.stats .stat strong').forEach((el) => observer.observe(el));
+    motionCleanups.push(() => observer.disconnect());
+    const heads = $$('.hero, .page-head'); let frame;
+    const move = () => {
+      frame = null;
+      heads.forEach((head) => {
+        const y = head.getBoundingClientRect().top;
+        head.style.setProperty('--circle-x', Math.max(-12, Math.min(12, -y * 0.025)) + 'px');
+      });
+    };
+    const scroll = () => { if (!frame) frame = requestAnimationFrame(move); };
+    window.addEventListener('scroll', scroll, { passive: true }); move();
+    motionCleanups.push(() => { window.removeEventListener('scroll', scroll); cancelAnimationFrame(frame); });
+  }
+  function animatePortrait() {
+    const photo = $('.hero-portrait');
+    if (!photo || motionQuery.matches) return;
+    photo.classList.remove('portrait-pending');
+    photo.animate([{ opacity: 0, transform: 'translateX(32px)' }, { opacity: 1, transform: 'none' }], { duration: 850, easing: 'cubic-bezier(.22,.61,.36,1)' });
+  }
+  function homeIntro() {
+    if (view !== 'home' || motionQuery.matches) { animatePortrait(); return; }
+    try {
+      if (sessionStorage.getItem('lr-intro-seen')) { animatePortrait(); return; }
+      sessionStorage.setItem('lr-intro-seen', '1');
+    } catch (_) { animatePortrait(); return; }
+    const overlay = document.createElement('div');
+    overlay.className = 'site-intro'; overlay.setAttribute('aria-hidden', 'true');
+    overlay.innerHTML = `<svg class="intro-art" viewBox="0 0 600 360" fill="none" aria-hidden="true">
+      <g class="intro-traces" stroke="#60a5fa" stroke-width="1.5"><path d="M300 180H180V100H130"/><path d="M300 180V80H470V100"/><path d="M300 180V260H300V280"/></g>
+      <g class="intro-node intro-node-seo"><circle cx="130" cy="100" r="28"/><circle cx="127" cy="97" r="9"/><path d="m134 104 8 8"/></g>
+      <g class="intro-node intro-node-dev"><circle cx="470" cy="100" r="28"/><path d="m460 93-8 7 8 7m20-14 8 7-8 7m-7-18-6 22"/></g>
+      <g class="intro-node intro-node-camera"><circle cx="300" cy="280" r="28"/><rect x="285" y="270" width="30" height="22" rx="4"/><circle cx="300" cy="281" r="7"/><path d="M291 270v-4h10v4"/></g>
+      <g class="intro-monogram"><circle cx="300" cy="180" r="55" stroke="#60a5fa" stroke-width="1.5"/><g stroke="#2563eb" stroke-width="2"><path d="m300 125 38 41-18 51m32-65-17 53-54 10m37 19-56-12-19-52m10 48-7-55 44-32m-43 32 49-27 43 32"/></g><text x="300" y="192" fill="white" text-anchor="middle" font-size="34" font-family="system-ui" font-weight="700">LR</text></g>
+    </svg>`;
+    const skip = document.createElement('button');
+    skip.className = 'intro-skip'; skip.type = 'button'; skip.textContent = 'Skip';
+    let timer;
+    const finish = () => {
+      clearTimeout(timer); overlay.remove(); skip.remove();
+      document.removeEventListener('click', skipEvent, true);
+      document.removeEventListener('keydown', skipEvent, true);
+      animatePortrait();
+    };
+    const skipEvent = (event) => { if (event.type === 'click') { event.preventDefault(); event.stopPropagation(); } finish(); };
+    $('.hero-portrait')?.classList.add('portrait-pending');
+    document.body.append(overlay, skip);
+    document.addEventListener('click', skipEvent, true);
+    document.addEventListener('keydown', skipEvent, true);
+    timer = setTimeout(finish, 1800);
+  }
+  function ensureLightbox() {
+    if ($('#lightbox')) return;
+    document.body.insertAdjacentHTML('beforeend', `<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer"><button class="lb-btn" id="lb-close" aria-label="Close">×</button><button class="lb-btn" id="lb-prev" aria-label="Previous image">‹</button><div class="lb-stage"><img id="lb-img" alt=""></div><button class="lb-btn" id="lb-next" aria-label="Next image">›</button><div id="lb-count"></div></div>`);
+  }
+  function renderCurrentPage() {
+    clearPageMotion();
+    document.body.dataset.view = view;
+    document.body.classList.remove('noscroll');
+    if ($('#lightbox')) $('#lightbox').hidden = true;
+    renderNav();
+    if (view === 'seo') renderSeo();
+    else if (view === 'dev' && document.body.dataset.caseStudy === 'credit-scoring') window.renderCreditScoringCaseStudy({ S, esc, asset, url, chips });
+    else if (view === 'dev') renderDev();
+    else if (view === 'multimedia') renderMultimedia();
+    else if (view === 'about') renderAbout();
+    else renderHome();
+    if (!$('#contact')) $('#main').insertAdjacentHTML('beforeend', contactBlock(view === 'about' ? 'home' : view, S.roles[view] ? S.roles[view].ctaSubject : 'Work inquiry'));
+    renderFooter(); wireCopy(); wireTimeline(); enhanceScroll(); reveal();
+    if (view === 'seo') animateSearchCharts();
+  }
+  function wireViewNavigation() {
+    if (isFile || document.body.dataset.caseStudy) return;
+    const order = ['home', 'seo', 'dev', 'multimedia'];
+    const route = (href) => {
+      const target = new URL(href, location.href);
+      if (target.origin !== location.origin || target.search) return null;
+      const id = order.find((key) => new URL(url(key)).pathname === target.pathname || new URL(url(key)).pathname + 'index.html' === target.pathname);
+      return id ? { id, target } : null;
+    };
+    const cache = new Map(); let busy = false; let queued;
+    async function navigate(href, pop = false) {
+      const next = route(href);
+      if (!next) { location.assign(href); return; }
+      if (pop && next.id === view) return;
+      if (busy) { queued = { href, pop }; return; }
+      if (motionQuery.matches) { if (pop) location.reload(); else location.assign(href); return; }
+      busy = true;
+      let stage, placeholder, main;
+      try {
+        let doc = cache.get(next.target.pathname);
+        if (!doc) {
+          const response = await fetch(next.target.href, { credentials: 'same-origin' });
+          if (!response.ok) throw Error('Page unavailable');
+          doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+          if (doc.body.dataset.view !== next.id || !doc.querySelector('#main')) throw Error('Unexpected page');
+          cache.set(next.target.pathname, doc);
+        }
+        const previous = view;
+        const direction = order.indexOf(next.id) > order.indexOf(previous) ? 1 : -1;
+        main = $('#main');
+        const old = main.cloneNode(true);
+        old.removeAttribute('id'); old.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+        old.querySelectorAll('iframe, dialog').forEach((el) => el.remove());
+        const navHeight = $('#nav').getBoundingClientRect().height;
+        old.style.transform = `translateY(${main.getBoundingClientRect().top - navHeight}px)`;
+        stage = document.createElement('div'); stage.className = 'cube-stage'; stage.style.top = navHeight + 'px'; stage.inert = true;
+        stage.setAttribute('aria-hidden', 'true'); stage.dataset.direction = direction > 0 ? 'forward' : 'backward';
+        const previousFace = document.createElement('div'); previousFace.className = 'cube-face cube-previous'; previousFace.append(old);
+        const currentFace = document.createElement('div'); currentFace.className = 'cube-face cube-current';
+        const rotor = document.createElement('div'); rotor.className = 'cube-rotor';
+        rotor.append(previousFace, currentFace); stage.append(rotor);
+        view = next.id; delete document.body.dataset.caseStudy;
+        renderCurrentPage();
+        // The old face is inert; the new face owns the actual, freshly wired DOM.
+        placeholder = document.createElement('div'); placeholder.style.height = innerHeight + 'px';
+        main.replaceWith(placeholder); currentFace.append(main); document.body.append(stage);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        const radius = stage.clientWidth / 2;
+        previousFace.style.transform = 'translateZ(' + radius + 'px)';
+        currentFace.style.transform = 'rotateY(' + (90 * direction) + 'deg) translateZ(' + radius + 'px)';
+        const options = { duration: 650, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' };
+        const cube = rotor.animate([
+          { transform: 'translateZ(' + (-radius) + 'px) rotateY(0deg)' },
+          { transform: 'translateZ(' + (-radius) + 'px) rotateY(' + (-90 * direction) + 'deg)' }
+        ], options);
+        await cube.finished;
+        placeholder.replaceWith(main); stage.remove(); stage = null;
+        if (!pop) history.pushState({ view }, '', next.target.href);
+        document.title = doc.title;
+        ['meta[name="description"]', 'meta[property^="og:"]', 'meta[name^="twitter:"]', 'link[rel="canonical"]'].forEach((selector) => {
+          $$(selector, doc).forEach((source) => {
+            const key = source.getAttribute('property') || source.getAttribute('name');
+            const target = source.tagName === 'LINK' ? $('link[rel="canonical"]') : document.head.querySelector(`meta[${source.hasAttribute('property') ? 'property' : 'name'}="${key}"]`);
+            if (target) target.replaceWith(source.cloneNode(true));
+          });
+        });
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        if (next.target.hash) document.getElementById(next.target.hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
+        const heading = $('#main h1'); if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
+        if (view === 'home') animatePortrait();
+      } catch (_) {
+        if (stage && placeholder && main) { placeholder.replaceWith(main); stage.remove(); }
+        location.assign(href);
+      } finally {
+        busy = false;
+        if (queued) { const pending = queued; queued = null; navigate(pending.href, pending.pop); }
+      }
+    }
+    document.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target.closest('a[href]');
+      if (!link || link.target || link.hasAttribute('download') || !route(link.href)) return;
+      const target = new URL(link.href);
+      if (target.pathname === location.pathname) return;
+      if (motionQuery.matches) return;
+      event.preventDefault(); navigate(link.href);
+    });
+    window.addEventListener('popstate', () => { if (route(location.href)) navigate(location.href, true); else location.reload(); });
+  }
+
+  const staticMain = $('#main').innerHTML;
+  try {
+    document.documentElement.classList.add('js-motion');
+    ensureLightbox();
+    renderCurrentPage();
+    wireLightbox();
+    wireViewNavigation();
+    homeIntro();
+  } catch (error) {
+    // A failed enhancement must not hide the static page or block its links.
+    clearPageMotion();
+    document.documentElement.classList.remove('js-motion');
+    document.querySelectorAll('.site-intro, .intro-skip').forEach((el) => el.remove());
+    $('#main').innerHTML = staticMain;
+    console.error('Portfolio enhancement failed; showing the static page.', error);
+  }
 
   // Land on #contact etc. when arriving from another page
   if (location.hash) {
