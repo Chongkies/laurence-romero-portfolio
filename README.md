@@ -2,7 +2,7 @@
 
 Computer Engineering graduate from the Philippines working in **SEO**, **full-stack web development** and **multimedia** (graphic design, video editing, photography). Open for remote work.
 
-**Live site:** https://chongkies.github.io
+**Live site:** https://chongkies.github.io/laurence-romero-portfolio
 **LinkedIn:** https://www.linkedin.com/in/jose-laurence-romero-a665912b1
 
 ## What's on the site
