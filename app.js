@@ -354,7 +354,10 @@
             ${figure.stats?.length ? `<dl class="case-figure-stats">${figure.stats.map((stat) => `<div><dt>${esc(stat.label)}</dt><dd>${esc(stat.value)}</dd></div>`).join("")}</dl>` : ""}
             <figure>
               <a class="case-figure-image" href="${esc(asset(figure.src))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(figure.title)}: open full-size screenshot in a new tab">
-                <img src="${esc(asset(figure.src))}" alt="${esc(figure.alt)}" width="${esc(figure.width)}" height="${esc(figure.height)}" loading="lazy" decoding="async">
+                <span class="search-chart"${figure.plotReveal ? ' data-chart-motion' : ''}>
+                  <img src="${esc(asset(figure.src))}" alt="${esc(figure.alt)}" width="${esc(figure.width)}" height="${esc(figure.height)}" loading="lazy" decoding="async">
+                  ${figure.plotReveal ? `<span class="search-chart-curtain" aria-hidden="true" style="left:${Number(figure.plotReveal.left)}%;top:${Number(figure.plotReveal.top)}%;width:${Number(figure.plotReveal.width)}%;height:${Number(figure.plotReveal.height)}%"></span>` : ''}
+                </span>
               </a>
               <figcaption class="note">${esc(figure.caption)}</figcaption>
             </figure>
@@ -724,6 +727,26 @@
     });
   }
 
+  function animateSearchCharts() {
+    const charts = $$('[data-chart-motion]');
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const chart = entry.target;
+        observer.unobserve(chart);
+        const img = chart.querySelector('img');
+        img.decode().then(() => {
+          requestAnimationFrame(() => chart.classList.add('chart-playing'));
+        }).catch(() => chart.classList.remove('motion-ready'));
+      });
+    }, { threshold: 0.25 });
+    charts.forEach((chart) => {
+      chart.classList.add('motion-ready');
+      observer.observe(chart);
+    });
+  }
+
   /* ----------------------------------------------------------- boot */
   document.body.setAttribute("data-view", view);
   renderNav();
@@ -738,6 +761,7 @@
   wireCopy();
   wireLightbox();
   reveal();
+  if (view === "seo") animateSearchCharts();
 
   // Land on #contact etc. when arriving from another page
   if (location.hash) {

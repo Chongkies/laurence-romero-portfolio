@@ -504,3 +504,11 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); 
 .case-figure-stats { display: flex; flex-wrap: wrap; gap: 14px 28px; margin: 18px 0; }
 .case-figure-stats dt { color: var(--muted); font-size: 13px; }
 .case-figure-stats dd { margin: 2px 0 0; font-size: 20px; font-weight: 700; }
+
+/* Reveal the original Search Console plots without fabricating data points. */
+.search-chart { display: block; position: relative; overflow: hidden; }
+.search-chart-curtain { display: none; position: absolute; background: #17191a; pointer-events: none; transform-origin: right center; }
+.search-chart.motion-ready .search-chart-curtain { display: block; }
+.search-chart.chart-playing .search-chart-curtain { animation: search-chart-draw 1.8s cubic-bezier(.25,.1,.25,1) forwards; }
+@keyframes search-chart-draw { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .search-chart.motion-ready .search-chart-curtain { display: none; animation: none; } }

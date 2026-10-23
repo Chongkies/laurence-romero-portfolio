@@ -204,7 +204,7 @@ window.SITE = {
         title: "Case study: new UK B2B site, from invisible to ranking",
         meta: "Prolink Property Support · UK B2B · Wix website · Sept – Oct 2026",
         brief:
-          "Prolink Property Support, a newly launched UK service business, needed to appear on Google for property-management support searches. I worked part-time (about an hour a day) on setup, technical SEO, on-page SEO, content review and reporting.",
+          "Prolink Property Support, a newly launched UK service business, needed to appear on Google for property-management support searches. I worked part-time on setup, technical SEO, on-page SEO, content review and reporting.",
         pdf: "", // e.g. "docs/seo-case-study.pdf" to show a download button
         stats: [
           { value: "8 → 692", label: "weekly Google impressions", note: "w/c 8 Sep to w/c 6 Oct" },
@@ -227,6 +227,7 @@ window.SITE = {
         figures: [
           {
             "src": "images/seo/search-console-performance.png",
+            "plotReveal": { "left": 5.3, "top": 23, "width": 91, "height": 46.5 },
             "alt": "Google Search Console daily performance: 17 clicks, 2.13K impressions, 0.8% CTR and average position 28.5, with impressions higher through October than late September.",
             "width": 1533,
             "height": 597,
@@ -262,6 +263,7 @@ window.SITE = {
           },
           {
             "src": "images/seo/search-console-indexing.png",
+            "plotReveal": { "left": 6.5, "top": 35.7, "width": 88.5, "height": 43.6 },
             "alt": "Google Search Console indexing chart showing 68 indexed pages and 18 not indexed at the latest reading.",
             "width": 933,
             "height": 375,
