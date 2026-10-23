@@ -40,16 +40,6 @@ style.css             Design and layout
 images/  docs/        Media and downloadable files
 ```
 
-## Run it locally
-
-```bash
-git clone https://github.com/Chongkies/chongkies.github.io.git
-cd chongkies.github.io
-python3 -m http.server 8000
-```
-
-Then open http://localhost:8000.
-
 ## Contact
 
 Use the contact section on the live site, or message me on LinkedIn.
