@@ -340,7 +340,7 @@ window.SITE = {
                 "label": "UAT rounds plus panel feedback"
               }
             ],
-            "problem": "The bank assessed loan applicants on paper forms and in Excel. Each application took 45 minutes to 1 hour; results were inconsistent and records were difficult to manage. Four Cebu microfinance firms—Asialink, RAFI, Guilmark and Exquisite Lending—reported slow computation and difficulty storing and retrieving records. All four said they would consider a better system.",
+            "problem": "The bank assessed loan applicants on paper forms and in Excel. Each application took 45 minutes to 1 hour; results were inconsistent and records were difficult to manage. Four Cebu microfinance firms - Asialink, RAFI, Guilmark and Exquisite Lending, reported slow computation and difficulty storing and retrieving records. All four said they would consider a better system.",
             "solution": "Lenders define their own credit and risk scoring models without code changes. The platform scores borrowers, calculates configurable predictive indicators and preserves records of changes. It supports assessment and review; its indicators are rule-based, not machine learning.",
             "stages": [
               {
