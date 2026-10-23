@@ -17,6 +17,9 @@ window.SITE = {
   name: "Jose Laurence Romero",
   initials: "LR",
 
+  // Single URL setting: after changing this, run node scripts/update-metadata.cjs.
+  baseUrl: "https://chongkies.github.io/laurence-romero-portfolio/",
+
   // Logos shown beside organization names in education and experience.
   organizationLogos: {
     "University of San Carlos": "images/school_logo.png",
@@ -87,10 +90,11 @@ window.SITE = {
   },
 
   location: "Hilongos, Leyte, Philippines",
-  availability: "Open for remote work",
+  availability: "Available any time (Philippine time, UTC+8). Looking for flexible-schedule remote work: I can work at my own pace or fit around an office schedule.",
 
   // Email is assembled in the browser so basic scrapers can't read it from the HTML.
   email: { user: "laurence.romero64", domain: "gmail.com" },
+  phone: "+639562913209",
 
   // Put resume PDFs in /docs/ and fill the paths to show "Download resume" buttons.
   // (Resume PDFs include your phone number, so they will be public once uploaded.)
@@ -105,6 +109,8 @@ window.SITE = {
   ],
 
   hero: {
+    availability: "Flexible remote work · Philippine time (UTC+8)",
+    whoIHelp: "I help small businesses get found on Google, run smoother with simple web tools, and look good online.",
     image: { src: "images/me/web/laurence-portrait.jpg", alt: "Jose Laurence Romero smiling in front of a station building and city skyline" },
     lead: "Computer Engineer who gets businesses found on Google, builds web applications, and creates visuals that look good and work well.",
   },
@@ -144,9 +150,36 @@ window.SITE = {
     { title: "Data Annotation Associate", org: "Remotasks", dates: "2019 – 2020", tag: "dev" },
   ],
 
+  workFacts: [
+    {
+      "k": "Time zone",
+      "v": "Philippine time (UTC+8)"
+    },
+    {
+      "k": "Availability",
+      "v": "Any time, flexible schedule"
+    },
+    {
+      "k": "Work style",
+      "v": "Remote, at my own pace"
+    }
+  ],
+
+  // Testimonials must be real quotes approved by the person.
+  // Entry shape: { quote, name, role, org (optional) }. Empty arrays render nothing.
   roles: {
     /* ------------------------------------------------------------ SEO */
     seo: {
+      testimonials: [],
+      howIWork: {
+        "title": "How I work",
+        "steps": [
+          "Audit your site and tracking.",
+          "Fix technical and on-page issues.",
+          "Track results in Google Search Console and GA4.",
+          "Send a simple report in plain English."
+        ]
+      },
       nav: "SEO & Marketing",
       title: "SEO & Marketing",
       kicker: "SEO Specialist",
@@ -157,7 +190,8 @@ window.SITE = {
       tags: ["Technical SEO", "Keyword strategy", "Reporting"],
       ctaSubject: "SEO / marketing work",
 
-      certificates: [
+      // TODO: add the Semrush completion date when provided; title and certificate links are verified.
+      certifications: [
         {
           title: "Semrush SEO Crash Course with Brian Dean",
           org: "Semrush Academy",
@@ -278,6 +312,16 @@ window.SITE = {
 
     /* ------------------------------------------------------------ DEV */
     dev: {
+      testimonials: [],
+      howIWork: {
+        "title": "How I work",
+        "steps": [
+          "Understand the workflow and who uses it.",
+          "Plan the features and data.",
+          "Build and test with real users.",
+          "Improve it from feedback."
+        ]
+      },
       nav: "Developer",
       title: "Software Developer",
       kicker: "Software Developer",
@@ -690,6 +734,16 @@ window.SITE = {
 
     /* ----------------------------------------------------- MULTIMEDIA */
     multimedia: {
+      testimonials: [],
+      howIWork: {
+        "title": "How I work",
+        "steps": [
+          "Learn the goal, audience and style.",
+          "Share a first draft.",
+          "Revise with your feedback.",
+          "Deliver files ready for print and social media."
+        ]
+      },
       nav: "Multimedia",
       title: "Multimedia",
       kicker: "Graphic Design · Video Editing · Photography",

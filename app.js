@@ -76,6 +76,20 @@
       </div>`;
   }
 
+  function howIWork(id) {
+    const work = S.roles[id].howIWork;
+    if (!work) return "";
+    return `<section class="section how-i-work"><div class="wrap"><div class="panel reveal"><h2 class="section-title">${esc(work.title)}</h2>
+      <ol class="work-steps" role="list">${work.steps.map((step, i) => `<li><span class="work-step-number" aria-hidden="true">${i + 1}</span><p>${esc(step)}</p></li>`).join("")}</ol>
+      <dl class="work-facts">${S.workFacts.map((fact) => `<div><dt>${esc(fact.k)}</dt><dd>${esc(fact.v)}</dd></div>`).join("")}</dl>
+    </div></div></section>`;
+  }
+
+  function testimonials(id) {
+    const items = S.roles[id].testimonials;
+    if (!items || !items.length) return "";
+    return `<section class="section"><div class="wrap"><h2 class="section-title reveal">What people say</h2><div class="testimonial-grid">${items.map((item) => `<figure class="panel reveal testimonial"><blockquote><p>${esc(item.quote)}</p></blockquote><figcaption><strong>${esc(item.name)}</strong>${item.role || item.org ? `<span>${[item.role, item.org].filter(Boolean).map(esc).join(", ")}</span>` : ""}</figcaption></figure>`).join("")}</div></div></section>`;
+  }
   function contactBlock(ctx, subject) {
     const links = S.links.filter((l) => l.url && l.roles.includes(ctx));
     const sub = encodeURIComponent("Hello Laurence — " + (subject || "Work inquiry"));
@@ -84,11 +98,14 @@
         <div class="wrap">
           <div class="cta-box">
             <h2>Let's work together</h2>
-            <p>${esc(S.availability)}. Send a short note about what you need and I'll reply by email.</p>
+            <p>${esc(S.availability)}</p>
+            <p>Send a short note about what you need and I'll reply by email.</p>
             <div class="btn-row">
               <a class="btn primary" href="mailto:${email}?subject=${sub}">Email me</a>
+              ${S.phone ? `<a class="btn ghost" href="tel:${esc(S.phone)}" aria-label="Call ${esc(S.phone)}">Call me</a>` : ""}
               <button class="btn ghost" id="copy-email" type="button">Copy email address</button>
             </div>
+            ${S.phone ? `<p class="contact-phone">Phone: <span>${esc(S.phone)}</span></p>` : ""}
             ${
               links.length
                 ? `<ul class="link-row">${links
@@ -146,9 +163,10 @@
       <section class="hero">
         <div class="wrap hero-in">
           <div class="hero-copy">
-          <p class="kicker reveal"><span class="pulse"></span>${esc(S.availability)} · ${esc(S.location)}</p>
+          <p class="kicker reveal"><span class="pulse"></span>${esc(S.hero.availability || S.availability)} · ${esc(S.location)}</p>
           <h1 class="reveal">${esc(S.name)}</h1>
           <p class="lead reveal">${esc(S.hero.lead)}</p>
+          ${S.hero.whoIHelp ? `<p class="hero-help reveal">${esc(S.hero.whoIHelp)}</p>` : ""}
           <div class="btn-row reveal">
             <a class="btn primary" href="#portfolios">Explore my work</a>
             <a class="btn ghost" href="#contact">Get in touch</a>
@@ -390,10 +408,10 @@
         </div>
       </section>
 
-      ${r.certificates && r.certificates.length ? `<section class="section">
+      ${r.certifications && r.certifications.length ? `<section class="section">
         <div class="wrap">
-          <h2 class="section-title reveal">Certificates</h2>
-          ${r.certificates.map((certificate) => `<article class="exp reveal">
+          <h2 class="section-title reveal">Certifications</h2>
+          ${r.certifications.map((certificate) => `<article class="exp reveal">
             <div class="exp-head"><div><h3>${esc(certificate.title)}</h3>${organizationName(certificate.org)}</div></div>
             <div class="btn-row">
               <a class="btn ghost" href="${esc(asset(certificate.pdf))}" target="_blank" rel="noopener noreferrer">View certificate (PDF)</a>
@@ -403,6 +421,8 @@
         </div>
       </section>` : ""}
 
+      ${howIWork("seo")}
+      ${testimonials("seo")}
       ${contactBlock("seo", r.ctaSubject)}
     `;
   }
@@ -471,6 +491,8 @@
         </div>
       </section>
 
+      ${howIWork("dev")}
+      ${testimonials("dev")}
       ${contactBlock("dev", r.ctaSubject)}
       <dialog class="project-preview-dialog" id="project-preview-dialog" aria-labelledby="project-preview-heading">
         <div class="project-preview-header"><h2 id="project-preview-heading"></h2><button class="btn ghost" type="button" id="project-preview-close">Close</button></div>
@@ -555,6 +577,8 @@
         </div>
       </section>
 
+      ${howIWork("multimedia")}
+      ${testimonials("multimedia")}
       ${contactBlock("multimedia", r.ctaSubject)}
     `;
     initGallery(r.gallery);
@@ -695,6 +719,7 @@
   else if (view === "multimedia") renderMultimedia();
   else if (view === "about") renderAbout();
   else renderHome();
+  if (!$("#contact")) $("#main").insertAdjacentHTML("beforeend", contactBlock(view === "about" ? "home" : view, S.roles[view] ? S.roles[view].ctaSubject : "Work inquiry"));
   renderFooter();
   wireCopy();
   wireLightbox();
