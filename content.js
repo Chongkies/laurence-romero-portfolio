@@ -636,7 +636,7 @@ window.SITE = {
           title: "LGU Treasury Collections System",
           previewLabel: "View desktop UI",
           previews: [
-            { src: "images/dev/lgu-dashboard.jpg", alt: "Sample treasurer office encoder dashboard with receipt-entry forms, drafts, receipt search and account management", device: "laptop", label: "Windows laptop — encoder dashboard", browser: { tab: "Treasury Collections", address: "Local network preview" } },
+            { src: "images/dev/lgu-dashboard.jpg", alt: "Sample treasurer office encoder dashboard with receipt-entry forms, drafts, receipt search and account management", device: "laptop", label: "Laptop — encoder dashboard", browser: { tab: "Treasury Collections", address: "Local network preview" } },
           ],
           subtitle: "Full-stack app for a municipal Treasurer's Office in the Philippines; in development ahead of a pilot",
           stack: ["Laravel", "React", "TypeScript", "Inertia.js", "Tailwind CSS", "shadcn/ui", "MySQL"],
@@ -657,7 +657,7 @@ window.SITE = {
           title: "Pickleball Player Platform",
           previewLabel: "View mobile & laptop UI",
           previews: [
-            { src: "images/dev/pickleball-laptop.jpg", alt: "Leyte Pickleball Player Directory desktop layout with location filters, rating summary and player cards", device: "laptop", label: "Windows laptop viewport" },
+            { src: "images/dev/pickleball-laptop.jpg", alt: "Leyte Pickleball Player Directory desktop layout with location filters, rating summary and player cards", device: "laptop", label: "Laptop viewport" },
             { src: "images/dev/pickleball-iphone.jpg", alt: "Leyte Pickleball Player Directory mobile layout with navigation and search filters", device: "iphone", label: "iPhone viewport" },
             { src: "images/dev/pickleball-iphone-players.jpg", alt: "Mobile directory summary with player counts, average rating and player cards below", device: "iphone", label: "iPhone — directory & players" },
           ],

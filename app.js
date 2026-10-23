@@ -504,24 +504,35 @@
       const project = r.projects[Number(button.dataset.projectPreview)];
       $("#project-preview-heading").textContent = project.title;
       $("#project-preview-devices").classList.toggle("single-preview", project.previews.length === 1);
-      $("#project-preview-devices").innerHTML = project.previews.map((preview) => `<figure class="project-device-preview">
+      $("#project-preview-devices").innerHTML = project.previews.map((preview, previewIndex) => `<figure class="project-device-preview" style="--preview-order:${previewIndex}">
         <div class="device-frame device-${preview.device === "iphone" ? "iphone" : "laptop"}">
+          ${preview.device === "iphone" ? `<span class="phone-hardware" aria-hidden="true"><span class="phone-volume"></span><span class="phone-power"></span><span class="phone-home"></span></span>` : ""}
           ${preview.browser ? `<div class="preview-browser" aria-hidden="true">
             <div class="preview-browser-tabs"><span class="preview-browser-tab">${esc(preview.browser.tab)} <span>×</span></span><span class="preview-browser-new">+</span><span class="preview-browser-window">− &nbsp; □ &nbsp; ×</span></div>
             <div class="preview-browser-toolbar"><span>← &nbsp; → &nbsp; ↻</span><span class="preview-browser-address">${esc(preview.browser.address)}</span><span>⋮</span></div>
           </div>` : ""}
           <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(preview.label)}: open full-size screenshot in a new tab"><img src="${esc(asset(preview.src))}" alt="${esc(preview.alt)}" decoding="async"></a>
-        </div><figcaption>${esc(preview.label)} · <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer">Open full size</a></figcaption>
+        </div>${preview.device !== "iphone" ? `<div class="device-laptop-base" aria-hidden="true"></div>` : ""}<figcaption>${esc(preview.label)} · <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer">Open full size</a></figcaption>
       </figure>`).join("");
+      previewDialog.classList.remove("is-closing");
       previewDialog.showModal();
       document.body.classList.add("noscroll");
       $("#project-preview-close").focus();
     }));
-    $("#project-preview-close").addEventListener("click", () => previewDialog.close());
+    let previewCloseTimer;
+    const closePreview = () => {
+      if (!previewDialog.open || previewDialog.classList.contains("is-closing")) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) { previewDialog.close(); return; }
+      previewDialog.classList.add("is-closing");
+      previewCloseTimer = setTimeout(() => previewDialog.close(), 180);
+    };
+    $("#project-preview-close").addEventListener("click", closePreview);
+    previewDialog.addEventListener("cancel", (event) => { event.preventDefault(); closePreview(); });
+    previewDialog.addEventListener("close", () => { clearTimeout(previewCloseTimer); previewDialog.classList.remove("is-closing"); });
     previewDialog.addEventListener("close", () => document.body.classList.remove("noscroll"));
     previewDialog.addEventListener("click", (event) => {
       const bounds = previewDialog.getBoundingClientRect();
-      if (event.target === previewDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) previewDialog.close();
+      if (event.target === previewDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) closePreview();
     });
   }
 
