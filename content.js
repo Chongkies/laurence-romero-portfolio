@@ -143,10 +143,10 @@ window.SITE = {
 
   // One master timeline: every job appears once, tagged by area. Newest first.
   timeline: [
-    { title: "SEO Specialist", org: "Prolink Property Support (part-time)", dates: "Sept 2026 – Present", tag: "seo" },
+    { title: "SEO Specialist", org: "Prolink Property Support", dates: "Sept 2026 – Present", tag: "seo" },
     { title: "IT Operations Intern", org: "Concentrix", dates: "Mar 2023 – Jun 2023", tag: "dev" },
     { title: "Freelance Graphic Designer", org: "Small businesses and local events", dates: "Freelance", tag: "multimedia" },
-    { title: "Freelance Video Editor", org: "Freelance", dates: "", tag: "multimedia" },
+    { title: "Freelance Video Editor", org: "Freelance", dates: "Freelance", tag: "multimedia" },
     { title: "Data Annotation Associate", org: "Remotasks", dates: "2019 – 2020", tag: "dev" },
   ],
 
@@ -208,8 +208,8 @@ window.SITE = {
         pdf: "", // e.g. "docs/seo-case-study.pdf" to show a download button
         stats: [
           { value: "8 → 692", label: "weekly Google impressions", note: "w/c 8 Sep to w/c 6 Oct" },
-          { value: "10 → 51", label: "pages indexed by Google", note: "21 Sep to 10 Oct" },
-          { value: "12", label: "non-brand queries ranking in positions 1–3", note: "Google Search Console" },
+          { value: "10 → 68", label: "pages indexed by Google", note: "Google Search Console, Pages/Indexing; latest screenshot" },
+          { value: "12", label: "non-brand queries ranking in positions 1–3", note: "Google Search Console, 8 Sep–15 Oct 2026 snapshot" },
           { value: "100/100", label: "technical health score, 0 errors", note: "Ahrefs, 7 Oct" },
         ],
         weeklyTitle: "Weekly impressions",
@@ -222,42 +222,74 @@ window.SITE = {
           { label: "6 Oct", v: 692 },
           { label: "13 Oct", v: 337, partial: true },
         ],
-        // TODO: re-export the chart without "anonymised" in its subtitle to match the named Prolink Property Support case study.
-        figure: {
-          src: "images/seo/pages-indexed-chart.png",
-          alt: "Pages on Google rose from 10 to 51 between 21 September and 12 October 2026, with plateaus near 28 and 43. Pages not yet indexed fell from 34 to 8 over the same period.",
-          width: 2000,
-          height: 1150,
-          chart: {
-            note: "Approximate checkpoints from Google Search Console, 21 Sep – 12 Oct 2026. Intermediate values are rounded; this is not a daily export.",
-            series: [
-              { label: "Pages on Google", values: [10, 28, 43, 51, 51] },
-              { label: "Pages not yet on Google", values: [34, 31, 12, 8, 8] },
+        // TODO: confirm the exact performance report date range (approximately 24 Sep–22 Oct 2026); it is not shown.
+        // TODO: confirm the date of the latest indexing reading.
+        figures: [
+          {
+            "src": "images/seo/search-console-performance.png",
+            "alt": "Google Search Console daily performance: 17 clicks, 2.13K impressions, 0.8% CTR and average position 28.5, with impressions higher through October than late September.",
+            "width": 1533,
+            "height": 597,
+            "title": "Search performance",
+            "caption": "Google Search Console, daily data, late Sep – late Oct 2026.",
+            "stats": [
+              {
+                "label": "Impressions",
+                "value": "2.13K"
+              },
+              {
+                "label": "Clicks",
+                "value": "17"
+              },
+              {
+                "label": "CTR",
+                "value": "0.8%"
+              },
+              {
+                "label": "Average position",
+                "value": "28.5"
+              }
             ],
-            checkpoints: [
-              { label: "21 Sep", day: 0 },
-              { label: "About 22 Sep", day: 1 },
-              { label: "About 5 Oct", day: 14 },
-              { label: "About 10 Oct", day: 19 },
-              { label: "12 Oct", day: 21 },
+            "explanation": [
+              "In this period the site appeared in Google results about 2,130 times. Impressions were close to zero in late September and clearly higher through October. The 17 clicks are an early result; visibility is growing faster than traffic.",
+              "The average position is 28.5 and the click rate is 0.8%. My next step is to improve titles, content and internal links for pages sitting just off page 1, so they can move up and earn more clicks."
             ],
+            "takeaways": [
+              "Visibility is growing before traffic does, which is normal for a new site.",
+              "I report the real numbers, including the weak ones, so you know where the work is.",
+              "I track clicks, impressions, CTR and position every month in Search Console."
+            ]
           },
-          title: "Getting blocked pages onto Google",
-          caption: "Source: Google Search Console (Pages / Indexing report), 21 Sep – 12 Oct 2026.",
-          explanation: [
-            "When I started, only 10 pages were on Google and 34 were not indexed. A site-wide noindex setting was telling Google to skip 29+ pages and blog posts on the site.",
-            "After I fixed the setting and re-submitted the pages, the report showed indexed pages rising to about 28, staying level for about two weeks, then climbing to 43 and finally 51 by 10 Oct. The chart does not establish the exact date of the fix or show that it alone caused each jump.",
-            "8 pages were still waiting at the last check. Indexing is not instant: Google decides when to crawl and whether to include each page, so the totals may change as it processes the remaining pages.",
-          ],
-          takeaways: [
-            "More indexed pages means more chances to appear in search results, supporting the growth in impressions shown above.",
-            "A single hidden setting was blocking much of the site, so checking indexing is the first step in any SEO audit I do.",
-            "I track this in Google Search Console's Pages report and re-check it after every fix.",
-          ],
-        },
+          {
+            "src": "images/seo/search-console-indexing.png",
+            "alt": "Google Search Console indexing chart showing 68 indexed pages and 18 not indexed at the latest reading.",
+            "width": 933,
+            "height": 375,
+            "title": "Pages on Google",
+            "caption": "Google Search Console, Pages/Indexing report. Baseline: 21 Sep 2026; latest reading shown in the screenshot.",
+            "stats": [
+              {
+                "label": "Pages on Google",
+                "value": "10 → 68"
+              },
+              {
+                "label": "Still not indexed",
+                "value": "18"
+              }
+            ],
+            "explanation": [
+              "At the start only 10 pages were on Google and 34 were not indexed. A site-wide noindex setting was telling Google to skip pages and blog posts. After I fixed it and re-submitted the pages, indexed pages grew in steps to 68. The chart does not establish when the fix happened or that it caused any specific jump.",
+              "18 pages are still not indexed. Google decides when to add each page, so I keep checking them and fixing any page that has a real problem."
+            ],
+            "takeaways": [
+              "More pages on Google means more chances to appear in search.",
+              "Checking indexing is the first step in every audit I do."
+            ]
+          }
+        ],
         beforeAfter: [
-          ["Indexing", "10 pages on Google; 29+ pages and posts blocked by a noindex setting", "51 pages on Google; 8 still waiting"],
-          ["Visibility", "8 impressions in the first week", "692 in the week of 6 Oct; 1,240 over the period"],
+          ["Indexing", "10 pages on Google; 29+ pages and posts blocked by a noindex setting", "68 pages on Google; 18 still not indexed (latest Search Console screenshot)"],
+          ["Visibility", "8 impressions in the first week", "692 in the week of 6 Oct 2026; 2.13K impressions in late Sep–late Oct 2026 (daily report)"],
           ["Measurement", "No search or analytics tracking", "Search Console, GA4 and Bing Webmaster Tools live; monthly client reporting"],
           ["On-page SEO", "Missing and duplicate titles and descriptions; stray code visible on pages", "Titles and descriptions written for key pages; stray code removed"],
           ["Technical", "Duplicate posts, broken links, redirect gaps, no business schema", "301 redirects, broken links fixed, LocalBusiness-type schema added"],
@@ -265,7 +297,7 @@ window.SITE = {
         ],
         rankingsTitle: "Rankings snapshot",
         rankingsNote:
-          "Google Search Console, 8 Sep – 15 Oct. 287 different queries brought the site into Google results and 37 non-brand queries reached the top 10. Many of the strongest rankings are long-tail searches with modest volume, which is typical in the first weeks.",
+          "Earlier snapshot: Google Search Console, 8 Sep – 15 Oct 2026. These page/query figures use a different date range from the daily performance report above. 287 different queries brought the site into Google results and 37 non-brand queries reached the top 10. Many of the strongest rankings are long-tail searches with modest volume, which is typical in the first weeks.",
         rankings: [
           ["Homepage", "108", "5.8 (page 1); 15 clicks"],
           ["Guide: reducing property management admin", "85", "10.5; queries like “reduce property admin workload” rank 1–2"],
@@ -282,7 +314,7 @@ window.SITE = {
           ["Reporting", "Plain-English monthly reports for a non-technical client."],
         ],
         honest:
-          "These are early-stage results from about six weeks of work. Visibility has grown faster than clicks (22 clicks in the period, 10 from the UK). Next steps: move page-2 posts onto page 1, rebuild the city page, set up lead tracking in GA4, and grow local citations and reviews.",
+          "These are early-stage results. The late Sep–late Oct 2026 daily report shows 17 clicks and an average position of 28.5: visibility has grown faster than traffic. Next steps: move page-2 posts onto page 1, rebuild the city page, set up lead tracking in GA4, and grow local citations and reviews.",
       },
 
       skills: [
@@ -297,7 +329,7 @@ window.SITE = {
         {
           title: "SEO Specialist",
           org: "Prolink Property Support",
-          dates: "Sept 2026 – Present · Part-time",
+          dates: "Sept 2026 – Present",
           bullets: [
             "Lead AI-assisted keyword and content strategy with GrandRanker, managing a 450+ keyword library.",
             "Run on-page SEO audits covering meta tags, internal linking and content structure, and improve navigation and UX to strengthen conversion paths.",
@@ -808,7 +840,7 @@ window.SITE = {
         {
           title: "Freelance Video Editor",
           org: "Freelance",
-          dates: "", // TODO: add freelance video editing dates when provided; update the home timeline too.
+          dates: "Freelance",
           bullets: [
             "Edited long-form videos with a focus on storytelling, arranging scenes and pacing to give the footage a clear progression.",
             "Used on-screen subtitles to carry the story and add context rather than dubbed narration.",

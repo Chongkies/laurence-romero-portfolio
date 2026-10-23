@@ -224,7 +224,7 @@ ul { padding: 0; list-style: none; }
 .panel h3 { margin-bottom: 8px; }
 .case-figure { margin-top: 24px; }
 .case-figure figure { margin: 16px 0 0; }
-.case-figure-image { display: block; overflow: hidden; padding: 8px; border-radius: 12px; background: #fff; }
+.case-figure-image { display: block; overflow: hidden; padding: 8px; border: 1px solid #383b3e; border-radius: 12px; background: #17191a; }
 .case-figure-image img { display: block; width: 100%; max-width: 100%; height: auto; }
 .panel.case-figure .note:first-of-type { margin-top: 12px; }
 .figure-explanation { max-width: 760px; margin-top: 16px; color: var(--muted); }
@@ -499,3 +499,8 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); 
 @media (prefers-reduced-motion: reduce) {
  .project-preview-dialog[open], .project-preview-dialog[open]::backdrop, .project-preview-dialog[open] .project-device-preview { animation: none; }
 }
+
+/* Search Console evidence panels. */
+.case-figure-stats { display: flex; flex-wrap: wrap; gap: 14px 28px; margin: 18px 0; }
+.case-figure-stats dt { color: var(--muted); font-size: 13px; }
+.case-figure-stats dd { margin: 2px 0 0; font-size: 20px; font-weight: 700; }

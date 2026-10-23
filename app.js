@@ -348,18 +348,21 @@
             <div class="bars">${bars}</div>
             <p class="note">${esc(c.weeklyNote)}</p>
           </div>
-          ${c.figure ? `<div class="panel case-figure reveal" aria-labelledby="indexing-figure-title">
-            <h3 id="indexing-figure-title">${esc(c.figure.title)}</h3>
+          
+          ${(c.figures || (c.figure ? [c.figure] : [])).map((figure, index) => `<div class="panel case-figure reveal" aria-labelledby="case-figure-${index}">
+            <h3 id="case-figure-${index}">${esc(figure.title)}</h3>
+            ${figure.stats?.length ? `<dl class="case-figure-stats">${figure.stats.map((stat) => `<div><dt>${esc(stat.label)}</dt><dd>${esc(stat.value)}</dd></div>`).join("")}</dl>` : ""}
             <figure>
-              ${c.figure.chart ? indexingChart(c.figure) : `<a class="case-figure-image" href="${esc(asset(c.figure.src))}" target="_blank" rel="noopener noreferrer">
-                <img src="${esc(asset(c.figure.src))}" alt="${esc(c.figure.alt)}" width="${esc(c.figure.width)}" height="${esc(c.figure.height)}" loading="lazy" decoding="async">
-              </a>`}
-              <figcaption class="note">${esc(c.figure.caption)}${c.figure.chart ? ` <a class="indexing-source" href="${esc(asset(c.figure.src))}" target="_blank" rel="noopener noreferrer">Open original chart</a>` : ""}</figcaption>
+              <a class="case-figure-image" href="${esc(asset(figure.src))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(figure.title)}: open full-size screenshot in a new tab">
+                <img src="${esc(asset(figure.src))}" alt="${esc(figure.alt)}" width="${esc(figure.width)}" height="${esc(figure.height)}" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="note">${esc(figure.caption)}</figcaption>
             </figure>
-            ${c.figure.explanation.map((p) => `<p class="figure-explanation">${esc(p)}</p>`).join("")}
+            ${(figure.explanation || []).map((p) => `<p class="figure-explanation">${esc(p)}</p>`).join("")}
             <h4>What this means</h4>
-            <ul class="bullets">${c.figure.takeaways.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
-          </div>` : ""}
+            <ul class="bullets">${(figure.takeaways || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+          </div>`).join("")}
+
         </div>
       </section>
 
