@@ -186,7 +186,7 @@ window.SITE = {
       headline: "Technical SEO, content strategy and plain-English reporting.",
       summary:
         "Computer Engineering graduate with hands-on SEO experience across keyword strategy, on-page optimization and technical fixes, plus the web development background to diagnose and implement changes myself.",
-      blurb: "Technical SEO, content strategy and reporting. See how a new site grew from 8 to 692 weekly Google impressions in five weeks.",
+      blurb: "Technical SEO, content strategy and reporting. A client website recorded 11 bookings during my work; their traffic sources are not yet confirmed.",
       tags: ["Technical SEO", "Keyword strategy", "Reporting"],
       ctaSubject: "SEO / marketing work",
 
@@ -200,12 +200,34 @@ window.SITE = {
         },
       ],
 
+      // These quotes are copied from public Google reviews and must stay verbatim.
+      clientReviews: {
+        "title": "What Prolink's customers say on Google",
+        "note": "Public Google reviews of Prolink Property Support, the business I do SEO for. These are reviews of the business, not of my own work.",
+        "items": [
+          {
+            "name": "Olivia L.",
+            "quote": "Incredible, some one was out to the property within the hour to fix the issue. Will use again for sure"
+          },
+          {
+            "name": "Jeff S.",
+            "quote": "We have worked along side Pro Link for a couple of years now and we can honestly say they are among the best clients we have worked with. They are really helpful when it comes to assisting us with getting access information or further details regarding the jobs etc. The whole team are a pleasure to work with."
+          }
+        ],
+        "summary": "Three 5-star Google reviews so far."
+      },
+
       caseStudy: {
         title: "Case study: new UK B2B site, from invisible to ranking",
         meta: "Prolink Property Support · UK B2B · Wix website · Sept – Oct 2026",
         brief:
           "Prolink Property Support, a newly launched UK service business, needed to appear on Google for property-management support searches. I worked part-time on setup, technical SEO, on-page SEO, content review and reporting.",
         pdf: "", // e.g. "docs/seo-case-study.pdf" to show a download button
+        // TODO: confirm what counts as a booking, the date range, and where the booking count was read.
+        bookings: {
+          title: "11 bookings made through the website so far",
+          note: "Bookings made through the client's website since I started working on it. Counted from the client's booking records.",
+        },
         stats: [
           { value: "8 → 692", label: "weekly Google impressions", note: "w/c 8 Sep to w/c 6 Oct" },
           { value: "10 → 68", label: "pages indexed by Google", note: "Google Search Console, Pages/Indexing; latest screenshot" },
@@ -316,7 +338,7 @@ window.SITE = {
           ["Reporting", "Plain-English monthly reports for a non-technical client."],
         ],
         honest:
-          "These are early-stage results. The late Sep–late Oct 2026 daily report shows 17 clicks and an average position of 28.5: visibility has grown faster than traffic. Next steps: move page-2 posts onto page 1, rebuild the city page, set up lead tracking in GA4, and grow local citations and reviews.",
+          "The client's website has recorded 11 bookings since I started working on it, counted from the client's booking records. I cannot attribute all 11 to Google search. Search clicks are still small: the late Sep–late Oct 2026 daily report shows 17 clicks and an average position of 28.5. I am working to connect bookings to their source in GA4. Next steps: move page-2 posts onto page 1, rebuild the city page, and grow local citations and reviews.",
       },
 
       skills: [

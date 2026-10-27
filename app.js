@@ -3,8 +3,8 @@
   "use strict";
 
   const S = window.SITE;
-  let view = document.body.getAttribute("data-view") || "home";
-  const root = new URL((document.body.getAttribute("data-root") || ".") + "/", location.href).href.replace(/\/$/, "");
+  const view = document.body.getAttribute("data-view") || "home";
+  const root = document.body.getAttribute("data-root") || ".";
   const isFile = location.protocol === "file:";
   const PATHS = { home: "", seo: "seo/", dev: "developer/", multimedia: "multimedia/", about: "about/" };
   const ROLE_IDS = ["seo", "dev", "multimedia"];
@@ -89,6 +89,21 @@
     if (!items || !items.length) return "";
     return `<section class="section"><div class="wrap"><h2 class="section-title reveal">What people say</h2><div class="testimonial-grid">${items.map((item) => `<figure class="panel reveal testimonial"><blockquote><p>${esc(item.quote)}</p></blockquote><figcaption><strong>${esc(item.name)}</strong>${item.role || item.org ? `<span>${[item.role, item.org].filter(Boolean).map(esc).join(", ")}</span>` : ""}</figcaption></figure>`).join("")}</div></div></section>`;
   }
+  function clientReviewSection(reviews) {
+    if (!reviews?.items?.length) return '';
+    const star = svg('<path d="m12 3 2.8 5.7 6.3.9-4.5 4.4 1.1 6.2L12 17.3l-5.7 2.9 1.1-6.2L2.9 9.6l6.3-.9L12 3z"/>');
+    return `<section class="section client-reviews" aria-labelledby="client-reviews-title"><div class="wrap">
+      <h2 class="section-title reveal" id="client-reviews-title">${esc(reviews.title)}</h2>
+      <p class="section-sub reveal">${esc(reviews.note)}</p>
+      <div class="testimonial-grid">${reviews.items.map((review) => `<figure class="panel reveal client-review">
+        <span class="review-stars" role="img" aria-label="5 out of 5 stars">${star.repeat(5)}</span>
+        <blockquote><p>${esc(review.quote)}</p></blockquote>
+        <figcaption><strong>${esc(review.name)}</strong><span>Google review</span></figcaption>
+      </figure>`).join('')}</div>
+      <p class="note reveal">${esc(reviews.summary)}</p>
+    </div></section>`;
+  }
+
   function contactBlock(ctx, subject) {
     const links = S.links.filter((l) => l.url && l.roles.includes(ctx));
     const sub = encodeURIComponent("Hello Laurence — " + (subject || "Work inquiry"));
@@ -327,6 +342,10 @@
           <p class="reveal narrow">${esc(c.brief)}</p>
           ${c.pdf ? `<p class="reveal"><a class="btn ghost" href="${asset(c.pdf)}" target="_blank" rel="noopener">Download the case study (PDF)</a></p>` : ""}
 
+          ${c.bookings ? `<aside class="panel bookings-highlight reveal" aria-label="Website booking result">
+            <strong>${esc(c.bookings.title)}</strong><p class="note">${esc(c.bookings.note)}</p>
+          </aside>` : ''}
+
           <div class="stats">
             ${c.stats
               .map(
@@ -396,6 +415,8 @@
           <aside class="callout reveal"><strong>Honest note.</strong> ${esc(c.honest)}</aside>
         </div>
       </section>
+
+      ${clientReviewSection(r.clientReviews)}
 
       <section class="section alt">
         <div class="wrap">
@@ -748,6 +769,8 @@
 
   /* Motion enhances rendered HTML; the underlying documents remain real pages. */
   const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  // Intro duration: adjust these three phases (milliseconds) together here.
+  const INTRO_TIMING = { traces: 1000, merge: 1000, opening: 1000 };
   let motionCleanups = [];
   function clearPageMotion() {
     motionCleanups.forEach((cleanup) => cleanup());
@@ -821,6 +844,9 @@
     } catch (_) { animatePortrait(); return; }
     const overlay = document.createElement('div');
     overlay.className = 'site-intro'; overlay.setAttribute('aria-hidden', 'true');
+    overlay.style.setProperty('--intro-traces', INTRO_TIMING.traces + 'ms');
+    overlay.style.setProperty('--intro-merge', INTRO_TIMING.merge + 'ms');
+    overlay.style.setProperty('--intro-opening', INTRO_TIMING.opening + 'ms');
     overlay.innerHTML = `<svg class="intro-art" viewBox="0 0 600 360" fill="none" aria-hidden="true">
       <g class="intro-traces" stroke="#60a5fa" stroke-width="1.5"><path d="M300 180H180V100H130"/><path d="M300 180V80H470V100"/><path d="M300 180V260H300V280"/></g>
       <g class="intro-node intro-node-seo"><circle cx="130" cy="100" r="28"/><circle cx="127" cy="97" r="9"/><path d="m134 104 8 8"/></g>
@@ -842,17 +868,11 @@
     document.body.append(overlay, skip);
     document.addEventListener('click', skipEvent, true);
     document.addEventListener('keydown', skipEvent, true);
-    timer = setTimeout(finish, 1800);
+    timer = setTimeout(finish, INTRO_TIMING.traces + INTRO_TIMING.merge + INTRO_TIMING.opening);
   }
-  function ensureLightbox() {
-    if ($('#lightbox')) return;
-    document.body.insertAdjacentHTML('beforeend', `<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer"><button class="lb-btn" id="lb-close" aria-label="Close">×</button><button class="lb-btn" id="lb-prev" aria-label="Previous image">‹</button><div class="lb-stage"><img id="lb-img" alt=""></div><button class="lb-btn" id="lb-next" aria-label="Next image">›</button><div id="lb-count"></div></div>`);
-  }
-  function renderCurrentPage() {
+  function renderPage() {
     clearPageMotion();
     document.body.dataset.view = view;
-    document.body.classList.remove('noscroll');
-    if ($('#lightbox')) $('#lightbox').hidden = true;
     renderNav();
     if (view === 'seo') renderSeo();
     else if (view === 'dev' && document.body.dataset.caseStudy === 'credit-scoring') window.renderCreditScoringCaseStudy({ S, esc, asset, url, chips });
@@ -864,103 +884,11 @@
     renderFooter(); wireCopy(); wireTimeline(); enhanceScroll(); reveal();
     if (view === 'seo') animateSearchCharts();
   }
-  function wireViewNavigation() {
-    if (isFile || document.body.dataset.caseStudy) return;
-    const order = ['home', 'seo', 'dev', 'multimedia'];
-    const route = (href) => {
-      const target = new URL(href, location.href);
-      if (target.origin !== location.origin || target.search) return null;
-      const id = order.find((key) => new URL(url(key)).pathname === target.pathname || new URL(url(key)).pathname + 'index.html' === target.pathname);
-      return id ? { id, target } : null;
-    };
-    const cache = new Map(); let busy = false; let queued;
-    async function navigate(href, pop = false) {
-      const next = route(href);
-      if (!next) { location.assign(href); return; }
-      if (pop && next.id === view) return;
-      if (busy) { queued = { href, pop }; return; }
-      if (motionQuery.matches) { if (pop) location.reload(); else location.assign(href); return; }
-      busy = true;
-      let stage, placeholder, main;
-      try {
-        let doc = cache.get(next.target.pathname);
-        if (!doc) {
-          const response = await fetch(next.target.href, { credentials: 'same-origin' });
-          if (!response.ok) throw Error('Page unavailable');
-          doc = new DOMParser().parseFromString(await response.text(), 'text/html');
-          if (doc.body.dataset.view !== next.id || !doc.querySelector('#main')) throw Error('Unexpected page');
-          cache.set(next.target.pathname, doc);
-        }
-        const previous = view;
-        const direction = order.indexOf(next.id) > order.indexOf(previous) ? 1 : -1;
-        main = $('#main');
-        const old = main.cloneNode(true);
-        old.removeAttribute('id'); old.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
-        old.querySelectorAll('iframe, dialog').forEach((el) => el.remove());
-        const navHeight = $('#nav').getBoundingClientRect().height;
-        old.style.transform = `translateY(${main.getBoundingClientRect().top - navHeight}px)`;
-        stage = document.createElement('div'); stage.className = 'cube-stage'; stage.style.top = navHeight + 'px'; stage.inert = true;
-        stage.setAttribute('aria-hidden', 'true'); stage.dataset.direction = direction > 0 ? 'forward' : 'backward';
-        const previousFace = document.createElement('div'); previousFace.className = 'cube-face cube-previous'; previousFace.append(old);
-        const currentFace = document.createElement('div'); currentFace.className = 'cube-face cube-current';
-        const rotor = document.createElement('div'); rotor.className = 'cube-rotor';
-        rotor.append(previousFace, currentFace); stage.append(rotor);
-        view = next.id; delete document.body.dataset.caseStudy;
-        renderCurrentPage();
-        // The old face is inert; the new face owns the actual, freshly wired DOM.
-        placeholder = document.createElement('div'); placeholder.style.height = innerHeight + 'px';
-        main.replaceWith(placeholder); currentFace.append(main); document.body.append(stage);
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        const radius = stage.clientWidth / 2;
-        previousFace.style.transform = 'translateZ(' + radius + 'px)';
-        currentFace.style.transform = 'rotateY(' + (90 * direction) + 'deg) translateZ(' + radius + 'px)';
-        const options = { duration: 650, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' };
-        const cube = rotor.animate([
-          { transform: 'translateZ(' + (-radius) + 'px) rotateY(0deg)' },
-          { transform: 'translateZ(' + (-radius) + 'px) rotateY(' + (-90 * direction) + 'deg)' }
-        ], options);
-        await cube.finished;
-        placeholder.replaceWith(main); stage.remove(); stage = null;
-        if (!pop) history.pushState({ view }, '', next.target.href);
-        document.title = doc.title;
-        ['meta[name="description"]', 'meta[property^="og:"]', 'meta[name^="twitter:"]', 'link[rel="canonical"]'].forEach((selector) => {
-          $$(selector, doc).forEach((source) => {
-            const key = source.getAttribute('property') || source.getAttribute('name');
-            const target = source.tagName === 'LINK' ? $('link[rel="canonical"]') : document.head.querySelector(`meta[${source.hasAttribute('property') ? 'property' : 'name'}="${key}"]`);
-            if (target) target.replaceWith(source.cloneNode(true));
-          });
-        });
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        if (next.target.hash) document.getElementById(next.target.hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
-        const heading = $('#main h1'); if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
-        if (view === 'home') animatePortrait();
-      } catch (_) {
-        if (stage && placeholder && main) { placeholder.replaceWith(main); stage.remove(); }
-        location.assign(href);
-      } finally {
-        busy = false;
-        if (queued) { const pending = queued; queued = null; navigate(pending.href, pending.pop); }
-      }
-    }
-    document.addEventListener('click', (event) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = event.target.closest('a[href]');
-      if (!link || link.target || link.hasAttribute('download') || !route(link.href)) return;
-      const target = new URL(link.href);
-      if (target.pathname === location.pathname) return;
-      if (motionQuery.matches) return;
-      event.preventDefault(); navigate(link.href);
-    });
-    window.addEventListener('popstate', () => { if (route(location.href)) navigate(location.href, true); else location.reload(); });
-  }
-
   const staticMain = $('#main').innerHTML;
   try {
     document.documentElement.classList.add('js-motion');
-    ensureLightbox();
-    renderCurrentPage();
+    renderPage();
     wireLightbox();
-    wireViewNavigation();
     homeIntro();
   } catch (error) {
     // A failed enhancement must not hide the static page or block its links.
