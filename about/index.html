@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,8 +11,7 @@
   <meta name="description" content="Get to know Jose Laurence Romero outside work: hobbies, outdoor activities and personal photos.">
   <meta property="og:title" content="About me | Jose Laurence Romero">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#4f46e5">
-  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
@@ -20,9 +19,61 @@
 </head>
 <body data-view="about" data-root="..">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="nav" id="nav"></header>
-  <main id="main"><noscript><p style="padding:40px">This portfolio needs JavaScript. <a href="../">Back to home</a>.</p></noscript></main>
-  <footer id="footer"></footer>
+  <header class="nav" id="nav">
+
+      <div class="wrap nav-in">
+        <a class="brand" href="../"><span class="mono">LR</span><span class="brand-name">Jose Laurence Romero</span></a>
+        <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span></button>
+        <nav class="links" id="navlinks">
+          <div class="nav-pages">
+          <a href="../seo/">SEO &amp; Marketing</a><a href="../developer/">Developer</a><a href="../multimedia/">Multimedia</a>
+          </div>
+          <div class="nav-actions">
+          <button class="theme" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button>
+          <a class="nav-contact" href="#contact">Contact</a>
+          </div>
+        </nav>
+      </div>
+</header>
+  <main id="main">
+
+      <section class="page-head">
+        <div class="wrap">
+          <h1>About Me</h1>
+          <h2>Outside Work</h2>
+          <p class="lead">I enjoy running, mountain biking, hiking, photography and pickleball. Here are a few personal photos from the court, the trails and time outdoors.</p>
+          <ul class="chips"><li>Running</li><li>Mountain biking</li><li>Hiking</li><li>Photography</li><li>Pickleball</li></ul>
+        </div>
+      </section>
+      <section class="section personal-page swiss-section">
+        <div class="wrap"><p class="section-label" aria-hidden="true">01 —<span>Photos</span></p><div class="section-content personal-photos">
+          <a href="../images/me/web/pickleball-court.jpg" target="_blank" rel="noopener noreferrer" aria-label="Laurence holding a paddle on an indoor pickleball court (open full photo in a new tab)"><img src="../images/me/web/pickleball-court.jpg" alt="Laurence holding a paddle on an indoor pickleball court" loading="lazy" decoding="async"></a><a href="../images/me/web/scooter-ride.jpg" target="_blank" rel="noopener noreferrer" aria-label="Laurence seated on a scooter beside a road through rock cliffs (open full photo in a new tab)"><img src="../images/me/web/scooter-ride.jpg" alt="Laurence seated on a scooter beside a road through rock cliffs" loading="lazy" decoding="async"></a><a href="../images/me/web/forest-walk.jpg" target="_blank" rel="noopener noreferrer" aria-label="Laurence standing among moss-covered trees and ferns in a forest (open full photo in a new tab)"><img src="../images/me/web/forest-walk.jpg" alt="Laurence standing among moss-covered trees and ferns in a forest" loading="lazy" decoding="async"></a><a href="../images/me/web/seaside.jpg" target="_blank" rel="noopener noreferrer" aria-label="Laurence standing in clear shallow seawater (open full photo in a new tab)"><img src="../images/me/web/seaside.jpg" alt="Laurence standing in clear shallow seawater" loading="lazy" decoding="async"></a><a href="../images/me/web/running-finish.jpg" target="_blank" rel="noopener noreferrer" aria-label="Laurence wearing a finisher medal at a running event (open full photo in a new tab)"><img src="../images/me/web/running-finish.jpg" alt="Laurence wearing a finisher medal at a running event" loading="lazy" decoding="async"></a><a href="../images/me/web/mountain-biking.jpg" target="_blank" rel="noopener noreferrer" aria-label="Laurence riding a mountain bike down a rocky trail (open full photo in a new tab)"><img src="../images/me/web/mountain-biking.jpg" alt="Laurence riding a mountain bike down a rocky trail" loading="lazy" decoding="async"></a>
+        </div></div>
+      </section>
+      <section class="cta" id="contact">
+        <div class="wrap">
+          <div class="cta-box">
+            <h2>Let's work together</h2>
+            <p>Available any time (Philippine time, UTC+8). Looking for flexible-schedule remote work: I can work at my own pace or fit around an office schedule.</p>
+            <p>Send a short note about what you need and I'll reply by email.</p>
+            <div class="btn-row">
+              <a class="btn primary" href="mailto:laurence.romero64@gmail.com?subject=Hello%20Laurence%20%E2%80%94%20Work%20inquiry"><span class="contact-link-label">Email me</span><span class="contact-link-value">laurence.romero64@gmail.com</span></a>
+              <a class="btn ghost" href="tel:+639562913209" aria-label="Call +639562913209"><span class="contact-link-label">Call me</span><span class="contact-link-value">+639562913209</span></a>
+              <button class="btn ghost" id="copy-email" type="button">Copy email address</button>
+            </div>
+            <p class="contact-phone">Phone: <span>+639562913209</span></p>
+            <ul class="link-row"><li><a href="https://www.linkedin.com/in/jose-laurence-romero-a665912b1" target="_blank" rel="noopener noreferrer">LinkedIn</a></li><li><a href="https://github.com/Chongkies" target="_blank" rel="noopener noreferrer">GitHub</a></li><li><a href="https://www.upwork.com/freelancers/joselaurencer" target="_blank" rel="noopener noreferrer">Upwork</a></li><li><a href="https://www.onlinejobs.ph/jobseekers/info/1520167" target="_blank" rel="noopener noreferrer">OnlineJobs.ph</a></li></ul>
+          </div>
+        </div>
+      </section>
+</main>
+  <footer id="footer">
+
+      <div class="wrap foot-in">
+        <p>© 2026 Jose Laurence Romero · Hilongos, Leyte, Philippines</p>
+        <a href="#top" class="totop">Back to top ↑</a>
+      </div>
+</footer>
   <script src="../content.js"></script>
   <script src="../app.js"></script>
 </body>

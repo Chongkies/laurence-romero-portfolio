@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,8 +11,8 @@
   <meta name="description" content="A Computer Engineering group thesis: configurable credit scoring, rule-based predictive indicators, architecture, validation results and limitations.">
   <meta property="og:title" content="Credit Scoring Thesis Case Study | Jose Laurence Romero">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#7c3aed">
-  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
@@ -21,9 +21,151 @@
 </head>
 <body data-view="dev" data-root="../.." data-case-study="credit-scoring">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="nav" id="nav"></header>
-  <main id="main"><noscript><p style="padding:40px">This case study needs JavaScript. <a href="../">Back to developer portfolio</a>.</p></noscript></main>
-  <footer id="footer"></footer>
+  <header class="nav" id="nav">
+
+      <div class="wrap nav-in">
+        <a class="brand" href="../../"><span class="mono">LR</span><span class="brand-name">Jose Laurence Romero</span></a>
+        <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span></button>
+        <nav class="links" id="navlinks">
+          <div class="nav-pages">
+          <a href="../../seo/">SEO &amp; Marketing</a><a href="../../developer/" class="active">Developer</a><a href="../../multimedia/">Multimedia</a>
+          </div>
+          <div class="nav-actions">
+          <button class="theme" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button>
+          <a class="nav-contact" href="#contact">Contact</a>
+          </div>
+        </nav>
+      </div>
+</header>
+  <main id="main">
+<article class="thesis-case">
+    <header class="page-head">
+      <div class="wrap">
+        <a class="back" href="../../developer/">← Developer portfolio</a>
+        <p class="kicker">Undergraduate group thesis · Computer Engineering · University of San Carlos, Cebu City</p>
+        <h1>Development of a Framework for a Credit Scoring Platform</h1>
+        <p class="thesis-subtitle">Credit Scoring System with Predictive Analysis</p>
+        <p class="lead">A dynamic, model-driven credit scoring platform with configurable predictive analysis. Lenders choose scoring models and assign criterion tiers without changing application code.</p>
+        <ul class="chips"><li><img class="tool-logo" src="../../images/tools/react.svg" width="16" height="16" alt="" aria-hidden="true">React.js</li><li><img class="tool-logo" src="../../images/tools/vite.svg" width="16" height="16" alt="" aria-hidden="true">Vite</li><li><img class="tool-logo" src="../../images/dev/credit-scoring/icons/reactrouter.svg" width="16" height="16" alt="" aria-hidden="true">React Router</li><li><img class="tool-logo" src="../../images/dev/credit-scoring/icons/axios.svg" width="16" height="16" alt="" aria-hidden="true">Axios</li><li><img class="tool-logo" src="../../images/tools/tailwindcss.svg" width="16" height="16" alt="" aria-hidden="true">Tailwind CSS</li><li><img class="tool-logo thesis-logo-original" src="../../images/dev/credit-scoring/icons/flowbite.png" width="16" height="16" alt="" aria-hidden="true">Flowbite React</li><li><img class="tool-logo" src="../../images/dev/credit-scoring/icons/recharts.svg" width="16" height="16" alt="" aria-hidden="true">Recharts</li><li><img class="tool-logo" src="../../images/tools/laravel.svg" width="16" height="16" alt="" aria-hidden="true">Laravel</li><li>REST APIs</li><li><img class="tool-logo" src="../../images/tools/mysql.svg" width="16" height="16" alt="" aria-hidden="true">MySQL</li><li><img class="tool-logo thesis-logo-original" src="../../images/dev/credit-scoring/icons/wampserver.png" width="16" height="16" alt="" aria-hidden="true">WampServer</li><li><img class="tool-logo" src="../../images/tools/visualstudiocode.svg" width="16" height="16" alt="" aria-hidden="true">VS Code</li><li><img class="tool-logo" src="../../images/tools/git.svg" width="16" height="16" alt="" aria-hidden="true">Git</li></ul>
+        <p class="thesis-status">Accepted for internal validation and research. Not a live production deployment.</p>
+        <div class="stats">
+          <div class="stat"><strong>15</strong><span>anonymized borrower profiles</span></div><div class="stat"><strong>3</strong><span>bank staff in UAT</span></div><div class="stat"><strong>4.67–5.00</strong><span>UAT means · 5-point scale · Very satisfied</span></div><div class="stat"><strong>3</strong><span>UAT rounds plus panel feedback</span></div>
+        </div>
+        <p class="thesis-confidential">Details generalised to respect confidentiality with the partner institution.</p>
+        <nav class="thesis-jumps" aria-label="Case study sections">
+          <a href="#thesis-method">Scoring method</a><a href="#thesis-features">Interface &amp; features</a><a href="#thesis-architecture">Architecture</a><a href="#thesis-results">Results</a><a href="#thesis-limits">Limitations</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="section swiss-section"><div class="wrap"><p class="section-label" aria-hidden="true">01 —<span>The problem</span></p><div class="section-content thesis-two">
+      <div><h2 class="section-title title-line">The problem</h2><p>The bank assessed loan applicants on paper forms and in Excel. Each application took 45 minutes to 1 hour; results were inconsistent and records were difficult to manage. Four Cebu microfinance firms - Asialink, RAFI, Guilmark and Exquisite Lending, reported slow computation and difficulty storing and retrieving records. All four said they would consider a better system.</p></div>
+      <div><h2 class="section-title title-line">The solution</h2><p>Lenders define their own credit and risk scoring models without code changes. The platform scores borrowers, calculates configurable predictive indicators and preserves records of changes. It supports assessment and review; its indicators are rule-based, not machine learning.</p></div>
+    </div></div></section>
+
+    <section class="section swiss-section" id="thesis-method"><div class="wrap"><p class="section-label" aria-hidden="true">02 —<span>How the scoring works</span></p><div class="section-content">
+      <h2 class="section-title title-line">How the scoring works</h2>
+      <ol class="thesis-flow" aria-label="Initial screening, then credit risk rating, then predictive indicators">
+        <li class="panel"><h3>1. Initial screening</h3><p>Weighted eligibility criteria cover applicant circumstances, loan context and collateral. A total of 12 points or more passes screening. Proprietary scoring forms and option-level point values are omitted.</p></li><li class="panel"><h3>2. Credit risk rating</h3><p>Capacity to pay, character and management, condition, and collateral feed a 100-point rating. The result maps to five credit-risk levels, from Very Low to Very High.</p><p class="thesis-formula">RiskScore = Σ(Wᵢ × Xᵢ)</p><p class="note">Wᵢ is a criterion weight; Xᵢ is its assigned score.</p></li><li class="panel"><h3>3. Dynamic predictive analysis</h3><p>Repayment Likelihood and Default Probability are calculated from the selected credit/risk model pair and its assigned criterion tiers. Different model configurations can produce different indicators; an application-specific tier override takes priority. The module is configurable and rule-based, not a trained ML model.</p></li>
+      </ol>
+      <div class="thesis-two thesis-formulas">
+        <div class="panel"><h3>Repayment Likelihood</h3><p class="thesis-formula">L = (Σ sᵢ·wᵢ) / (Σ max_sᵢ·wᵢ) × 100</p><p>Primary 0.50 · Secondary 0.35 · Low 0.15 · None excluded</p><p class="note">sᵢ is the criterion score, max_sᵢ its maximum and wᵢ its tier weight.</p></div><div class="panel"><h3>Default Probability</h3><p class="thesis-formula">P_d = (Σ (max_sⱼ − sⱼ)·rwⱼ) / S_rmax × 100</p><p>Critical 0.60 · Contingency 0.30 · Behavioral 0.10 · None excluded</p><p class="note">The weighted gap to each maximum is normalised by S_rmax, the maximum weighted risk-gap total.</p></div>
+      </div>
+      <p class="note">Tiers are configured per credit/risk model pair. A per-application override takes priority over that configuration.</p>
+    </div></div></section>
+
+    <section class="section swiss-section" id="thesis-features"><div class="wrap"><p class="section-label" aria-hidden="true">03 —<span>Interface &amp; feature highlights</span></p><div class="section-content">
+      <h2 class="section-title title-line">Interface &amp; feature highlights</h2>
+      <div class="panel thesis-gallery" id="thesis-gallery" role="region" aria-roledescription="carousel" aria-label="Application UI screenshots">
+        <h3>Explore the application UI</h3><p>Browse full-frame screenshots with the arrows, keyboard or a horizontal swipe. Each image keeps its original dimensions and proportions; click to open full size. Bank branding is replaced with a neutral label. Screens containing personal data or proprietary scoring values are excluded. Interface values are not additional validation results.</p>
+        <div class="thesis-carousel-frame">
+          <div class="thesis-carousel-track" id="thesis-carousel-track" tabindex="0" aria-label="Screenshot gallery; use left and right arrow keys">
+            <figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="1 of 13: Login form"><a href="../../images/dev/credit-scoring/login-form.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Login form"><img src="../../images/dev/credit-scoring/login-form.webp" alt="Email and password fields with sign-in and password-reset links; bank logo replaced with a neutral label" width="1916" height="905" loading="lazy" decoding="async"></a><figcaption><strong>Login form</strong><span>Email and password fields with sign-in and password-reset links; bank logo replaced with a neutral label. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="2 of 13: Password reset"><a href="../../images/dev/credit-scoring/password-reset.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Password reset"><img src="../../images/dev/credit-scoring/password-reset.webp" alt="Empty email field and Send Reset Link button" width="1909" height="901" loading="lazy" decoding="async"></a><figcaption><strong>Password reset</strong><span>Empty email field and Send Reset Link button. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="3 of 13: Dashboard"><a href="../../images/dev/credit-scoring/dashboard.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Dashboard"><img src="../../images/dev/credit-scoring/dashboard.webp" alt="Dashboard tiles for users, credit data, predictive analysis, models, evaluation, loans and activity logs" width="1890" height="821" loading="lazy" decoding="async"></a><figcaption><strong>Dashboard</strong><span>Dashboard tiles for users, credit data, predictive analysis, models, evaluation, loans and activity logs. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="4 of 13: Products and services"><a href="../../images/dev/credit-scoring/services.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Products and services"><img src="../../images/dev/credit-scoring/services.webp" alt="Three-column interface for loans, deposits and services; bank branding replaced with a neutral label" width="1916" height="905" loading="lazy" decoding="async"></a><figcaption><strong>Products and services</strong><span>Three-column interface for loans, deposits and services; bank branding replaced with a neutral label. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="5 of 13: Credit score data"><a href="../../images/dev/credit-scoring/credit-data.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Credit score data"><img src="../../images/dev/credit-scoring/credit-data.webp" alt="Risk-distribution pie chart, report controls and records with numbered borrower placeholders" width="1904" height="910" loading="lazy" decoding="async"></a><figcaption><strong>Credit score data</strong><span>Risk-distribution pie chart, report controls and records with numbered borrower placeholders. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="6 of 13: Credit score analysis"><a href="../../images/dev/credit-scoring/credit-analysis.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Credit score analysis"><img src="../../images/dev/credit-scoring/credit-analysis.webp" alt="Analysis view with a risk-distribution pie chart and collapsed criterion groups" width="1895" height="867" loading="lazy" decoding="async"></a><figcaption><strong>Credit score analysis</strong><span>Analysis view with a risk-distribution pie chart and collapsed criterion groups. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="7 of 13: Predictive analysis"><a href="../../images/dev/credit-scoring/predictive-gauges.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Predictive analysis"><img src="../../images/dev/credit-scoring/predictive-gauges.webp" alt="Repayment and default gauges with interpretation badges and a recommendation banner" width="1217" height="612" loading="lazy" decoding="async"></a><figcaption><strong>Predictive analysis</strong><span>Repayment and default gauges with interpretation badges and a recommendation banner. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="8 of 13: Model manager"><a href="../../images/dev/credit-scoring/model-manager.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Model manager"><img src="../../images/dev/credit-scoring/model-manager.webp" alt="Credit and risk model tabs, search, Create Model and action menus" width="1916" height="904" loading="lazy" decoding="async"></a><figcaption><strong>Model manager</strong><span>Credit and risk model tabs, search, Create Model and action menus. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="9 of 13: Credit evaluation"><a href="../../images/dev/credit-scoring/credit-evaluation.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Credit evaluation"><img src="../../images/dev/credit-scoring/credit-evaluation.webp" alt="Empty applicant and amount fields followed by model selection cards" width="1914" height="903" loading="lazy" decoding="async"></a><figcaption><strong>Credit evaluation</strong><span>Empty applicant and amount fields followed by model selection cards. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="10 of 13: Risk model selection"><a href="../../images/dev/credit-scoring/risk-model-selection.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Risk model selection"><img src="../../images/dev/credit-scoring/risk-model-selection.webp" alt="Risk model cards and Start Processing control" width="1911" height="588" loading="lazy" decoding="async"></a><figcaption><strong>Risk model selection</strong><span>Risk model cards and Start Processing control. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="11 of 13: Loan records"><a href="../../images/dev/credit-scoring/loan-records.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Loan records"><img src="../../images/dev/credit-scoring/loan-records.webp" alt="Loan listing with numbered borrower placeholders, risk ratings, search and export controls" width="1556" height="783" loading="lazy" decoding="async"></a><figcaption><strong>Loan records</strong><span>Loan listing with numbered borrower placeholders, risk ratings, search and export controls. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="12 of 13: Recycle Bin"><a href="../../images/dev/credit-scoring/recycle-bin.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Recycle Bin"><img src="../../images/dev/credit-scoring/recycle-bin.webp" alt="Archived application with a numbered borrower placeholder and restore and delete actions" width="1233" height="723" loading="lazy" decoding="async"></a><figcaption><strong>Recycle Bin</strong><span>Archived application with a numbered borrower placeholder and restore and delete actions. Click to open full size.</span></figcaption></figure><figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="13 of 13: Activity log"><a href="../../images/dev/credit-scoring/audit-log.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: Activity log"><img src="../../images/dev/credit-scoring/audit-log.webp" alt="Activity log showing generic Admin account actions; bank branding replaced with a neutral label" width="1892" height="865" loading="lazy" decoding="async"></a><figcaption><strong>Activity log</strong><span>Activity log showing generic Admin account actions; bank branding replaced with a neutral label. Click to open full size.</span></figcaption></figure>
+          </div>
+          <button class="thesis-carousel-arrow previous" type="button" id="thesis-carousel-prev" aria-label="Previous screenshot" aria-controls="thesis-carousel-track" disabled="">‹</button>
+          <button class="thesis-carousel-arrow next" type="button" id="thesis-carousel-next" aria-label="Next screenshot" aria-controls="thesis-carousel-track">›</button>
+        </div>
+        <p class="note" id="thesis-carousel-status" aria-live="polite" aria-atomic="true">1 / 13 — Login form</p>
+      </div>
+      <div class="thesis-features">
+        <section class="panel">
+          <h3>Dynamic configuration, explainable output</h3><p>Administrators assign predictive tiers to criteria for each credit/risk model pair, with None excluding a criterion. Per-application overrides allow a different tier configuration for an individual assessment. Gauges, badges, recommendations and breakdown tables present the resulting calculations.</p>
+
+        </section><section class="panel">
+          <h3>Breakdowns that expose the calculation</h3><p>Tables connect each score to its tier, weight and weighted contribution. The illustration below uses symbolic placeholders; the bank's actual scoring tables and criterion point values are not reproduced.</p>
+          <div class="thesis-breakdown">
+            <p class="thesis-illustration-label">Generalised interface illustration · symbolic placeholders, not borrower data</p>
+            <div class="table-wrap"><table><caption class="sr-only">Illustrative repayment calculation breakdown with symbolic scores</caption><thead><tr><th>Criterion</th><th>Score / maximum</th><th>Tier / weight</th><th>Contribution</th></tr></thead><tbody>
+              <tr><th scope="row">Criterion A</th><td>s₁ / max_s₁</td><td>Primary · 0.50</td><td>s₁ × 0.50</td></tr>
+              <tr><th scope="row">Criterion B</th><td>s₂ / max_s₂</td><td>Secondary · 0.35</td><td>s₂ × 0.35</td></tr>
+              <tr><th scope="row">Criterion C</th><td>s₃ / max_s₃</td><td>Low · 0.15</td><td>s₃ × 0.15</td></tr>
+            </tbody></table></div>
+          </div>
+        </section><section class="panel">
+          <h3>Models that change without code</h3><p>Create, edit, duplicate, archive, restore and soft-delete credit and risk models. The interface separates model management from application scoring.</p>
+
+        </section><section class="panel">
+          <h3>Records that retain their history</h3><p>Loan edits archive the old record and create a new one. Archive and Recycle Bin workflows support retrieval; activity logs record the user, action, module, old/new values and IP.</p>
+
+        </section><section class="panel">
+          <h3>Access, reporting and daily use</h3><p>Role-based, branch-scoped access, dashboard pie charts, PDF report export and dark mode support staff workflows.</p>
+
+        </section>
+      </div>
+    </div></div></section>
+
+    <section class="section swiss-section" id="thesis-architecture"><div class="wrap"><p class="section-label" aria-hidden="true">04 —<span>Three tiers, separate responsibilities</span></p><div class="section-content">
+      <h2 class="section-title title-line">Three tiers, separate responsibilities</h2>
+      <ol class="thesis-flow" aria-label="React frontend communicates with Laravel API, which communicates with MySQL">
+        <li class="panel"><h3>React SPA</h3><p>Vite · React Router · Axios · Tailwind CSS · Flowbite React · Recharts</p><p class="note">Forms, navigation, visualisations and report interaction.</p></li><li class="panel"><h3>Laravel REST API</h3><p>Authentication · validation · computation · logging</p><p class="note">Scoring, predictive calculations and application rules.</p></li><li class="panel"><h3>MySQL</h3><p>Soft deletes · archiving</p><p class="note">Users, borrowers, loan applications, credit score models, risk score models, model combination tiers and activity logs.</p></li>
+      </ol><p class="note">Developed on WampServer using VS Code and Git. The frontend, API and database form a decoupled three-tier design.</p>
+    </div></div></section>
+
+    <section class="section swiss-section" id="thesis-results"><div class="wrap"><p class="section-label" aria-hidden="true">05 —<span>Validation results</span></p><div class="section-content">
+      <h2 class="section-title title-line">Validation results</h2>
+      <div class="panel thesis-distribution">
+        <h3>Risk distribution · 15 profiles</h3>
+        <ul class="thesis-risk-list"><li><span class="thesis-risk-label">Very Low</span><span class="thesis-risk-track" aria-hidden="true"><span class="thesis-risk-bar" style="--share:40%"></span></span><span>40% (6)</span></li><li><span class="thesis-risk-label">Low</span><span class="thesis-risk-track" aria-hidden="true"><span class="thesis-risk-bar" style="--share:26.7%"></span></span><span>26.7% (4)</span></li><li><span class="thesis-risk-label">Moderate</span><span class="thesis-risk-track" aria-hidden="true"><span class="thesis-risk-bar" style="--share:33.3%"></span></span><span>33.3% (5)</span></li><li><span class="thesis-risk-label">High</span><span class="thesis-risk-track" aria-hidden="true"><span class="thesis-risk-bar" style="--share:0%"></span></span><span>0% (0)</span></li><li><span class="thesis-risk-label">Very High</span><span class="thesis-risk-track" aria-hidden="true"><span class="thesis-risk-bar" style="--share:0%"></span></span><span>0% (0)</span></li></ul>
+      </div>
+      <div class="thesis-results-copy"><p>Validation data: 15 anonymized borrower profiles from the bank.</p><p>Risk distribution: 40% Very Low (6), 26.7% Low (4), 33.3% Moderate (5), 0% High or Very High.</p><p>Mean Repayment Likelihood: 93.6% (Very Low risk group) vs 73.4% (Moderate group). Default Probability in the Moderate group ran from 25% to 39%.</p><p>User acceptance testing: 3 bank staff (president, loans clerk, audit staff), 5-point Likert scale. Means ranged 4.67 to 5.00 across efficiency, ease of use, security, features, predictive analysis and overall potential.</p><p>Three UAT rounds plus panel feedback led to the edit/archive features, a corrected default-probability formula, and dynamic tier assignment.</p></div>
+    </div></div></section>
+
+    <section class="section swiss-section" id="thesis-limits"><div class="wrap"><p class="section-label" aria-hidden="true">06 —<span>Limitations and next steps</span></p><div class="section-content">
+      <h2 class="section-title title-line">Limitations and next steps</h2>
+      <div class="panel"><ul class="bullets"><li>Rule-based and dependent on administrator-configured weights. No trained ML model or long-term repayment dataset was used.</li><li>Tested on 15 profiles in a rural-bank context; results may not generalise.</li><li>Data sharing between administrators was prepared but not validated and is not presented as a finished feature.</li><li>The bank accepted the deliverables for internal validation and research, not live production deployment or adoption.</li></ul><p class="thesis-next">Recommended next steps: cloud deployment, ML validation on larger datasets, a borrower portal, 2FA and stronger security, and multi-bank support.</p></div>
+    </div></div></section>
+
+    <section class="section swiss-section"><div class="wrap"><p class="section-label" aria-hidden="true">07 —<span>Project context</span></p><div class="section-content">
+      <h2 class="section-title title-line">Project context</h2>
+      <dl class="thesis-credits"><div><dt>Institution</dt><dd>Computer Engineering, University of San Carlos, Cebu City</dd></div><div><dt>Partner institution</dt><dd>Rural Bank of Hindang (Leyte), Inc.</dd></div></dl>
+      <p class="note">Details generalised to respect confidentiality with the partner institution.</p>
+      <div class="btn-row"><a class="btn ghost" href="../../developer/">← Back to developer portfolio</a></div>
+    </div></div></section>
+  </article>
+      <section class="cta" id="contact">
+        <div class="wrap">
+          <div class="cta-box">
+            <h2>Let's work together</h2>
+            <p>Available any time (Philippine time, UTC+8). Looking for flexible-schedule remote work: I can work at my own pace or fit around an office schedule.</p>
+            <p>Send a short note about what you need and I'll reply by email.</p>
+            <div class="btn-row">
+              <a class="btn primary" href="mailto:laurence.romero64@gmail.com?subject=Hello%20Laurence%20%E2%80%94%20Software%20development%20work"><span class="contact-link-label">Email me</span><span class="contact-link-value">laurence.romero64@gmail.com</span></a>
+              <a class="btn ghost" href="tel:+639562913209" aria-label="Call +639562913209"><span class="contact-link-label">Call me</span><span class="contact-link-value">+639562913209</span></a>
+              <button class="btn ghost" id="copy-email" type="button">Copy email address</button>
+            </div>
+            <p class="contact-phone">Phone: <span>+639562913209</span></p>
+            <ul class="link-row"><li><a href="https://www.linkedin.com/in/jose-laurence-romero-a665912b1" target="_blank" rel="noopener noreferrer">LinkedIn</a></li><li><a href="https://github.com/Chongkies" target="_blank" rel="noopener noreferrer">GitHub</a></li></ul>
+          </div>
+        </div>
+      </section>
+</main>
+  <footer id="footer">
+
+      <div class="wrap foot-in">
+        <p>© 2026 Jose Laurence Romero · Hilongos, Leyte, Philippines</p>
+        <a href="#top" class="totop">Back to top ↑</a>
+      </div>
+</footer>
   <script src="../../content.js"></script>
   <script src="../../credit-scoring.js"></script>
   <script src="../../app.js"></script>

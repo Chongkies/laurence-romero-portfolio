@@ -115,8 +115,8 @@
             <p>${esc(S.availability)}</p>
             <p>Send a short note about what you need and I'll reply by email.</p>
             <div class="btn-row">
-              <a class="btn primary" href="mailto:${email}?subject=${sub}">Email me</a>
-              ${S.phone ? `<a class="btn ghost" href="tel:${esc(S.phone)}" aria-label="Call ${esc(S.phone)}">Call me</a>` : ""}
+              <a class="btn primary" href="mailto:${email}?subject=${sub}"><span class="contact-link-label">Email me</span><span class="contact-link-value">${esc(email)}</span></a>
+              ${S.phone ? `<a class="btn ghost" href="tel:${esc(S.phone)}" aria-label="Call ${esc(S.phone)}"><span class="contact-link-label">Call me</span><span class="contact-link-value">${esc(S.phone)}</span></a>` : ""}
               <button class="btn ghost" id="copy-email" type="button">Copy email address</button>
             </div>
             ${S.phone ? `<p class="contact-phone">Phone: <span>${esc(S.phone)}</span></p>` : ""}
@@ -147,10 +147,11 @@
 
   /* ----------------------------------------------------------- home */
   function renderHome() {
-    const cards = ROLE_IDS.map((id) => {
+    const cards = ROLE_IDS.map((id, index) => {
       const r = S.roles[id];
       return `
         <a class="role-card reveal" data-role="${id}" href="${url(id)}">
+          <span class="role-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
           <span class="role-ico">${ICONS[id]}</span>
           <h3>${esc(r.title)}</h3>
           <p>${esc(r.blurb)}</p>
@@ -180,11 +181,18 @@
           <p class="lead reveal">${esc(S.hero.lead)}</p>
           ${S.hero.whoIHelp ? `<p class="hero-help reveal">${esc(S.hero.whoIHelp)}</p>` : ""}
           <div class="btn-row reveal">
-            <a class="btn primary" href="#portfolios">Explore my work</a>
+            <a class="btn primary" href="#portfolios">Explore my work<span class="link-arrow" aria-hidden="true">↗</span></a>
             <a class="btn ghost" href="#contact">Get in touch</a>
           </div>
           </div>
           ${S.hero.image ? `<div class="hero-portrait"><img src="${esc(asset(S.hero.image.src))}" alt="${esc(S.hero.image.alt)}" width="1000" height="1333" fetchpriority="high" decoding="async"></div>` : ""}
+          <dl class="hero-meta">
+            <div><dt>Location</dt><dd>${esc(S.location)}</dd></div>
+            <div><dt>Availability</dt><dd>${esc(S.hero.availability || S.availability)}</dd></div>
+            ${S.phone ? `<div><dt>Phone</dt><dd><a href="tel:${esc(S.phone)}">${esc(S.phone)}</a></dd></div>` : ''}
+            <div><dt>Email</dt><dd><a href="mailto:${email}">${esc(email)}</a></dd></div>
+          </dl>
+
         </div>
       </section>
 
@@ -343,7 +351,7 @@
           ${c.pdf ? `<p class="reveal"><a class="btn ghost" href="${asset(c.pdf)}" target="_blank" rel="noopener">Download the case study (PDF)</a></p>` : ""}
 
           ${c.bookings ? `<aside class="panel bookings-highlight reveal" aria-label="Website booking result">
-            <strong>${esc(c.bookings.title)}</strong><p class="note">${esc(c.bookings.note)}</p>
+            <strong><span class="booking-number">${esc(c.bookings.title.split(" ")[0])}</span><span>${esc(c.bookings.title.slice(c.bookings.title.indexOf(" ")))}</span></strong><p class="note">${esc(c.bookings.note)}</p>
           </aside>` : ''}
 
           <div class="stats">
@@ -848,11 +856,11 @@
     overlay.style.setProperty('--intro-merge', INTRO_TIMING.merge + 'ms');
     overlay.style.setProperty('--intro-opening', INTRO_TIMING.opening + 'ms');
     overlay.innerHTML = `<svg class="intro-art" viewBox="0 0 600 360" fill="none" aria-hidden="true">
-      <g class="intro-traces" stroke="#60a5fa" stroke-width="1.5"><path d="M300 180H180V100H130"/><path d="M300 180V80H470V100"/><path d="M300 180V260H300V280"/></g>
+      <g class="intro-traces" stroke="var(--ink)" stroke-width="1.5"><path d="M300 180H180V100H130"/><path d="M300 180V80H470V100"/><path d="M300 180V260H300V280"/></g>
       <g class="intro-node intro-node-seo"><circle cx="130" cy="100" r="28"/><circle cx="127" cy="97" r="9"/><path d="m134 104 8 8"/></g>
       <g class="intro-node intro-node-dev"><circle cx="470" cy="100" r="28"/><path d="m460 93-8 7 8 7m20-14 8 7-8 7m-7-18-6 22"/></g>
       <g class="intro-node intro-node-camera"><circle cx="300" cy="280" r="28"/><rect x="285" y="270" width="30" height="22" rx="4"/><circle cx="300" cy="281" r="7"/><path d="M291 270v-4h10v4"/></g>
-      <g class="intro-monogram"><circle cx="300" cy="180" r="55" stroke="#60a5fa" stroke-width="1.5"/><g stroke="#2563eb" stroke-width="2"><path d="m300 125 38 41-18 51m32-65-17 53-54 10m37 19-56-12-19-52m10 48-7-55 44-32m-43 32 49-27 43 32"/></g><text x="300" y="192" fill="white" text-anchor="middle" font-size="34" font-family="system-ui" font-weight="700">LR</text></g>
+      <g class="intro-monogram"><circle cx="300" cy="180" r="55" stroke="var(--accent)" stroke-width="1.5"/><g stroke="var(--accent)" stroke-width="2"><path d="m300 125 38 41-18 51m32-65-17 53-54 10m37 19-56-12-19-52m10 48-7-55 44-32m-43 32 49-27 43 32"/></g><text x="300" y="192" fill="var(--ink)" text-anchor="middle" font-size="34" font-family="system-ui" font-weight="700">LR</text></g>
     </svg>`;
     const skip = document.createElement('button');
     skip.className = 'intro-skip'; skip.type = 'button'; skip.textContent = 'Skip';
@@ -870,6 +878,33 @@
     document.addEventListener('keydown', skipEvent, true);
     timer = setTimeout(finish, INTRO_TIMING.traces + INTRO_TIMING.merge + INTRO_TIMING.opening);
   }
+  function applySwissLayout() {
+    let number = 0;
+    $$('#main > section.section, #main > .thesis-case > section.section').forEach((section) => {
+      const wrap = $(':scope > .wrap', section);
+      if (!wrap || section.classList.contains('swiss-section')) return;
+      const title = $('.section-title, h2, h3', wrap);
+      if (!title && !section.classList.contains('personal-page')) return;
+      const cleanTitle = title ? title.cloneNode(true) : document.createElement('span');
+      $$('.about-hint', cleanTitle).forEach((hint) => hint.remove());
+      let label = cleanTitle.textContent.trim() || 'Photos';
+      if (section.id === 'portfolios') label = 'Portfolios';
+      else if (section.id === 'about') label = 'About';
+      else if (section.classList.contains('client-reviews')) label = 'Google reviews';
+      else if (label.startsWith('Case study:')) label = 'Case study';
+      const body = document.createElement('div');
+      body.className = 'section-content';
+      ['about-grid', 'two-col', 'personal-photos', 'thesis-two'].forEach((name) => {
+        if (wrap.classList.contains(name)) { body.classList.add(name); wrap.classList.remove(name); }
+      });
+      while (wrap.firstChild) body.append(wrap.firstChild);
+      const marker = document.createElement('p');
+      marker.className = 'section-label'; marker.setAttribute('aria-hidden', 'true');
+      marker.innerHTML = String(++number).padStart(2, '0') + ' —<span>' + esc(label) + '</span>';
+      wrap.append(marker, body); section.classList.add('swiss-section');
+    });
+  }
+
   function renderPage() {
     clearPageMotion();
     document.body.dataset.view = view;
@@ -881,6 +916,7 @@
     else if (view === 'about') renderAbout();
     else renderHome();
     if (!$('#contact')) $('#main').insertAdjacentHTML('beforeend', contactBlock(view === 'about' ? 'home' : view, S.roles[view] ? S.roles[view].ctaSubject : 'Work inquiry'));
+    applySwissLayout();
     renderFooter(); wireCopy(); wireTimeline(); enhanceScroll(); reveal();
     if (view === 'seo') animateSearchCharts();
   }
