@@ -54,17 +54,45 @@
       const open = links.classList.toggle("open");
       burger.setAttribute("aria-expanded", open);
     });
-    $("#theme").addEventListener("click", () => {
+    let changingTheme = false;
+    $("#theme").addEventListener("click", async () => {
+      if (changingTheme) return;
       const el = document.documentElement;
       const dark =
         el.getAttribute("data-theme") === "dark" ||
         (!el.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
       const next = dark ? "light" : "dark";
-      el.setAttribute("data-theme", next);
+      const applyTheme = () => {
+        el.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+      };
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        applyTheme();
+        return;
+      }
+      changingTheme = true;
       try {
-        localStorage.setItem("theme", next);
-      } catch (e) {}
+        if (document.startViewTransition) {
+          el.classList.add("theme-changing");
+          const transition = document.startViewTransition(applyTheme);
+          // A browser may skip a transition during navigation or a viewport resize.
+          transition.ready.catch(() => {});
+          await transition.finished;
+        } else {
+          applyTheme();
+          // A gentle fade also works in browsers without snapshot transitions.
+          if (el.animate) await el.animate([{ opacity: .85 }, { opacity: 1 }], {
+            duration: 450, easing: "ease-in-out"
+          }).finished;
+        }
+      } catch (e) {
+        applyTheme();
+      } finally {
+        el.classList.remove("theme-changing");
+        changingTheme = false;
+      }
     });
+
   }
 
   function renderFooter() {
