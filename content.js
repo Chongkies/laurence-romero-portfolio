@@ -180,8 +180,8 @@ window.SITE = {
           "Send a simple report in plain English."
         ]
       },
-      nav: "SEO & Marketing",
-      title: "SEO & Marketing",
+      nav: "SEO",
+      title: "SEO",
       kicker: "SEO Specialist",
       headline: "Technical SEO, content strategy and plain-English reporting.",
       summary:

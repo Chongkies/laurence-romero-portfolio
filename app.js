@@ -248,7 +248,7 @@
             <h3 class="reveal">Experience</h3>
             <ul class="timeline">${timeline}</ul>
             <p class="legend reveal">
-              <span><i class="tl-dot" data-role="seo"></i>SEO & Marketing</span>
+              <span><i class="tl-dot" data-role="seo"></i>SEO</span>
               <span><i class="tl-dot" data-role="dev"></i>Developer</span>
               <span><i class="tl-dot" data-role="multimedia"></i>Multimedia</span>
             </p>

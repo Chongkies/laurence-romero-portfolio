@@ -503,7 +503,7 @@ body[data-view="multimedia"], [data-role="multimedia"] { --accent: var(--role-mu
 body:is([data-view="seo"], [data-view="dev"], [data-view="multimedia"]) .page-head > .wrap { border-bottom-color: var(--accent); }
 body:is([data-view="seo"], [data-view="dev"], [data-view="multimedia"]) .swiss-section > .wrap { border-top-color: color-mix(in srgb, var(--accent) 55%, var(--rule)); }
 body:is([data-view="seo"], [data-view="dev"], [data-view="multimedia"]) .section-label { color: var(--accent); }
-.hero .btn.primary[href="#portfolios"] { padding: 16px 22px; border: 1px solid var(--orange); background: var(--orange); color: var(--light-ink); }
+.hero .btn.primary[href="#portfolios"] { padding: 16px 22px; border: 1px solid var(--orange); background: var(--orange); color: var(--light-ink);  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .hero .btn.primary[href="#portfolios"]:hover { background: var(--orange-hover); border-color: var(--orange-hover); color: var(--light-ink); }
 .hero .btn.primary[href="#portfolios"] .link-arrow { font-size: 20px; line-height: 1; }
 .hero .btn.primary[href="#portfolios"]:hover .link-arrow { transform: translate(3px,-3px); }
