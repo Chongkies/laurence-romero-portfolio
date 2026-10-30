@@ -186,7 +186,7 @@ window.SITE = {
       headline: "Technical SEO, content strategy and plain-English reporting.",
       summary:
         "Computer Engineering graduate with hands-on SEO experience across keyword strategy, on-page optimization and technical fixes, plus the web development background to diagnose and implement changes myself.",
-      blurb: "Technical SEO, content strategy and reporting. A client website recorded 11 bookings during my work; their traffic sources are not yet confirmed.",
+      blurb: "Technical SEO, content strategy and reporting. A client website recorded 11 bookings during the first month; their traffic sources are not yet confirmed.",
       tags: ["Technical SEO", "Keyword strategy", "Reporting"],
       ctaSubject: "SEO / marketing work",
 
@@ -338,7 +338,7 @@ window.SITE = {
           ["Reporting", "Plain-English monthly reports for a non-technical client."],
         ],
         honest:
-          "The client's website has recorded 11 bookings since I started working on it, counted from the client's booking records. I cannot attribute all 11 to Google search. Search clicks are still small: the late Sep–late Oct 2026 daily report shows 17 clicks and an average position of 28.5. I am working to connect bookings to their source in GA4. Next steps: move page-2 posts onto page 1, rebuild the city page, and grow local citations and reviews.",
+          "The client's website has recorded 11 bookings during the first month of the campaign, counted from the client's booking records. I cannot attribute all 11 to Google search. Search clicks are still small: the late Sep–late Oct 2026 daily report shows 17 clicks and an average position of 28.5. I am working to connect bookings to their source in GA4. Next steps: move page-2 posts onto page 1, rebuild the city page, and grow local citations and reviews.",
       },
 
       skills: [

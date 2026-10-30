@@ -4,6 +4,11 @@
   --light-rule: rgba(10,10,10,.14); --light-accent: #1d4ed8; --light-surface: #f5f5f3;
   --dark-paper: #0b0b0c; --dark-ink: #f2f2f0; --dark-muted: #a1a1a6;
   --dark-rule: rgba(242,242,240,.16); --dark-accent: #7aa2ff; --dark-surface: #131315;
+  --light-dev: #6d28d9; --dark-dev: #b79aff;
+  --light-multimedia: #be185d; --dark-multimedia: #ff80ab;
+  --orange: #f97316; --orange-hover: #ea580c;
+  --role-seo: var(--light-accent); --role-dev: var(--light-dev); --role-multimedia: var(--light-multimedia);
+  --inverse-seo: var(--dark-accent); --inverse-dev: var(--dark-dev); --inverse-multimedia: var(--dark-multimedia);
   --paper: var(--light-paper); --ink: var(--light-ink); --muted: var(--light-muted);
   --rule: var(--light-rule); --rule-strong: var(--ink); --accent: var(--light-accent); --surface: var(--light-surface);
   --bg: var(--paper); --text: var(--ink); --line: var(--rule); --card: var(--paper);
@@ -15,13 +20,17 @@
   :root:not([data-theme="light"]) {
     --paper: var(--dark-paper); --ink: var(--dark-ink); --muted: var(--dark-muted);
     --rule: var(--dark-rule); --accent: var(--dark-accent); --surface: var(--dark-surface);
+    --role-seo: var(--dark-accent); --role-dev: var(--dark-dev); --role-multimedia: var(--dark-multimedia);
+    --inverse-seo: var(--light-accent); --inverse-dev: var(--light-dev); --inverse-multimedia: var(--light-multimedia);
     --inverse-accent: var(--light-accent); --logo-filter: brightness(0) invert(1); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: var(--dark-paper); --ink: var(--dark-ink); --muted: var(--dark-muted);
   --rule: var(--dark-rule); --accent: var(--dark-accent); --surface: var(--dark-surface);
-  --inverse-accent: var(--light-accent); --logo-filter: brightness(0) invert(1); color-scheme: dark;
+  --role-seo: var(--dark-accent); --role-dev: var(--dark-dev); --role-multimedia: var(--dark-multimedia);
+    --inverse-seo: var(--light-accent); --inverse-dev: var(--light-dev); --inverse-multimedia: var(--light-multimedia);
+    --inverse-accent: var(--light-accent); --logo-filter: brightness(0) invert(1); color-scheme: dark;
 }
 @view-transition { navigation: auto; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .28s; }
@@ -484,3 +493,17 @@ body[data-view="about"] .page-head .lead { margin-top: 24px; }
   animation-duration: 450ms;
   animation-timing-function: ease-in-out;
 }
+
+/* Colored portfolio rules retain the existing Swiss layout. */
+body[data-view="seo"], [data-role="seo"] { --accent: var(--role-seo); --inverse-accent: var(--inverse-seo); }
+body[data-view="dev"], [data-role="dev"] { --accent: var(--role-dev); --inverse-accent: var(--inverse-dev); }
+body[data-view="multimedia"], [data-role="multimedia"] { --accent: var(--role-multimedia); --inverse-accent: var(--inverse-multimedia); }
+.role-card { border-top-color: var(--accent); }
+.role-card:hover h3 { text-decoration-color: var(--accent); }
+body:is([data-view="seo"], [data-view="dev"], [data-view="multimedia"]) .page-head > .wrap { border-bottom-color: var(--accent); }
+body:is([data-view="seo"], [data-view="dev"], [data-view="multimedia"]) .swiss-section > .wrap { border-top-color: color-mix(in srgb, var(--accent) 55%, var(--rule)); }
+body:is([data-view="seo"], [data-view="dev"], [data-view="multimedia"]) .section-label { color: var(--accent); }
+.hero .btn.primary[href="#portfolios"] { padding: 16px 22px; border: 1px solid var(--orange); background: var(--orange); color: var(--light-ink); }
+.hero .btn.primary[href="#portfolios"]:hover { background: var(--orange-hover); border-color: var(--orange-hover); color: var(--light-ink); }
+.hero .btn.primary[href="#portfolios"] .link-arrow { font-size: 20px; line-height: 1; }
+.hero .btn.primary[href="#portfolios"]:hover .link-arrow { transform: translate(3px,-3px); }
