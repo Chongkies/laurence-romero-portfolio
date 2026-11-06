@@ -6,15 +6,15 @@ window.renderCreditScoringCaseStudy = function ({ S, esc, asset, url, chips }) {
   const thesisChips = () => `<ul class="chips">${c.stack.map((name) => {
     const local = c.logos && c.logos[name];
     const logo = local ? local.src : S.softwareLogos[name];
-    return `<li>${logo ? `<img class="tool-logo${local && local.originalColor ? " thesis-logo-original" : ""}" src="${esc(asset(logo))}" width="16" height="16" alt="" aria-hidden="true">` : ""}${esc(name)}</li>`;
+    return `<li>${logo ? `<img class="tool-logo${local && local.originalColor ? " thesis-logo-original" : ""}" src="${esc(asset(logo))}" width="16" height="16" loading="lazy" decoding="async" alt="" aria-hidden="true">` : ""}${esc(name)}</li>`;
   }).join("")}</ul>`;
   document.getElementById("main").innerHTML = `<article class="thesis-case">
     <header class="page-head">
       <div class="wrap">
         <a class="back reveal" href="${url("dev")}">← Developer portfolio</a>
-        <p class="kicker reveal">${esc(c.type)}</p>
         <h1 class="reveal">${esc(c.title)}</h1>
         <p class="thesis-subtitle reveal">${esc(c.subtitle)}</p>
+        <p class="thesis-type reveal">${esc(c.type)}</p>
         <p class="lead reveal">${esc(c.summary)}</p>
         ${thesisChips()}
         <p class="thesis-status reveal">${esc(c.status)}</p>
@@ -36,7 +36,7 @@ window.renderCreditScoringCaseStudy = function ({ S, esc, asset, url, chips }) {
     <section class="section" id="thesis-method"><div class="wrap">
       <h2 class="section-title reveal">How the scoring works</h2>
       <ol class="thesis-flow" aria-label="Initial screening, then credit risk rating, then predictive indicators">
-        ${c.stages.map((stage) => `<li class="panel reveal"><h3>${esc(stage.title)}</h3><p>${esc(stage.text)}</p>${stage.formula ? `<p class="thesis-formula">${esc(stage.formula)}</p><p class="note">${esc(stage.note)}</p>` : ""}</li>`).join("")}
+        ${c.stages.map((stage) => `<li class="panel reveal"><h3>${esc(stage.title.replace(/^\d+\.\s*/, ""))}</h3><p>${esc(stage.text)}</p>${stage.formula ? `<p class="thesis-formula">${esc(stage.formula)}</p><p class="note">${esc(stage.note)}</p>` : ""}</li>`).join("")}
       </ol>
       <div class="thesis-two thesis-formulas">
         ${c.formulas.map((formula) => `<div class="panel reveal"><h3>${esc(formula.title)}</h3><p class="thesis-formula">${esc(formula.expression)}</p><p>${esc(formula.tiers)}</p><p class="note">${esc(formula.meaning)}</p></div>`).join("")}
@@ -110,7 +110,7 @@ window.renderCreditScoringCaseStudy = function ({ S, esc, asset, url, chips }) {
     previous.disabled = current === 0; next.disabled = current === c.gallery.length - 1;
     status.textContent = `${current + 1} / ${c.gallery.length} — ${c.gallery[current].title}`;
   };
-  const move = (index) => track.scrollTo({ left: Math.max(0, Math.min(c.gallery.length - 1, index)) * track.clientWidth, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  const move = (index) => window.PortfolioMotion.slideTrack(track, Math.max(0, Math.min(c.gallery.length - 1, index)) * track.clientWidth);
   previous.addEventListener("click", () => move(current - 1));
   next.addEventListener("click", () => move(current + 1));
   track.addEventListener("scroll", update, { passive: true });

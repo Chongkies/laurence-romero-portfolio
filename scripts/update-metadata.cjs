@@ -4,6 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const context = { window: {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, 'data/seo-metrics.js'), 'utf8'), context);
 vm.runInNewContext(fs.readFileSync(path.join(root, 'content.js'), 'utf8'), context);
 const base = context.window.SITE.baseUrl.replace(/\/?$/, '/');
 const escape = (value) => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');

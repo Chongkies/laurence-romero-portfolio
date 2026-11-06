@@ -13,6 +13,8 @@ const carrd = (n, items) =>
     return { src: `https://laurenceromero.carrd.co/assets/images/gallery0${n}/${id}_original.${ext}?v=a5aeaca9`, alt: "" };
   });
 
+const seoMetrics = window.SEO_METRICS;
+
 window.SITE = {
   name: "Jose Laurence Romero",
   initials: "LR",
@@ -90,7 +92,7 @@ window.SITE = {
   },
 
   location: "Hilongos, Leyte, Philippines",
-  availability: "Available any time (Philippine time, UTC+8). Looking for flexible-schedule remote work: I can work at my own pace or fit around an office schedule.",
+  availability: "Available any time for flexible remote work from Hilongos, Leyte, Philippines (UTC+8), at my own pace or around an office schedule.",
 
   // Email is assembled in the browser so basic scrapers can't read it from the HTML.
   email: { user: "laurence.romero64", domain: "gmail.com" },
@@ -108,22 +110,28 @@ window.SITE = {
     { label: "OnlineJobs.ph", url: "https://www.onlinejobs.ph/jobseekers/info/1520167", roles: ["home", "seo", "multimedia"] },
   ],
 
+  // TODO: update the booking value and date range when the client's records change; confirm the booking definition and reporting dates.
+  results: {
+    bookings: seoMetrics.bookings, // TODO: update value and exact booking dates in data/seo-metrics.js.
+    impressions: `weekly Google impressions grew from ${seoMetrics.historical.weekly[0].value} to ${seoMetrics.historical.weekly.filter(w => !w.partialDays).at(-1).value} on a new site`,
+    indexed: `${seoMetrics.indexing.latest.indexed} pages indexed on Google`,
+  },
+
   hero: {
     availability: "Flexible remote work · Philippine time (UTC+8)",
-    whoIHelp: "I help small businesses get found on Google, run smoother with simple web tools, and look good online.",
     image: { src: "images/me/web/laurence-portrait.jpg", alt: "Jose Laurence Romero smiling in front of a station building and city skyline" },
-    lead: "Computer Engineer who gets businesses found on Google, builds web applications, and creates visuals that look good and work well.",
+    lead: "I help small businesses get found on Google, build practical web applications, and create graphics, videos and photos.",
   },
 
   bio: [
-    "I'm a Computer Engineering graduate from the University of San Carlos, based in Hilongos, Leyte. My work sits in three areas: search engine optimization, full-stack web development, and multimedia (graphic design, video editing and photography).",
-    "It started with designing posters and editing videos for local events, and grew into client work for small businesses. I'm self-taught in design, formally trained in engineering, and I like projects where those skills meet.",
+    "I'm a Computer Engineering graduate from the University of San Carlos, based in Hilongos, Leyte. I work in SEO, full-stack web development and multimedia.",
+    "Designing posters and editing videos for local events grew into work for small businesses. I'm self-taught in design and formally trained in engineering.",
   ],
 
   personalAbout: {
-    nav: "About Me",
+    nav: "About me",
     hint: "Want to know me more? Click me!",
-    title: "Outside Work",
+    title: "Outside work",
     intro: "I enjoy running, mountain biking, hiking, photography and pickleball. Here are a few personal photos from the court, the trails and time outdoors.",
     hobbies: ["Running", "Mountain biking", "Hiking", "Photography", "Pickleball"],
     photos: [
@@ -183,11 +191,10 @@ window.SITE = {
       nav: "SEO",
       title: "SEO",
       kicker: "SEO Specialist",
-      headline: "Technical SEO, content strategy and plain-English reporting.",
+      headline: "Technical SEO, content strategy and clear reporting",
       summary:
-        "Computer Engineering graduate with hands-on SEO experience across keyword strategy, on-page optimization and technical fixes, plus the web development background to diagnose and implement changes myself.",
-      blurb: "Technical SEO, content strategy and reporting. A client website recorded 11 bookings during the first month; their traffic sources are not yet confirmed.",
-      tags: ["Technical SEO", "Keyword strategy", "Reporting"],
+        "I plan keywords, improve on-page content and fix technical SEO issues, with the web development background to implement changes myself.",
+      blurb: "Technical SEO, content strategy and clear reporting for small businesses. I fix search issues, improve content and track what changes.",
       ctaSubject: "SEO / marketing work",
 
       // TODO: add the Semrush completion date when provided; title and certificate links are verified.
@@ -218,127 +225,69 @@ window.SITE = {
       },
 
       caseStudy: {
-        title: "Case study: new UK B2B site, from invisible to ranking",
-        meta: "Prolink Property Support · UK B2B · Wix website · Sept – Oct 2026",
+        title: "Case study: Prolink Property Support",
+        meta: "Prolink Property Support · UK B2B · Wix website · Sept – early Nov 2026",
         brief:
-          "Prolink Property Support, a newly launched UK service business, needed to appear on Google for property-management support searches. I worked part-time on setup, technical SEO, on-page SEO, content review and reporting.",
+          "A newly launched UK service business needed to appear in property-management support searches. I worked part-time on setup, technical SEO, on-page content and reporting.",
         pdf: "", // e.g. "docs/seo-case-study.pdf" to show a download button
-        // TODO: confirm what counts as a booking, the date range, and where the booking count was read.
-        bookings: {
-          title: "11 bookings made through the website so far",
-          note: "Bookings made through the client's website since I started working on it. Counted from the client's booking records.",
+        chartCopy: {
+          performance: `Impressions started near zero in September and have grown through October and November. Visibility is growing faster than clicks: ${seoMetrics.performance.totals.clicks} clicks so far at an average position of ${seoMetrics.performance.totals.averagePosition} means many pages are still on page 2 or 3. Next I will improve titles, content and internal links on the pages just off page 1.`,
+          indexing: `At the start only ${seoMetrics.indexing.baseline.indexed} pages were on Google. After I fixed a site-wide noindex setting and re-submitted pages, indexed pages grew to ${seoMetrics.indexing.latest.indexed}; ${seoMetrics.indexing.latest.notIndexed} are still not indexed and I keep checking them.`,
+          analytics: `AI assistants are already sending visitors. ChatGPT was the largest source of first visits (${seoMetrics.analytics.firstVisits.find(s => s.source === 'chatgpt.com').value} of ${seoMetrics.analytics.activeUsers} active users), ahead of direct visits (${seoMetrics.analytics.firstVisits.find(s => s.source === 'direct').value}) and Google organic search (${seoMetrics.analytics.firstVisits.find(s => s.source === 'google organic').value}), and Gemini adds a few more. Visitors spend an average of ${seoMetrics.analytics.engagementSeconds / 60} minutes on the site.`,
         },
-        stats: [
-          { value: "8 → 692", label: "weekly Google impressions", note: "w/c 8 Sep to w/c 6 Oct" },
-          { value: "10 → 68", label: "pages indexed by Google", note: "Google Search Console, Pages/Indexing; latest screenshot" },
-          { value: "12", label: "non-brand queries ranking in positions 1–3", note: "Google Search Console, 8 Sep–15 Oct 2026 snapshot" },
-          { value: "100/100", label: "technical health score, 0 errors", note: "Ahrefs, 7 Oct" },
-        ],
-        weeklyTitle: "Weekly impressions",
-        weeklyNote: "Times the site appeared in Google results each week. The last bar is only 3 days of data. Source: Google Search Console.",
-        weekly: [
-          { label: "8 Sep", v: 8 },
-          { label: "15 Sep", v: 21 },
-          { label: "22 Sep", v: 52 },
-          { label: "29 Sep", v: 130 },
-          { label: "6 Oct", v: 692 },
-          { label: "13 Oct", v: 337, partial: true },
-        ],
-        // TODO: confirm the exact performance report date range (approximately 24 Sep–22 Oct 2026); it is not shown.
-        // TODO: confirm the date of the latest indexing reading.
-        figures: [
-          {
-            "src": "images/seo/search-console-performance.png",
-            "plotReveal": { "left": 5.3, "top": 23, "width": 91, "height": 46.5 },
-            "alt": "Google Search Console daily performance: 17 clicks, 2.13K impressions, 0.8% CTR and average position 28.5, with impressions higher through October than late September.",
-            "width": 1533,
-            "height": 597,
-            "title": "Search performance",
-            "caption": "Google Search Console, daily data, late Sep – late Oct 2026.",
-            "stats": [
-              {
-                "label": "Impressions",
-                "value": "2.13K"
-              },
-              {
-                "label": "Clicks",
-                "value": "17"
-              },
-              {
-                "label": "CTR",
-                "value": "0.8%"
-              },
-              {
-                "label": "Average position",
-                "value": "28.5"
-              }
-            ],
-            "explanation": [
-              "In this period the site appeared in Google results about 2,130 times. Impressions were close to zero in late September and clearly higher through October. The 17 clicks are an early result; visibility is growing faster than traffic.",
-              "The average position is 28.5 and the click rate is 0.8%. My next step is to improve titles, content and internal links for pages sitting just off page 1, so they can move up and earn more clicks."
-            ],
-            "takeaways": [
-              "Visibility is growing before traffic does, which is normal for a new site.",
-              "I report the real numbers, including the weak ones, so you know where the work is.",
-              "I track clicks, impressions, CTR and position every month in Search Console."
-            ]
-          },
-          {
-            "src": "images/seo/search-console-indexing.png",
-            "plotReveal": { "left": 6.5, "top": 35.7, "width": 88.5, "height": 43.6 },
-            "alt": "Google Search Console indexing chart showing 68 indexed pages and 18 not indexed at the latest reading.",
-            "width": 933,
-            "height": 375,
-            "title": "Pages on Google",
-            "caption": "Google Search Console, Pages/Indexing report. Baseline: 21 Sep 2026; latest reading shown in the screenshot.",
-            "stats": [
-              {
-                "label": "Pages on Google",
-                "value": "10 → 68"
-              },
-              {
-                "label": "Still not indexed",
-                "value": "18"
-              }
-            ],
-            "explanation": [
-              "At the start only 10 pages were on Google and 34 were not indexed. A site-wide noindex setting was telling Google to skip pages and blog posts. After I fixed it and re-submitted the pages, indexed pages grew in steps to 68. The chart does not establish when the fix happened or that it caused any specific jump.",
-              "18 pages are still not indexed. Google decides when to add each page, so I keep checking them and fixing any page that has a real problem."
-            ],
-            "takeaways": [
-              "More pages on Google means more chances to appear in search.",
-              "Checking indexing is the first step in every audit I do."
-            ]
-          }
-        ],
         beforeAfter: [
-          ["Indexing", "10 pages on Google; 29+ pages and posts blocked by a noindex setting", "68 pages on Google; 18 still not indexed (latest Search Console screenshot)"],
-          ["Visibility", "8 impressions in the first week", "692 in the week of 6 Oct 2026; 2.13K impressions in late Sep–late Oct 2026 (daily report)"],
-          ["Measurement", "No search or analytics tracking", "Search Console, GA4 and Bing Webmaster Tools live; monthly client reporting"],
-          ["On-page SEO", "Missing and duplicate titles and descriptions; stray code visible on pages", "Titles and descriptions written for key pages; stray code removed"],
-          ["Technical", "Duplicate posts, broken links, redirect gaps, no business schema", "301 redirects, broken links fixed, LocalBusiness-type schema added"],
-          ["Authority", "Brand-new domain", "9 referring domains; first links and citations in progress"],
+          [
+            "Measurement",
+            "No search or analytics tracking",
+            "Search Console, GA4 and Bing Webmaster Tools live; monthly client reporting"
+          ],
+          [
+            "On-page SEO",
+            "Missing and duplicate titles and descriptions; stray code visible on pages",
+            "Titles and descriptions written for key pages; stray code removed"
+          ],
+          [
+            "Technical",
+            "Duplicate posts, broken links, redirect gaps, no business schema",
+            "301 redirects, broken links fixed, LocalBusiness-type schema added"
+          ],
+          [
+            "Authority",
+            "Brand-new domain",
+            `${seoMetrics.historical.referringDomains} referring domains; first links and citations in progress`
+          ]
         ],
         rankingsTitle: "Rankings snapshot",
-        rankingsNote:
-          "Earlier snapshot: Google Search Console, 8 Sep – 15 Oct 2026. These page/query figures use a different date range from the daily performance report above. 287 different queries brought the site into Google results and 37 non-brand queries reached the top 10. Many of the strongest rankings are long-tail searches with modest volume, which is typical in the first weeks.",
-        rankings: [
-          ["Homepage", "108", "5.8 (page 1); 15 clicks"],
-          ["Guide: reducing property management admin", "85", "10.5; queries like “reduce property admin workload” rank 1–2"],
-          ["Guide: managing outsourced contractors", "67", "13.6"],
-          ["Guide: virtual property management assistants", "90", "18.3"],
-          ["Local service page (city-targeted)", "194", "83.5; being rebuilt next"],
-        ],
+        rankingsNote: `Earlier snapshot: Google Search Console, 8 Sep–15 Oct 2026; a different range from the daily report. The site appeared for ${seoMetrics.historical.queryCount} queries; ${seoMetrics.historical.topTenQueries} non-brand queries reached the top 10. The strongest rankings are mostly low-volume, long-tail searches.`,
+        rankings: seoMetrics.historical.rankings,
         did: [
-          ["Setup and tracking", "Verified the site in Google Search Console and Bing, connected GA4 through Wix."],
-          ["Technical SEO", "Diagnosed and fixed the site-wide noindex, removed stray code, added 301 redirects for duplicate posts, fixed broken links, added structured data."],
-          ["On-page SEO", "Wrote titles, meta descriptions and alt text; set up blog categories and internal links; cleaned navigation and removed duplicate menu items."],
-          ["Content quality", "Audited AI-written blog posts and flagged leaked drafting notes, repeated text and off-topic content for editing."],
-          ["Opportunity analysis", "Used query and page data to find pages stuck on page 2 and rewrote titles to lift click-through."],
-          ["Reporting", "Plain-English monthly reports for a non-technical client."],
+          [
+            "Setup and tracking",
+            "Verified Search Console and Bing; connected GA4 through Wix."
+          ],
+          [
+            "Technical SEO",
+            "Diagnosed crawl issues and implemented the fixes shown in the comparison above."
+          ],
+          [
+            "On-page SEO",
+            "Wrote alt text, set blog categories and internal links, and removed duplicate navigation items."
+          ],
+          [
+            "Content quality",
+            "Audited AI-written posts for leaked drafting notes, repetition and off-topic content."
+          ],
+          [
+            "Opportunity analysis",
+            "Used query and page data to find page-2 opportunities and rewrote titles to improve click-through."
+          ],
+          [
+            "Reporting",
+            "Sent monthly reports in plain English to a non-technical client."
+          ]
         ],
         honest:
-          "The client's website has recorded 11 bookings during the first month of the campaign, counted from the client's booking records. I cannot attribute all 11 to Google search. Search clicks are still small: the late Sep–late Oct 2026 daily report shows 17 clicks and an average position of 28.5. I am working to connect bookings to their source in GA4. Next steps: move page-2 posts onto page 1, rebuild the city page, and grow local citations and reviews.",
+          `${seoMetrics.bookings.value} bookings were made through the client's website in ${seoMetrics.bookings.period}; their traffic sources are not confirmed. Search clicks are still small. I am setting up GA4 key-event tracking, improving page-2 posts, rebuilding the city page, and growing local citations and reviews.`,
       },
 
       skills: [
@@ -355,7 +304,7 @@ window.SITE = {
           org: "Prolink Property Support",
           dates: "Sept 2026 – Present",
           bullets: [
-            "Lead AI-assisted keyword and content strategy with GrandRanker, managing a 450+ keyword library.",
+            `Lead AI-assisted keyword and content strategy with GrandRanker, managing a ${seoMetrics.historical.keywordLibraryMinimum}+ keyword library.`,
             "Run on-page SEO audits covering meta tags, internal linking and content structure, and improve navigation and UX to strengthen conversion paths.",
             "Set up Google Search Console, GA4 and Bing Webmaster Tools to track search visibility and site activity.",
             "Resolved indexing blocks, duplicate-post redirects and broken links, and added structured data.",
@@ -381,11 +330,10 @@ window.SITE = {
       nav: "Developer",
       title: "Software Developer",
       kicker: "Software Developer",
-      headline: "Full-stack web applications built around real business requirements.",
+      headline: "Web applications for real business workflows",
       summary:
-        "Computer Engineering graduate building full-stack web applications across frontend, backend, databases and APIs. I turn business workflows into software, work with modern frameworks and development tools, and validate features through automated tests and user acceptance testing. I use AI coding assistants under my direction, reviewing their output and testing each phase hands-on.",
-      blurb: "Full-stack web apps with React, Laravel and Firebase, including a credit scoring platform built for a rural bank.",
-      tags: ["React", "Laravel", "Firebase"],
+        "Computer Engineering graduate building interfaces, back ends, databases and APIs around business workflows. I test with users and automated checks, and direct AI coding assistants while reviewing and testing their output.",
+      blurb: "Full-stack web developer building practical systems: a credit scoring platform tested with a bank, a data-entry system for a local government treasurer's office, and a player-rating platform for pickleball. I plan with the people who will use it, build the interface and the back end, test it with real users, and improve it from their feedback.",
       ctaSubject: "Software development work",
 
       projects: [
@@ -803,11 +751,10 @@ window.SITE = {
       nav: "Multimedia",
       title: "Multimedia",
       kicker: "Graphic Design · Video Editing · Photography",
-      headline: "Design with a purpose. Edit with impact.",
+      headline: "Graphic design, video and photography",
       summary:
-        "Self-taught designer and editor. What started as a hobby, designing posters and editing videos for local events, turned into client work for small businesses like bike shops, pet stores and local events. I focus on making things look good and work well.",
-      blurb: "Graphic design, video editing and photography: posters, logos, thumbnails, social content and more.",
-      tags: ["Graphic design", "Video editing", "Photography"],
+        "Self-taught designer and editor creating work for bike shops, pet stores and local events, from early hobby projects to client commissions.",
+      blurb: "I design posters, logos, social media graphics and YouTube thumbnails, edit videos, and take photos, mostly for small businesses, local events and community groups. Clean work that matches your brand and is ready for print or social media.",
       ctaSubject: "Design / video project",
 
       toolGroups: [

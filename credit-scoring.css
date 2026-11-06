@@ -2,12 +2,12 @@
 .thesis-case { overflow-wrap: anywhere; }
 .thesis-case h2, .thesis-case h3 { line-height: 1.3; }
 .thesis-case .page-head h1 { max-width: 1050px; font-size: clamp(2rem, 4.5vw, 3.5rem); }
-.thesis-case .kicker { display: block; max-width: 850px; }
+.thesis-case .kicker { display: none; }
 .thesis-case .thesis-subtitle { color: var(--accent); font-weight: 600; margin-top: 16px; }
 .thesis-case .chips li { display: inline-flex; align-items: center; gap: 6px; }
 .thesis-case .thesis-status { margin-top: 22px; color: var(--muted); }
 .thesis-case .thesis-role h2 { font-size: 1.2rem; margin-bottom: 12px; }
-.thesis-case .thesis-confidential { margin-top: 24px; padding-left: 14px; border-left: 2px solid var(--accent); color: var(--muted); font-size: 14px; }
+.thesis-case .thesis-confidential { margin-top: 24px; padding-left: 14px; border: 0; color: var(--muted); font-size: 14px; }
 .thesis-case .thesis-jumps { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; font-size: 14px; }
 .thesis-case .thesis-jumps a { text-decoration: underline; text-underline-offset: 4px; }
 .thesis-case .thesis-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
@@ -18,7 +18,7 @@
 .thesis-case .thesis-flow > li:not(:last-child)::after { content: "→"; position: absolute; top: 24px; right: -26px; color: var(--accent); font-size: 22px; }
 .thesis-case .thesis-flow h3 { color: var(--text); font-size: 1.1rem; }
 .thesis-case .thesis-formulas { margin-top: 24px; }
-.thesis-case .thesis-formula { color: var(--text); padding: 16px; margin: 16px 0; border-radius: 0; background: var(--surface); font-family: ui-monospace, Consolas, monospace; font-size: 15px; }
+.thesis-case .thesis-formula { color: var(--text); padding: 16px; margin: 16px 0; border-radius: 0; background: var(--surface); font-family: Inter, Arial, sans-serif; font-size: 15px; }
 .thesis-case .panel .note:first-of-type { margin-top: 14px; }
 .thesis-case .thesis-features { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; }
 .thesis-case .thesis-shot { margin: 24px 0 0; }
@@ -33,12 +33,12 @@
 .thesis-case .thesis-risk-list li { display: grid; grid-template-columns: 85px minmax(0, 1fr) 95px; gap: 16px; align-items: center; font-size: 14px; }
 .thesis-case .thesis-risk-list li > :last-child { text-align: right; }
 .thesis-case .thesis-risk-track { height: 14px; background: var(--surface); border-radius: 0; overflow: hidden; }
-.thesis-case .thesis-risk-bar { display: block; height: 100%; width: 0; border-radius: 0; background: var(--accent); transition: width 1s var(--ease); }
-.thesis-case .thesis-distribution.in .thesis-risk-bar { width: var(--share); }
+.thesis-case .thesis-risk-bar { display: block; height: 100%; width: var(--share); border-radius: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-base) var(--ease-in-out); }
+.thesis-case .thesis-distribution.in .thesis-risk-bar { transform: scaleX(1); }
 .thesis-case .thesis-results-copy { display: grid; gap: 16px; margin-top: 24px; max-width: 900px; }
 .thesis-case .thesis-next { margin-top: 24px; }
 .thesis-case .thesis-credits { display: grid; gap: 16px; }
-.thesis-case .thesis-credits > div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.thesis-case .thesis-credits > div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; padding-bottom: 16px; border: 0; }
 .thesis-case .thesis-credits dt { color: var(--muted); }
 .thesis-case .thesis-credits dd { margin: 0; }
 @media (max-width: 800px) {
@@ -48,28 +48,38 @@
   .thesis-case .thesis-risk-list li { grid-template-columns: 65px minmax(0, 1fr) 80px; gap: 8px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .thesis-case .thesis-risk-bar { width: var(--share); transition: none; }
+  .thesis-case .thesis-risk-bar { transform: scaleX(1); transition: none; }
 }
 
 /* Case-study screenshot carousel and full-color favicon badges. */
 .thesis-case .thesis-logo-original { filter: none !important; }
 .thesis-case .thesis-gallery { margin-top: 24px; }
 .thesis-case .thesis-carousel-frame { position: relative; margin-top: 20px; }
-.thesis-case .thesis-carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; border: 1px solid var(--line); border-radius: 0; }
+.thesis-case .thesis-carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; border: 0; border-radius: 0; }
 .thesis-case .thesis-carousel-slide { flex: 0 0 100%; min-width: 0; margin: 0; scroll-snap-align: start; }
 .thesis-case .thesis-carousel-slide > a { display: grid; place-items: center; height: clamp(240px, 44vw, 520px); background: var(--paper); }
 .thesis-case .thesis-carousel-slide img { width: 100%; height: 100%; object-fit: contain; }
 .thesis-case .thesis-carousel-slide figcaption { display: grid; gap: 6px; padding: 18px 56px; font-size: 13px; color: var(--muted); }
 .thesis-case .thesis-carousel-slide figcaption strong { color: var(--text); font-size: 15px; }
-.thesis-case .thesis-carousel-arrow { position: absolute; top: calc(clamp(240px, 44vw, 520px) / 2 - 22px); width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 0; background: var(--card); color: var(--text); font-size: 30px; cursor: pointer; }
+.thesis-case .thesis-carousel-arrow { position: absolute; top: calc(clamp(240px, 44vw, 520px) / 2 - 22px); width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 0; background: var(--card); color: var(--text); font-size: 30px; cursor: pointer; }
 .thesis-case .thesis-carousel-arrow.previous { left: 8px; }
 .thesis-case .thesis-carousel-arrow.next { right: 8px; }
 .thesis-case .thesis-carousel-arrow:disabled { opacity: 0.35; cursor: default; }
 
 /* Shared Swiss typography, with the thesis header kept in reading order. */
 .thesis-case .page-head > .wrap { display: block; }
-.thesis-case .page-head h1 { margin-top: 26px; max-width: 21ch; font-size: clamp(40px,5.3vw,76px); line-height: 1.05; letter-spacing: -.045em; }
+.thesis-case .page-head h1 { margin-top: 26px; max-width: 21ch; font-size: clamp(40px,5.3vw,76px); line-height: 1.05; letter-spacing: -.01em; }
 .thesis-case .page-head .lead { margin-top: 26px; max-width: 65ch; }
 .thesis-case .page-head .stats { margin-block: 38px; }
 
 .thesis-case .stat strong { font-size: clamp(22px,2.7vw,42px); }
+
+.thesis-case .thesis-formula { border-radius: var(--radius); }
+.thesis-case .thesis-confidential { padding-left: 0; }
+.thesis-case .thesis-carousel-arrow { border-radius: var(--radius); background: var(--surface); }
+.thesis-case .thesis-carousel-arrow:hover { color: var(--accent); }
+
+.thesis-case .thesis-type { margin-top: 14px; font-size: 14px; }
+
+/* Original credit rows share the site rule token. */
+.thesis-case .thesis-credits > div { border-bottom: 1px solid var(--rule); }

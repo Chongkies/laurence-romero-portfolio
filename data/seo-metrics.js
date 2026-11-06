@@ -1,0 +1,83 @@
+/* SEO results: the only source of numeric SEO/GA metrics used by the UI.
+   Run node scripts/import-search-console.cjs after adding the CSV exports.
+   TODO: add both CSVs; confirm the exact performance end date, latest indexing date,
+   GA4 range, booking dates/definition, and replace the older source screenshots. */
+window.SEO_METRICS = {
+  bookings: {
+    value: 30,
+    label: "bookings made through the client's website in the first month and a half",
+    note: "Counted from the client's booking records.",
+    period: "about six weeks",
+  },
+  performance: {
+    source: "Google Search Console",
+    range: { start: "2026-09-08", end: "", approximateEnd: "early Nov 2026" },
+    totals: { clicks: 32, impressionsDisplay: "3.77K", impressionsExact: null, ctr: 0.8, averagePosition: 25.4 },
+    series: [],
+    csvSummary: null,
+    rangeWarning: "",
+  },
+  indexing: {
+    source: "Google Search Console, Pages report",
+    baseline: { date: "2026-09-21", indexed: 10 },
+    latest: { date: "", indexed: 74, notIndexed: 15 },
+    series: [],
+    rangeWarning: "",
+  },
+  analytics: {
+    source: "Google Analytics 4",
+    range: { start: "", end: "" },
+    activeUsers: 65,
+    newUsers: 55,
+    engagementSeconds: 240,
+    eventCount: 840,
+    firstVisits: [
+      { source: "chatgpt.com", label: "ChatGPT", value: 25 },
+      { source: "direct", label: "Direct", value: 21 },
+      { source: "google organic", label: "Google organic search", value: 15 },
+      { source: "gemini.google.com", label: "Gemini", value: 2 },
+      { source: "facebook.com", label: "Facebook", value: 1 },
+      { source: "linkedin.com", label: "LinkedIn", value: 1 },
+    ],
+    sessions: [
+      { source: "direct", label: "Direct", value: 76 },
+      { source: "chatgpt.com", label: "ChatGPT", value: 27 },
+      { source: "google organic", label: "Google organic search", value: 19 },
+      { source: "linkedin.com", label: "LinkedIn", value: 8 },
+      { source: "manage.wix.com", label: "manage.wix.com", value: 4 },
+      { source: "gemini.google.com", label: "Gemini", value: 2 },
+      { source: "facebook.com", label: "Facebook", value: 2 },
+    ],
+  },
+  historical: {
+    weekly: [
+      { date: "2026-09-08", label: "8 Sep", value: 8 },
+      { date: "2026-09-15", label: "15 Sep", value: 21 },
+      { date: "2026-09-22", label: "22 Sep", value: 52 },
+      { date: "2026-09-29", label: "29 Sep", value: 130 },
+      { date: "2026-10-06", label: "6 Oct", value: 692 },
+      { date: "2026-10-13", label: "13 Oct", value: 337, partialDays: 3 },
+    ],
+    rankingsRange: { start: "2026-09-08", end: "2026-10-15" },
+    topThreeQueries: 12,
+    queryCount: 287,
+    topTenQueries: 37,
+    technicalHealth: { score: 100, maximum: 100, errors: 0, date: "2026-10-07" },
+    referringDomains: 9,
+    keywordLibraryMinimum: 450,
+    initialNotIndexed: 34,
+    blockedPagesMinimum: 29,
+    rankings: [
+      ["Homepage", "108", "5.8 (page 1); 15 clicks"],
+      ["Guide: reducing property management admin", "85", "10.5; queries like “reduce property admin workload” rank 1–2"],
+      ["Guide: managing outsourced contractors", "67", "13.6"],
+      ["Guide: virtual property management assistants", "90", "18.3"],
+      ["Local service page (city-targeted)", "194", "83.5; being rebuilt next"],
+    ],
+  },
+  screenshots: {
+    performance: { path: "images/seo/search-console-performance.png", available: true, earlierSnapshot: true },
+    indexing: { path: "images/seo/search-console-indexing.png", available: true, earlierSnapshot: true },
+    analytics: { path: "images/seo/ga4-snapshot.png", available: false, earlierSnapshot: false },
+  },
+};

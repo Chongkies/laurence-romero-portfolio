@@ -3,6 +3,7 @@
   "use strict";
 
   const S = window.SITE;
+  const M = window.PortfolioMotion;
   const view = document.body.getAttribute("data-view") || "home";
   const root = document.body.getAttribute("data-root") || ".";
   const isFile = location.protocol === "file:";
@@ -20,15 +21,10 @@
 
   const svg = (inner) =>
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
-  const ICONS = {
-    seo: svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 13l2.5-3 2 2L15 8"/>'),
-    dev: svg('<path d="m8 8-5 4 5 4"/><path d="m16 8 5 4-5 4"/><path d="m14 5-4 14"/>'),
-    multimedia: svg('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/>'),
-  };
 
   const chips = (arr, showLogos = false) => (arr && arr.length ? `<ul class="chips">${arr.map((t) => {
     const logo = showLogos && S.softwareLogos && S.softwareLogos[t];
-    return `<li>${logo ? `<img class="tool-logo" src="${esc(asset(logo))}" width="16" height="16" alt="" aria-hidden="true">` : ""}${esc(t)}</li>`;
+    return `<li>${logo ? `<img class="tool-logo" src="${esc(asset(logo))}" width="16" height="16" loading="lazy" decoding="async" alt="" aria-hidden="true">` : ""}${esc(t)}</li>`;
   }).join("")}</ul>` : "");
 
   /* ---------------------------------------------------------- shell */
@@ -50,10 +46,10 @@
 
     const burger = $("#burger");
     const links = $("#navlinks");
-    burger.addEventListener("click", () => {
-      const open = links.classList.toggle("open");
-      burger.setAttribute("aria-expanded", open);
-    });
+    M.menu(burger, links);
+    const syncThemeIcon = () => M.themeIcon($("#theme"), document.documentElement.getAttribute("data-theme") === "dark" || (!document.documentElement.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches));
+    syncThemeIcon();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeIcon);
     let changingTheme = false;
     $("#theme").addEventListener("click", async () => {
       if (changingTheme) return;
@@ -64,6 +60,7 @@
       const next = dark ? "light" : "dark";
       const applyTheme = () => {
         el.setAttribute("data-theme", next);
+        syncThemeIcon();
         try { localStorage.setItem("theme", next); } catch (e) {}
       };
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -82,7 +79,7 @@
           applyTheme();
           // A gentle fade also works in browsers without snapshot transitions.
           if (el.animate) await el.animate([{ opacity: .85 }, { opacity: 1 }], {
-            duration: 450, easing: "ease-in-out"
+            duration: M.duration("base"), easing: M.ease("in-out")
           }).finished;
         }
       } catch (e) {
@@ -107,8 +104,7 @@
     const work = S.roles[id].howIWork;
     if (!work) return "";
     return `<section class="section how-i-work"><div class="wrap"><div class="panel reveal"><h2 class="section-title">${esc(work.title)}</h2>
-      <ol class="work-steps" role="list">${work.steps.map((step, i) => `<li><span class="work-step-number" aria-hidden="true">${i + 1}</span><p>${esc(step)}</p></li>`).join("")}</ol>
-      <dl class="work-facts">${S.workFacts.map((fact) => `<div><dt>${esc(fact.k)}</dt><dd>${esc(fact.v)}</dd></div>`).join("")}</dl>
+      <ol class="work-steps" role="list">${work.steps.map((step) => `<li><p>${esc(step)}</p></li>`).join("")}</ol>
     </div></div></section>`;
   }
 
@@ -161,38 +157,26 @@
   }
 
   function wireCopy() {
-    const b = $("#copy-email");
-    if (!b) return;
-    b.addEventListener("click", () => {
-      const done = () => {
-        b.textContent = "Copied: " + email;
-        setTimeout(() => (b.textContent = "Copy email address"), 2500);
-      };
-      if (navigator.clipboard) navigator.clipboard.writeText(email).then(done, () => (b.textContent = email));
-      else b.textContent = email;
-    });
+    const button = $("#copy-email");
+    if (button) M.copy(button, email);
   }
 
   /* ----------------------------------------------------------- home */
   function renderHome() {
-    const cards = ROLE_IDS.map((id, index) => {
+    const cards = ROLE_IDS.map((id) => {
       const r = S.roles[id];
       return `
-        <a class="role-card reveal" data-role="${id}" href="${url(id)}">
-          <span class="role-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
-          <span class="role-ico">${ICONS[id]}</span>
+        <article class="role-card reveal" data-role="${id}">
           <h3>${esc(r.title)}</h3>
           <p>${esc(r.blurb)}</p>
-          ${chips(r.tags)}
-          <span class="role-go">View portfolio <i>→</i></span>
-        </a>`;
+          <a class="role-go" href="${url(id)}">View portfolio</a>
+        </article>`;
     }).join("");
 
     const timeline = S.timeline.map((t) => {
       const job = (S.roles[t.tag]?.experience || []).find((e) => e.title === t.title && e.org === t.org);
       const bullets = job?.bullets || [];
       return `<li class="tl-item reveal" id="${esc(t.id)}">
-        <span class="tl-dot" data-role="${t.tag}"></span>
         <div><h4>${esc(t.title)}</h4>${organizationName(t.org)}
           ${bullets.length ? `<button class="timeline-toggle" type="button" aria-expanded="false" aria-controls="${esc(t.id)}-details">View<span class="sr-only"> ${esc(t.title)}</span></button>
           <div class="timeline-details" id="${esc(t.id)}-details" inert><div><ul class="bullets">${bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></div>` : ''}
@@ -204,22 +188,19 @@
       <section class="hero">
         <div class="wrap hero-in">
           <div class="hero-copy">
-          <p class="kicker reveal"><span class="pulse"></span>${esc(S.hero.availability || S.availability)} · ${esc(S.location)}</p>
           <h1 class="reveal">${esc(S.name)}</h1>
           <p class="lead reveal">${esc(S.hero.lead)}</p>
-          ${S.hero.whoIHelp ? `<p class="hero-help reveal">${esc(S.hero.whoIHelp)}</p>` : ""}
           <div class="btn-row reveal">
             <a class="btn primary" href="#portfolios">Explore my work<span class="link-arrow" aria-hidden="true">↗</span></a>
             <a class="btn ghost" href="#contact">Get in touch</a>
           </div>
           </div>
           ${S.hero.image ? `<div class="hero-portrait"><img src="${esc(asset(S.hero.image.src))}" alt="${esc(S.hero.image.alt)}" width="1000" height="1333" fetchpriority="high" decoding="async"></div>` : ""}
-          <dl class="hero-meta">
-            <div><dt>Location</dt><dd>${esc(S.location)}</dd></div>
-            <div><dt>Availability</dt><dd>${esc(S.hero.availability || S.availability)}</dd></div>
-            ${S.phone ? `<div><dt>Phone</dt><dd><a href="tel:${esc(S.phone)}">${esc(S.phone)}</a></dd></div>` : ''}
-            <div><dt>Email</dt><dd><a href="mailto:${email}">${esc(email)}</a></dd></div>
-          </dl>
+          <ul class="hero-proof" aria-label="Selected SEO results">
+            <li><a href="${url('seo')}">${esc(S.results.bookings.value)} ${esc(S.results.bookings.label)}</a></li>
+            <li><a href="${url('seo')}">${esc(S.results.impressions)}</a></li>
+            <li><a href="${url('seo')}">${esc(S.results.indexed)}</a></li>
+          </ul>
 
         </div>
       </section>
@@ -247,11 +228,6 @@
           <div>
             <h3 class="reveal">Experience</h3>
             <ul class="timeline">${timeline}</ul>
-            <p class="legend reveal">
-              <span><i class="tl-dot" data-role="seo"></i>SEO</span>
-              <span><i class="tl-dot" data-role="dev"></i>Developer</span>
-              <span><i class="tl-dot" data-role="multimedia"></i>Multimedia</span>
-            </p>
           </div>
         </div>
       </section>
@@ -282,14 +258,13 @@
   function pageHead(id) {
     const r = S.roles[id];
     const others = ROLE_IDS.filter((x) => x !== id)
-      .map((x) => `<a class="pill" data-role="${x}" href="${url(x)}">${esc(S.roles[x].nav)}</a>`)
+      .map((x) => `<a class="text-link" data-role="${x}" href="${url(x)}">${esc(S.roles[x].nav)}</a>`)
       .join("");
     const resume = S.resumes[id] ? `<a class="btn ghost" href="${asset(S.resumes[id])}" target="_blank" rel="noopener">Download resume</a>` : "";
     return `
       <section class="page-head">
         <div class="wrap">
           <a class="back reveal" href="${url("home", "#portfolios")}">← All portfolios</a>
-          <p class="kicker reveal">${esc(r.kicker)}</p>
           <h1 class="reveal">${esc(r.headline)}</h1>
           <p class="lead reveal">${esc(r.summary)}</p>
           <div class="btn-row reveal">
@@ -333,41 +308,9 @@
       .join("");
 
   /* ------------------------------------------------------------ SEO */
-  function indexingChart(figure) {
-    const chart = figure.chart;
-    const x = (day) => 40 + day / 21 * 420;
-    const y = (value) => 220 - value / 60 * 180;
-    return `<div class="indexing-chart">
-      <ul class="indexing-legend">${chart.series.map((series, i) => `<li><span class="indexing-key series-${i}"></span>${esc(series.label)}</li>`).join("")}</ul>
-      <svg viewBox="0 0 500 270" role="img" aria-labelledby="indexing-chart-title indexing-chart-desc">
-        <title id="indexing-chart-title">${esc(figure.title)}</title>
-        <desc id="indexing-chart-desc">${esc(figure.alt)} ${esc(chart.note)}</desc>
-        ${[0, 20, 40, 60].map((value) => `<line class="indexing-grid" x1="40" x2="460" y1="${y(value)}" y2="${y(value)}"/><text class="indexing-axis" x="30" y="${y(value) + 4}" text-anchor="end">${value}</text>`).join("")}
-        ${[{ day: 0, label: "21 Sep" }, { day: 7, label: "28 Sep" }, { day: 14, label: "5 Oct" }, { day: 21, label: "12 Oct" }].map((tick) => `<text class="indexing-axis" x="${x(tick.day)}" y="246" text-anchor="middle">${tick.label}</text>`).join("")}
-        ${chart.series.map((series, i) => {
-          const path = chart.checkpoints.map((point, n) => `${n ? "H" : "M"}${x(point.day)}${n ? "V" : ","}${y(series.values[n])}`).join(" ");
-          return `<g class="indexing-series series-${i}"><path class="indexing-line" d="${path}" pathLength="1"/>${chart.checkpoints.map((point, n) => `<circle class="indexing-point" cx="${x(point.day)}" cy="${y(series.values[n])}" r="4" tabindex="0"><title>${esc(point.label)}: ${series.values[n]} ${esc(series.label.toLowerCase())}</title></circle>`).join("")}<text class="indexing-value" x="470" y="${y(series.values.at(-1)) + 4}">${series.values.at(-1)}</text></g>`;
-        }).join("")}
-      </svg>
-      <p class="note">${esc(chart.note)}</p>
-    </div>`;
-  }
-
   function renderSeo() {
     const r = S.roles.seo;
     const c = r.caseStudy;
-    const max = Math.max.apply(null, c.weekly.map((w) => w.v));
-    const bars = c.weekly
-      .map(
-        (w) => `
-        <div class="bar-col">
-          <span class="bar-val">${w.v}</span>
-          <div class="bar${w.partial ? " partial" : ""}" style="--n:${((w.v / max) * 100).toFixed(1)}"></div>
-          <span class="bar-lab">${esc(w.label)}${w.partial ? "<small>3 days</small>" : ""}</span>
-        </div>`
-      )
-      .join("");
-
     $("#main").innerHTML = `
       ${pageHead("seo")}
 
@@ -378,45 +321,11 @@
           <p class="reveal narrow">${esc(c.brief)}</p>
           ${c.pdf ? `<p class="reveal"><a class="btn ghost" href="${asset(c.pdf)}" target="_blank" rel="noopener">Download the case study (PDF)</a></p>` : ""}
 
-          ${c.bookings ? `<aside class="panel bookings-highlight reveal" aria-label="Website booking result">
-            <strong><span class="booking-number">${esc(c.bookings.title.split(" ")[0])}</span><span>${esc(c.bookings.title.slice(c.bookings.title.indexOf(" ")))}</span></strong><p class="note">${esc(c.bookings.note)}</p>
+          ${S.results.bookings ? `<aside class="panel bookings-highlight reveal" aria-label="Website booking result">
+            <strong><span class="booking-number">${esc(S.results.bookings.value)}</span><span>${esc(S.results.bookings.label)}</span></strong><p class="note">${esc(S.results.bookings.note)}</p>
           </aside>` : ''}
 
-          <div class="stats">
-            ${c.stats
-              .map(
-                (s) => `
-              <div class="stat reveal">
-                <strong>${esc(s.value)}</strong>
-                <span>${esc(s.label)}</span>
-                <small>${esc(s.note)}</small>
-              </div>`
-              )
-              .join("")}
-          </div>
-
-          <div class="panel reveal">
-            <h3>${esc(c.weeklyTitle)}</h3>
-            <div class="bars">${bars}</div>
-            <p class="note">${esc(c.weeklyNote)}</p>
-          </div>
-          
-          ${(c.figures || (c.figure ? [c.figure] : [])).map((figure, index) => `<div class="panel case-figure reveal" aria-labelledby="case-figure-${index}">
-            <h3 id="case-figure-${index}">${esc(figure.title)}</h3>
-            ${figure.stats?.length ? `<dl class="case-figure-stats">${figure.stats.map((stat) => `<div><dt>${esc(stat.label)}</dt><dd>${esc(stat.value)}</dd></div>`).join("")}</dl>` : ""}
-            <figure>
-              <a class="case-figure-image" href="${esc(asset(figure.src))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(figure.title)}: open full-size screenshot in a new tab">
-                <span class="search-chart"${figure.plotReveal ? ' data-chart-motion' : ''}>
-                  <img src="${esc(asset(figure.src))}" alt="${esc(figure.alt)}" width="${esc(figure.width)}" height="${esc(figure.height)}" loading="lazy" decoding="async">
-                  ${figure.plotReveal ? `<span class="search-chart-curtain" aria-hidden="true" style="left:${Number(figure.plotReveal.left)}%;top:${Number(figure.plotReveal.top)}%;width:${Number(figure.plotReveal.width)}%;height:${Number(figure.plotReveal.height)}%"></span>` : ''}
-                </span>
-              </a>
-              <figcaption class="note">${esc(figure.caption)}</figcaption>
-            </figure>
-            ${(figure.explanation || []).map((p) => `<p class="figure-explanation">${esc(p)}</p>`).join("")}
-            <h4>What this means</h4>
-            <ul class="bullets">${(figure.takeaways || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
-          </div>`).join("")}
+          ${window.SEOCharts.render(window.SEO_METRICS, c.chartCopy, asset)}
 
         </div>
       </section>
@@ -446,9 +355,9 @@
         <div class="wrap">
           <h2 class="section-title reveal">What I did</h2>
           <div class="did-grid">
-            ${c.did.map((d, i) => `<div class="did reveal"><span class="num">${String(i + 1).padStart(2, "0")}</span><h4>${esc(d[0])}</h4><p>${esc(d[1])}</p></div>`).join("")}
+            ${c.did.map((d) => `<div class="did reveal"><h4>${esc(d[0])}</h4><p>${esc(d[1])}</p></div>`).join("")}
           </div>
-          <aside class="callout reveal"><strong>Honest note.</strong> ${esc(c.honest)}</aside>
+          <aside class="callout reveal"><strong>Honest note</strong> ${esc(c.honest)}</aside>
         </div>
       </section>
 
@@ -497,8 +406,8 @@
         ${p.image ? `<img class="project-img" loading="lazy" src="${asset(p.image)}" alt="${esc(p.title)} screenshot">` : ""}
         <div class="project-body${p.caseStudy || (p.previews && p.previews.length) ? " has-project-view" : ""}">
           ${p.caseStudy ? `<a class="btn ghost project-view" href="${esc(asset(p.caseStudy.path + (isFile ? "index.html" : "")))}" aria-label="View case study: ${esc(p.title)}">${svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}<span>View</span></a>` : p.previews && p.previews.length ? `<button class="btn ghost project-view" type="button" data-project-preview="${projectIndex}" aria-label="View UI previews: ${esc(p.title)}">${svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}<span>View</span></button>` : ""}
-          <p class="meta">${esc(p.subtitle)}</p>
           <h3>${esc(p.title)}</h3>
+          <p class="meta">${esc(p.subtitle)}</p>
           ${chips(p.stack, true)}
           <ul class="bullets">${p.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
           ${
@@ -584,7 +493,7 @@
       if (!previewDialog.open || previewDialog.classList.contains("is-closing")) return;
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) { previewDialog.close(); return; }
       previewDialog.classList.add("is-closing");
-      previewCloseTimer = setTimeout(() => previewDialog.close(), 180);
+      previewCloseTimer = setTimeout(() => previewDialog.close(), M.duration("base") * .8);
     };
     $("#project-preview-close").addEventListener("click", closePreview);
     previewDialog.addEventListener("cancel", (event) => { event.preventDefault(); closePreview(); });
@@ -673,14 +582,26 @@
       .join("");
 
     function draw() {
+      M.galleryUpdate(grid, () => {
       list = active === "all" ? all : all.filter((x) => x.cat === active);
       grid.innerHTML = list
         .slice(0, shown)
         .map((it, i) => `<button class="shot" type="button" data-i="${i}" aria-label="Open image ${i + 1}"><img loading="lazy" decoding="async" src="${esc(asset(it.src))}" alt="${esc(it.alt)}"></button>`)
         .join("");
       more.parentElement.style.display = list.length > shown ? "" : "none";
+      });
     }
 
+    M.tabIndicator(tabs);
+    tabs.addEventListener("keydown", (event) => {
+      const buttons = $$(".tab", tabs), current = buttons.indexOf(document.activeElement);
+      let next;
+      if (event.key === "ArrowRight") next = (current + 1) % buttons.length;
+      if (event.key === "ArrowLeft") next = (current - 1 + buttons.length) % buttons.length;
+      if (event.key === "Home") next = 0;
+      if (event.key === "End") next = buttons.length - 1;
+      if (next !== undefined) { event.preventDefault(); buttons[next].focus(); buttons[next].click(); }
+    });
     tabs.addEventListener("click", (e) => {
       const b = e.target.closest(".tab");
       if (!b) return;
@@ -699,63 +620,16 @@
     });
     grid.addEventListener("click", (e) => {
       const b = e.target.closest(".shot");
-      if (b) openLightbox(list, +b.getAttribute("data-i"));
+      if (b) lightbox.open(list, +b.getAttribute("data-i"), b);
     });
     draw();
   }
 
   /* ------------------------------------------------------- lightbox */
-  let lbList = [];
-  let lbIndex = 0;
-  function openLightbox(list, i) {
-    lbList = list;
-    lbIndex = i;
-    const lb = $("#lightbox");
-    lb.hidden = false;
-    document.body.classList.add("noscroll");
-    showLb();
-    $("#lb-close").focus();
-  }
-  function showLb() {
-    const it = lbList[lbIndex];
-    const img = $("#lb-img");
-    img.classList.remove("loaded");
-    img.onload = () => img.classList.add("loaded");
-    img.src = asset(it.src);
-    img.alt = it.alt;
-    $("#lb-count").textContent = lbIndex + 1 + " / " + lbList.length;
-  }
-  function closeLb() {
-    $("#lightbox").hidden = true;
-    document.body.classList.remove("noscroll");
-  }
-  function stepLb(d) {
-    lbIndex = (lbIndex + d + lbList.length) % lbList.length;
-    showLb();
-  }
+  let lightbox;
   function wireLightbox() {
-    const lb = $("#lightbox");
-    if (!lb) return;
-    $("#lb-close").addEventListener("click", closeLb);
-    $("#lb-prev").addEventListener("click", () => stepLb(-1));
-    $("#lb-next").addEventListener("click", () => stepLb(1));
-    lb.addEventListener("click", (e) => {
-      if (e.target === lb || e.target.classList.contains("lb-stage")) closeLb();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (lb.hidden) return;
-      if (e.key === "Escape") closeLb();
-      if (e.key === "ArrowLeft") stepLb(-1);
-      if (e.key === "ArrowRight") stepLb(1);
-    });
-    let x0 = null;
-    lb.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
-    lb.addEventListener("touchend", (e) => {
-      if (x0 === null) return;
-      const dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 50) stepLb(dx < 0 ? 1 : -1);
-      x0 = null;
-    });
+    const box = $("#lightbox");
+    if (box) lightbox = M.lightbox(box, asset);
   }
 
   /* ----------------------------------------------- scroll animations */
@@ -777,29 +651,14 @@
     );
     motionCleanups.push(() => io.disconnect());
     els.forEach((el, i) => {
-      el.style.transitionDelay = Math.min((i % 4) * 60, 180) + "ms";
-      io.observe(el);
-    });
-  }
-
-  function animateSearchCharts() {
-    const charts = $$('[data-chart-motion]');
-    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const chart = entry.target;
-        observer.unobserve(chart);
-        const img = chart.querySelector('img');
-        img.decode().then(() => {
-          requestAnimationFrame(() => chart.classList.add('chart-playing'));
-        }).catch(() => chart.classList.remove('motion-ready'));
+      const siblings = $$(".reveal", el.parentElement);
+      el.style.transitionDelay = M.stagger(siblings.indexOf(el)) + "ms";
+      el.addEventListener("transitionend", function settled(event) {
+        if (event.target !== el || event.propertyName !== "opacity") return;
+        el.style.transitionDelay = "0ms";
+        el.removeEventListener("transitionend", settled);
       });
-    }, { threshold: 0.25 });
-    motionCleanups.push(() => observer.disconnect());
-    charts.forEach((chart) => {
-      chart.classList.add('motion-ready');
-      observer.observe(chart);
+      io.observe(el);
     });
   }
 
@@ -813,19 +672,11 @@
     motionCleanups = [];
   }
   function wireTimeline() {
-    $$('.timeline-toggle').forEach((button) => button.addEventListener('click', () => {
-      const open = button.getAttribute('aria-expanded') !== 'true';
-      button.setAttribute('aria-expanded', String(open));
-      const panel = document.getElementById(button.getAttribute('aria-controls'));
-      panel.inert = !open;
-      panel.classList.toggle('is-open', open);
-      button.firstChild.textContent = open ? 'Hide' : 'View';
-    }));
+    $$(".timeline-toggle").forEach(button => M.timeline(button, document.getElementById(button.getAttribute("aria-controls"))));
   }
   function enhanceScroll() {
     const alternating = $$('.skill.reveal, .did.reveal, .project.reveal, .tl-item.reveal, .exp.reveal, .role-card.reveal');
     alternating.forEach((el, i) => el.classList.add(i % 2 ? 'reveal-right' : 'reveal-left'));
-    $$('.section-title').forEach((title) => title.classList.add('title-line'));
     if (motionQuery.matches || !('IntersectionObserver' in window)) return;
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -843,8 +694,8 @@
       el.replaceChildren(accessible, visual);
       const start = performance.now(); let frame;
       const tick = (now) => {
-        const progress = Math.min(1, (now - start) / 650);
-        const number = target * (1 - Math.pow(1 - progress, 3));
+        const progress = Math.min(1, (now - start) / M.duration("base"));
+        const number = target * M.progress(progress);
         visual.textContent = match[1] + number.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + match[3];
         if (progress < 1) frame = requestAnimationFrame(tick);
         else el.textContent = final;
@@ -854,23 +705,10 @@
     }), { threshold: 0.5 });
     $$('.stats .stat strong').forEach((el) => observer.observe(el));
     motionCleanups.push(() => observer.disconnect());
-    const heads = $$('.hero, .page-head'); let frame;
-    const move = () => {
-      frame = null;
-      heads.forEach((head) => {
-        const y = head.getBoundingClientRect().top;
-        head.style.setProperty('--circle-x', Math.max(-12, Math.min(12, -y * 0.025)) + 'px');
-      });
-    };
-    const scroll = () => { if (!frame) frame = requestAnimationFrame(move); };
-    window.addEventListener('scroll', scroll, { passive: true }); move();
-    motionCleanups.push(() => { window.removeEventListener('scroll', scroll); cancelAnimationFrame(frame); });
+
   }
   function animatePortrait() {
-    const photo = $('.hero-portrait');
-    if (!photo || motionQuery.matches) return;
-    photo.classList.remove('portrait-pending');
-    photo.animate([{ opacity: 0, transform: 'translateX(32px)' }, { opacity: 1, transform: 'none' }], { duration: 850, easing: 'cubic-bezier(.22,.61,.36,1)' });
+    M.hero($(".hero-portrait"));
   }
   function homeIntro() {
     if (view !== 'home' || motionQuery.matches) { animatePortrait(); return; }
@@ -906,33 +744,6 @@
     document.addEventListener('keydown', skipEvent, true);
     timer = setTimeout(finish, INTRO_TIMING.traces + INTRO_TIMING.merge + INTRO_TIMING.opening);
   }
-  function applySwissLayout() {
-    let number = 0;
-    $$('#main > section.section, #main > .thesis-case > section.section').forEach((section) => {
-      const wrap = $(':scope > .wrap', section);
-      if (!wrap || section.classList.contains('swiss-section')) return;
-      const title = $('.section-title, h2, h3', wrap);
-      if (!title && !section.classList.contains('personal-page')) return;
-      const cleanTitle = title ? title.cloneNode(true) : document.createElement('span');
-      $$('.about-hint', cleanTitle).forEach((hint) => hint.remove());
-      let label = cleanTitle.textContent.trim() || 'Photos';
-      if (section.id === 'portfolios') label = 'Portfolios';
-      else if (section.id === 'about') label = 'About';
-      else if (section.classList.contains('client-reviews')) label = 'Google reviews';
-      else if (label.startsWith('Case study:')) label = 'Case study';
-      const body = document.createElement('div');
-      body.className = 'section-content';
-      ['about-grid', 'two-col', 'personal-photos', 'thesis-two'].forEach((name) => {
-        if (wrap.classList.contains(name)) { body.classList.add(name); wrap.classList.remove(name); }
-      });
-      while (wrap.firstChild) body.append(wrap.firstChild);
-      const marker = document.createElement('p');
-      marker.className = 'section-label'; marker.setAttribute('aria-hidden', 'true');
-      marker.innerHTML = String(++number).padStart(2, '0') + ' —<span>' + esc(label) + '</span>';
-      wrap.append(marker, body); section.classList.add('swiss-section');
-    });
-  }
-
   function renderPage() {
     clearPageMotion();
     document.body.dataset.view = view;
@@ -944,9 +755,8 @@
     else if (view === 'about') renderAbout();
     else renderHome();
     if (!$('#contact')) $('#main').insertAdjacentHTML('beforeend', contactBlock(view === 'about' ? 'home' : view, S.roles[view] ? S.roles[view].ctaSubject : 'Work inquiry'));
-    applySwissLayout();
-    renderFooter(); wireCopy(); wireTimeline(); enhanceScroll(); reveal();
-    if (view === 'seo') animateSearchCharts();
+    renderFooter(); M.init(); wireCopy(); wireTimeline(); enhanceScroll(); reveal();
+    if (view === 'seo') motionCleanups.push(window.SEOCharts.init());
   }
   const staticMain = $('#main').innerHTML;
   try {
@@ -968,11 +778,4 @@
     const t = document.getElementById(location.hash.slice(1));
     if (t) setTimeout(() => t.scrollIntoView(), 60);
   }
-  // Close the mobile menu after tapping a link
-  document.addEventListener("click", (e) => {
-    if (e.target.closest("#navlinks a")) {
-      $("#navlinks").classList.remove("open");
-      $("#burger").setAttribute("aria-expanded", "false");
-    }
-  });
 })();
