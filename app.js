@@ -39,7 +39,7 @@
           </div>
           <div class="nav-actions">
           <button class="theme" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">${svg('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>')}</button>
-          <a class="nav-contact" href="#contact">Contact</a>
+          <a class="btn btn--secondary btn--sm nav-contact" href="#contact">Contact</a>
           </div>
         </nav>
       </div>`;
@@ -100,14 +100,6 @@
       </div>`;
   }
 
-  function howIWork(id) {
-    const work = S.roles[id].howIWork;
-    if (!work) return "";
-    return `<section class="section how-i-work"><div class="wrap"><div class="panel reveal"><h2 class="section-title">${esc(work.title)}</h2>
-      <ol class="work-steps" role="list">${work.steps.map((step) => `<li><p>${esc(step)}</p></li>`).join("")}</ol>
-    </div></div></section>`;
-  }
-
   function testimonials(id) {
     const items = S.roles[id].testimonials;
     if (!items || !items.length) return "";
@@ -121,7 +113,7 @@
       <p class="section-sub reveal">${esc(reviews.note)}</p>
       <div class="testimonial-grid">${reviews.items.map((review) => `<figure class="panel reveal client-review">
         <span class="review-stars" role="img" aria-label="5 out of 5 stars">${star.repeat(5)}</span>
-        <blockquote><p>${esc(review.quote)}</p></blockquote>
+        <blockquote><details class="review-details"><summary><span class="review-clamp">${esc(review.quote)}</span><span class="review-more">Read more</span><span class="review-less">Read less</span></summary></details></blockquote>
         <figcaption><strong>${esc(review.name)}</strong><span>Google review</span></figcaption>
       </figure>`).join('')}</div>
       <p class="note reveal">${esc(reviews.summary)}</p>
@@ -139,9 +131,9 @@
             <p>${esc(S.availability)}</p>
             <p>Send a short note about what you need and I'll reply by email.</p>
             <div class="btn-row">
-              <a class="btn primary" href="mailto:${email}?subject=${sub}"><span class="contact-link-label">Email me</span><span class="contact-link-value">${esc(email)}</span></a>
-              ${S.phone ? `<a class="btn ghost" href="tel:${esc(S.phone)}" aria-label="Call ${esc(S.phone)}"><span class="contact-link-label">Call me</span><span class="contact-link-value">${esc(S.phone)}</span></a>` : ""}
-              <button class="btn ghost" id="copy-email" type="button">Copy email address</button>
+              <a class="btn btn--primary" href="mailto:${email}?subject=${sub}"><span class="contact-link-label">Email me</span><span class="contact-link-value">${esc(email)}</span></a>
+              ${S.phone ? `<a class="btn btn--secondary" href="tel:${esc(S.phone)}" aria-label="Call ${esc(S.phone)}"><span class="contact-link-label">Call me</span><span class="contact-link-value">${esc(S.phone)}</span></a>` : ""}
+              <button class="btn btn--secondary btn--sm" id="copy-email" type="button">Copy email address</button>
             </div>
             ${S.phone ? `<p class="contact-phone">Phone: <span>${esc(S.phone)}</span></p>` : ""}
             ${
@@ -169,7 +161,7 @@
         <article class="role-card reveal" data-role="${id}">
           <h3>${esc(r.title)}</h3>
           <p>${esc(r.blurb)}</p>
-          <a class="role-go" href="${url(id)}">View portfolio</a>
+          <a class="btn btn--cta role-go" href="${url(id)}" aria-label="View ${esc(r.title)} portfolio">View portfolio</a>
         </article>`;
     }).join("");
 
@@ -178,8 +170,7 @@
       const bullets = job?.bullets || [];
       return `<li class="tl-item reveal" id="${esc(t.id)}">
         <div><h4>${esc(t.title)}</h4>${organizationName(t.org)}
-          ${bullets.length ? `<button class="timeline-toggle" type="button" aria-expanded="false" aria-controls="${esc(t.id)}-details">View<span class="sr-only"> ${esc(t.title)}</span></button>
-          <div class="timeline-details" id="${esc(t.id)}-details" inert><div><ul class="bullets">${bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></div>` : ''}
+          ${bullets.length ? `<ul class="bullets">${bullets.slice(0, 3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>${bullets.length > 3 ? `<details class="experience-more"><summary class="timeline-toggle btn btn--secondary btn--sm"><span class="more-label">View</span><span class="less-label">Hide</span></summary><ul class="bullets">${bullets.slice(3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul></details>` : ''}` : ''}
         </div><span class="tl-date">${esc(t.dates)}</span>
       </li>`;
     }).join('');
@@ -191,17 +182,11 @@
           <h1 class="reveal">${esc(S.name)}</h1>
           <p class="lead reveal">${esc(S.hero.lead)}</p>
           <div class="btn-row reveal">
-            <a class="btn primary" href="#portfolios">Explore my work<span class="link-arrow" aria-hidden="true">↗</span></a>
-            <a class="btn ghost" href="#contact">Get in touch</a>
+            <a class="btn btn--primary" href="#portfolios">Explore my work<span class="link-arrow" aria-hidden="true">↗</span></a>
+            <a class="btn btn--primary" href="#contact">Get in touch</a>
           </div>
           </div>
           ${S.hero.image ? `<div class="hero-portrait"><img src="${esc(asset(S.hero.image.src))}" alt="${esc(S.hero.image.alt)}" width="1000" height="1333" fetchpriority="high" decoding="async"></div>` : ""}
-          <ul class="hero-proof" aria-label="Selected SEO results">
-            <li><a href="${url('seo')}">${esc(S.results.bookings.value)} ${esc(S.results.bookings.label)}</a></li>
-            <li><a href="${url('seo')}">${esc(S.results.impressions)}</a></li>
-            <li><a href="${url('seo')}">${esc(S.results.indexed)}</a></li>
-          </ul>
-
         </div>
       </section>
 
@@ -258,9 +243,9 @@
   function pageHead(id) {
     const r = S.roles[id];
     const others = ROLE_IDS.filter((x) => x !== id)
-      .map((x) => `<a class="text-link" data-role="${x}" href="${url(x)}">${esc(S.roles[x].nav)}</a>`)
+      .map((x) => `<a class="btn btn--secondary btn--sm" data-role="${x}" href="${url(x)}">${esc(S.roles[x].nav)}</a>`)
       .join("");
-    const resume = S.resumes[id] ? `<a class="btn ghost" href="${asset(S.resumes[id])}" target="_blank" rel="noopener">Download resume</a>` : "";
+    const resume = S.resumes[id] ? `<a class="btn btn--secondary" href="${asset(S.resumes[id])}" target="_blank" rel="noopener">Download CV</a>` : "";
     return `
       <section class="page-head">
         <div class="wrap">
@@ -268,12 +253,12 @@
           <h1 class="reveal">${esc(r.headline)}</h1>
           <p class="lead reveal">${esc(r.summary)}</p>
           <div class="btn-row reveal">
-            <a class="btn primary" href="#contact">Contact me</a>
-            ${id === "multimedia" && r.videos && r.videos.length ? `<a class="btn ghost" href="#videos">${esc(r.videoLink)}</a>` : ""}
-            ${id === "multimedia" ? `<a class="btn ghost" href="#designs">${esc(r.galleryLink)}</a>` : ""}
+            <a class="btn btn--primary" href="#contact">Contact me</a>
+            ${id === "multimedia" && r.videos && r.videos.length ? `<a class="btn btn--secondary" href="#videos">${esc(r.videoLink)}</a>` : ""}
+            ${id === "multimedia" ? `<a class="btn btn--secondary" href="#designs">${esc(r.galleryLink)}</a>` : ""}
             ${resume}
           </div>
-          <p class="switch reveal"><span>Also see:</span>${others}</p>
+          <div class="switch reveal"><span>Also see:</span>${others}</div>
         </div>
       </section>`;
   }
@@ -300,7 +285,7 @@
         </div>
         ${e.bullets ? `<ul class="bullets">${e.bullets.slice(0, 3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
           ${e.bullets.length > 3 ? `<details class="experience-more">
-            <summary><span class="more-label">View more</span><span class="less-label">View less</span><span class="sr-only"> about ${esc(e.title)} at ${esc(e.org)}</span></summary>
+            <summary class="timeline-toggle btn btn--secondary btn--sm"><span class="more-label">View</span><span class="less-label">Hide</span><span class="sr-only"> more about ${esc(e.title)} at ${esc(e.org)}</span></summary>
             <ul class="bullets">${e.bullets.slice(3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
           </details>` : ""}` : ""}
       </article>`
@@ -310,87 +295,84 @@
   /* ------------------------------------------------------------ SEO */
   function renderSeo() {
     const r = S.roles.seo;
-    const c = r.caseStudy;
     $("#main").innerHTML = `
       ${pageHead("seo")}
-
       <section class="section">
         <div class="wrap">
-          <h2 class="section-title reveal">${esc(c.title)}</h2>
-          <p class="meta reveal">${esc(c.meta)}</p>
-          <p class="reveal narrow">${esc(c.brief)}</p>
-          ${c.pdf ? `<p class="reveal"><a class="btn ghost" href="${asset(c.pdf)}" target="_blank" rel="noopener">Download the case study (PDF)</a></p>` : ""}
-
-          ${S.results.bookings ? `<aside class="panel bookings-highlight reveal" aria-label="Website booking result">
-            <strong><span class="booking-number">${esc(S.results.bookings.value)}</span><span>${esc(S.results.bookings.label)}</span></strong><p class="note">${esc(S.results.bookings.note)}</p>
-          </aside>` : ''}
-
-          ${window.SEOCharts.render(window.SEO_METRICS, c.chartCopy, asset)}
-
+          <h2 class="section-title reveal">Prolink Property Support</h2>
+          <p class="meta reveal">UK B2B · Wix website · 19 Sep – 23 Nov 2026</p>
+          <p class="reveal narrow">A new UK property-support site that almost nobody could find. The goal: get it onto Google and into AI answers, using free tools only.</p>
+          <div class="stats seo-metric-stats reveal" aria-label="Case study results">
+            <div class="stat"><strong>5,206</strong><span>Google impressions</span><small>From 7 before the work (UK)</small></div>
+            <div class="stat"><strong>38</strong><span>Google clicks</span><small>From 0</small></div>
+            <div class="stat"><strong>74</strong><span>Pages on Google</span><small>From about 10</small></div>
+            <div class="stat"><strong>32</strong><span>AI citations</span><small>Copilot, last 3 months</small></div>
+          </div>
+          <p class="note reveal">About 860 impressions a week by November. Average position 35.5 to 24.0 over the last five weeks. (UK, Search Console)</p>
+          ${window.SEOCharts.render(window.SEO_METRICS)}
         </div>
       </section>
-
       <section class="section alt">
         <div class="wrap">
           <h2 class="section-title reveal">Before and after</h2>
           <div class="table-wrap reveal">
             <table>
-              <thead><tr><th>Area</th><th>Before</th><th>After</th></tr></thead>
-              <tbody>${c.beforeAfter.map((r2) => `<tr><th scope="row">${esc(r2[0])}</th><td>${esc(r2[1])}</td><td>${esc(r2[2])}</td></tr>`).join("")}</tbody>
+              <thead><tr><th></th><th>19 Sep</th><th>Now</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Google impressions (UK)</th><td>7</td><td>5,206</td></tr>
+                <tr><th scope="row">Google clicks (UK)</th><td>0</td><td>38</td></tr>
+                <tr><th scope="row">Average position</th><td>n/a</td><td>26.6 overall, 24.0 in last 5 weeks</td></tr>
+                <tr><th scope="row">Pages indexed by Google</th><td>about 10</td><td>74</td></tr>
+                <tr><th scope="row">Site health score</th><td>81</td><td>100 (Ahrefs)</td></tr>
+                <tr><th scope="row">AI assistant visits (90 days)</th><td>not tracked</td><td>75 (Google organic: 56)</td></tr>
+                <tr><th scope="row">Copilot citations (3 months)</th><td>not tracked</td><td>32</td></tr>
+              </tbody>
             </table>
           </div>
-
-          <h3 class="sub-title reveal">${esc(c.rankingsTitle)}</h3>
-          <div class="table-wrap reveal">
-            <table>
-              <thead><tr><th>Page</th><th>Impressions</th><th>Avg. position</th></tr></thead>
-              <tbody>${c.rankings.map((r2) => `<tr><th scope="row">${esc(r2[0])}</th><td>${esc(r2[1])}</td><td>${esc(r2[2])}</td></tr>`).join("")}</tbody>
-            </table>
-          </div>
-          <p class="note reveal">${esc(c.rankingsNote)}</p>
+          <p class="note reveal">Clicks are still small; the site is young and growth is ongoing.</p>
+          <p class="bookings-line reveal">${esc(S.results.bookings.value)} bookings made through the client's website in the first month and a half. ${esc(S.results.bookings.note)}</p>
         </div>
       </section>
-
       <section class="section">
         <div class="wrap">
           <h2 class="section-title reveal">What I did</h2>
-          <div class="did-grid">
-            ${c.did.map((d) => `<div class="did reveal"><h4>${esc(d[0])}</h4><p>${esc(d[1])}</p></div>`).join("")}
-          </div>
-          <aside class="callout reveal"><strong>Honest note</strong> ${esc(c.honest)}</aside>
+          <ul class="bullets seo-did-list">
+            <li>Technical SEO: audited with Ahrefs and Screaming Frog; fixed duplicate H1s, long titles, missing descriptions, alt text, share images.</li>
+            <li>On-page: rewrote titles and meta descriptions for real search queries; added internal links.</li>
+            <li>Content: planned topic clusters; published answer-first guides on UK compliance, repairs and contractor management.</li>
+            <li>AI search: added direct answers, FAQs, “last reviewed” dates and business schema so assistants can cite pages.</li>
+            <li>Setup: Google Search Console, GA4, Bing Webmaster Tools, sitemaps.</li>
+            <li>Reporting: monthly one-page reports with clear charts.</li>
+          </ul>
         </div>
       </section>
-
       ${clientReviewSection(r.clientReviews)}
-
       <section class="section alt">
         <div class="wrap">
-          <h2 class="section-title reveal">Skills and tools</h2>
+          <h2 class="section-title reveal">Tools</h2>
           ${skillGroups(r.skills)}
+          <p class="seo-skills-line">Keyword research, on-page SEO, technical SEO, content audits, structured data, analytics and reporting</p>
         </div>
       </section>
-
       <section class="section">
         <div class="wrap">
           <h2 class="section-title reveal">Experience</h2>
           ${experienceList(r.experience)}
         </div>
       </section>
-
       ${r.certifications && r.certifications.length ? `<section class="section">
         <div class="wrap">
           <h2 class="section-title reveal">Certifications</h2>
           ${r.certifications.map((certificate) => `<article class="exp reveal">
             <div class="exp-head"><div><h3>${esc(certificate.title)}</h3>${organizationName(certificate.org)}</div></div>
             <div class="btn-row">
-              <a class="btn ghost" href="${esc(asset(certificate.pdf))}" target="_blank" rel="noopener noreferrer">View certificate (PDF)</a>
-              <a class="btn ghost" href="${esc(certificate.source)}" target="_blank" rel="noopener noreferrer">View on Semrush</a>
+              <a class="btn btn--secondary" href="${esc(asset(certificate.pdf))}" target="_blank" rel="noopener noreferrer">View certificate (PDF)</a>
+              <a class="btn btn--secondary" href="${esc(certificate.source)}" target="_blank" rel="noopener noreferrer">View on Semrush</a>
             </div>
           </article>`).join("")}
         </div>
       </section>` : ""}
 
-      ${howIWork("seo")}
       ${testimonials("seo")}
       ${contactBlock("seo", r.ctaSubject)}
     `;
@@ -399,7 +381,7 @@
   /* ------------------------------------------------------------ DEV */
   function renderDev() {
     const r = S.roles.dev;
-    const projects = r.projects
+    const projects = r.projects.filter((p) => !p.hidden)
       .map(
         (p, projectIndex) => `
       <article class="project reveal">
@@ -460,7 +442,6 @@
         </div>
       </section>
 
-      ${howIWork("dev")}
       ${testimonials("dev")}
       ${contactBlock("dev", r.ctaSubject)}
       <dialog class="project-preview-dialog" id="project-preview-dialog" aria-labelledby="project-preview-heading">
@@ -520,7 +501,7 @@
                 <figure class="video reveal">
                   <div class="video-frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/${esc(v.youtube)}" title="${esc(v.title)}" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
                   <figcaption><strong>${esc(v.title)}</strong>${v.type ? `<span>${esc(v.type)}</span>` : ""}</figcaption>
-                  <a class="video-watch" href="https://www.youtube.com/watch?v=${esc(v.youtube)}" target="_blank" rel="noopener noreferrer">Watch on YouTube<span class="sr-only">: ${esc(v.title)}</span></a>
+                  <a class="btn btn--secondary video-watch" href="https://www.youtube.com/watch?v=${esc(v.youtube)}" target="_blank" rel="noopener noreferrer">Watch on YouTube<span class="sr-only">: ${esc(v.title)}</span></a>
                 </figure>`
                 )
                 .join("")}
@@ -557,7 +538,6 @@
         </div>
       </section>
 
-      ${howIWork("multimedia")}
       ${testimonials("multimedia")}
       ${contactBlock("multimedia", r.ctaSubject)}
     `;

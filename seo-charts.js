@@ -1,58 +1,90 @@
-/* Native, progressively enhanced charts. No guessed daily observations. */
+/* Native SVG charts for the SEO case study; no chart library or generated totals. */
 window.SEOCharts = (() => {
-  const models = new Map();
-  const e = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const date = value => value ? new Date(value+'T00:00:00Z').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}) : '';
-  const range = r => r?.start ? `${date(r.start)}${r.end ? ' – '+date(r.end) : r.approximateEnd ? ' – '+r.approximateEnd+' (approximate)' : ''}` : '';
-  const stats = rows => `<div class="stats seo-metric-stats">${rows.map(([value,label,note])=>`<div class="stat"><strong>${e(value)}</strong><span>${e(label)}</span>${note?`<small>${e(note)}</small>`:''}</div>`).join('')}</div>`;
-  const caption = (source,r,image,asset) => `<p class="note chart-caption">${e(source)}${range(r)?' · '+e(range(r)):''}${image?.earlierSnapshot?'. Source screenshot shows an earlier reading.':''}${image?.available?` <a href="${e(asset(image.path))}" target="_blank" rel="noopener noreferrer">View source screenshot</a>`:''}</p>`;
-  function chart(id,title,points,keys,options={}) {
-    if (!points.length) return '';
-    const horizontal=options.horizontal, width=720, left=horizontal?305:48, right=horizontal || options.bars?28:options.step?185:215, top=24, bottom=horizontal?points.length*48+24:268;
-    const plot=width-left-right, max=Math.max(1,...points.flatMap(p=>keys.map(k=>p[k.key])))*1.12;
-    const first=Date.parse(points[0].date), last=Date.parse(points.at(-1).date);
-    const x=(p,i)=>horizontal?left:first===last?left+plot/2:left+(options.bars?Math.min(24,plot/points.length*.325):0)+(Date.parse(p.date)-first)/(last-first)*(plot-(options.bars?Math.min(48,plot/points.length*.65):0));
-    const y=n=>bottom-n/max*(bottom-top);
-    let svg='';
-    if(!horizontal) svg=[0,.5,1].map(f=>`<line class="seo-grid" x1="${left}" x2="${width-right}" y1="${y(max*f)}" y2="${y(max*f)}"/><text class="seo-axis" x="${left-8}" y="${y(max*f)+5}" text-anchor="end">${Math.round(max*f)}</text>`).join('');
-    if(horizontal) svg+=points.map((p,i)=>`<text x="0" y="${top+i*48+19}">${e(p.label)}</text><rect class="seo-bar horizontal" x="${left}" y="${top+i*48}" width="${p.value/max*plot}" height="26"/><text x="${left+p.value/max*plot+10}" y="${top+i*48+19}">${e(p.value)}</text>`).join('');
-    else if(options.bars) svg+=points.map((p,i)=>{const barWidth=Math.min(48,plot/points.length*.65);return `<rect class="seo-bar vertical" style="transform-origin:${x(p,i)}px ${bottom}px" x="${x(p,i)-barWidth/2}" y="${y(p[keys[0].key])}" width="${barWidth}" height="${bottom-y(p[keys[0].key])}"/>`;}).join('');
-    else svg+=keys.map((k,ki)=>{
-      const d=points.map((p,i)=>`${i?(options.step?'H':'L'):'M'}${x(p,i)}${i&&options.step?'V':','}${y(p[k.key])}`).join(' ');
-      return `<path class="seo-line ${ki?'secondary':''}" d="${d}" pathLength="1"/><text class="seo-end ${ki?'secondary':''}" x="${width-right+12}" y="${y(points.at(-1)[k.key])+5}">${e(points.at(-1)[k.key])} ${e(k.label.toLowerCase())}</text>`;
-    }).join('');
-    if(!horizontal) svg+=[...new Set([0,Math.floor((points.length-1)/2),points.length-1])].map((i,n,a)=>`<text class="seo-axis" x="${x(points[i],i)}" y="${bottom+33}" text-anchor="${n===0?'start':n===a.length-1?'end':'middle'}">${e(options.weekly?points[i].label:date(points[i].date).replace(/ \d{4}$/, ''))}</text>`).join('');
-    const summary=options.summary || `${title}: ${points.map(p=>`${p.label || date(p.date)}, ${keys.map(k=>p[k.key]+' '+k.label).join(', ')}`).join('; ')}.`;
-    models.set(id,{points,keys,horizontal,left,plot,bottom,top,x});
-    return `<div class="seo-chart-block"><h4>${e(title)}</h4><div class="seo-native-chart" id="${id}" tabindex="0" role="group" aria-label="${e(summary)}" aria-describedby="${id}-hint"><svg viewBox="0 0 ${width} ${bottom+52}" aria-hidden="true">${svg}</svg><output class="seo-tooltip" aria-live="polite" hidden></output><span class="sr-only" id="${id}-hint">Use arrow keys to explore values; Home and End jump to the first and last point.</span></div><div class="sr-only"><table><caption>${e(title)}</caption><thead><tr><th scope="col">${horizontal?'Source':'Date'}</th>${keys.map(k=>`<th scope="col">${e(k.label)}</th>`).join('')}</tr></thead><tbody>${points.map(p=>`<tr><th scope="row">${e(p.label || date(p.date))}${p.partialDays?' (partial week: '+e(p.partialDays)+' days)':''}</th>${keys.map(k=>`<td>${e(p[k.key])}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const fmt = (n) => Number(n).toLocaleString("en-GB");
+  const axisMax = (max) => max <= 12 ? 12 : 1000;
+
+  function weekly(m) {
+    const width = 900, height = 390, left = 64, right = 18, top = 40, bottom = 300;
+    const plotW = width - left - right, plotH = bottom - top, step = plotW / m.weeks.length, barW = Math.min(48, step * .64);
+    const max = axisMax(Math.max(...m.weeks.map((w) => Math.max(w.impressions, w.clicks))));
+    const label = (w, field) => `Week of ${w.label}: ${fmt(w[field])} ${field}`;
+    const makeSvg = (field) => {
+      const ticks = [0, max / 4, max / 2, max * .75, max];
+      const grid = ticks.map((v, i) => { const y = bottom - (v / max) * plotH; return `<line class="seo-grid" data-tick="${i}" x1="${left}" x2="${width-right}" y1="${y}" y2="${y}"/><text class="seo-axis" data-tick="${i}" x="${left-10}" y="${y+5}" text-anchor="end">${fmt(v)}</text>`; }).join("");
+      const bars = m.weeks.map((w, i) => {
+        const x = left + step * i + (step - barW) / 2, value = w[field], h = (value / max) * plotH, y = bottom - h;
+        const fill = w.partial ? "url(#partial-hatch)" : "var(--accent)";
+        const xLabel = i % 2 === 0 || i === m.weeks.length - 1 ? `<text class="seo-axis week-label" x="${x+barW/2}" y="${bottom+30}" text-anchor="middle">${esc(w.label)}</text>` : "";
+        return `<g class="seo-week-bar" data-index="${i}" tabindex="0" role="button" aria-label="${esc(label(w, field))}"><rect class="seo-bar${w.partial ? " is-partial" : ""}" x="${x}" y="${top}" width="${barW}" height="${plotH}" fill="${fill}" style="--bar-delay:${i*40}ms;--bar-scale:${value/max}"/><text class="seo-value" x="${x+barW/2}" y="${Math.max(top-8,y-8)}" text-anchor="middle">${fmt(value)}</text>${xLabel}</g>`;
+      }).join("");
+      return `<svg viewBox="0 0 ${width} 350" role="img" aria-label="Weekly ${field} from Google Search Console in the UK, 14 September to 20 November 2026"><defs><pattern id="partial-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="var(--surface)"/><line x1="0" y1="0" x2="0" y2="8" stroke="var(--muted)" stroke-width="2"/></pattern></defs>${grid}${bars}<line class="seo-baseline" x1="${left}" x2="${width-right}" y1="${bottom}" y2="${bottom}"/></svg>`;
+    };
+    const table = `<div class="sr-only"><table><caption>Weekly Google results (UK)</caption><thead><tr><th>Week</th><th>Impressions</th><th>Clicks</th></tr></thead><tbody>${m.weeks.map((w) => `<tr><th>${esc(w.label)}${w.partial ? " (partial week, 16–20 Nov)" : ""}</th><td>${w.impressions}</td><td>${w.clicks}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<section class="seo-chart-block" aria-labelledby="weekly-chart-title"><h3 id="weekly-chart-title">Weekly Google results (UK)</h3><div class="chart-tabs" role="tablist" aria-label="Weekly Google result metric"><button class="chart-tab is-active" id="chart-tab-impressions" role="tab" aria-selected="true" tabindex="0" data-metric="impressions">Impressions</button><button class="chart-tab" id="chart-tab-clicks" role="tab" aria-selected="false" tabindex="-1" data-metric="clicks">Clicks</button></div><div class="seo-native-chart" id="weekly-chart" data-metric="impressions">${makeSvg("impressions")}<output class="seo-tooltip" aria-live="polite" hidden></output></div><p class="chart-caption">Partial week (16–20 Nov). Values are weekly; weeks are not summed. Google Search Console, UK, to 20 Nov 2026.</p>${table}</section>`;
   }
-  function render(m,copy,asset) {
-    models.clear();
-    const h=m.historical,p=m.performance,i=m.indexing,a=m.analytics,t=p.totals;
-    const full=h.weekly.filter(w=>!w.partialDays), engagement=`${Math.floor(a.engagementSeconds/60)}m ${String(a.engagementSeconds%60).padStart(2,'0')}s`;
-    let html=stats([[`${full[0].value} → ${full.at(-1).value}`,'weekly Google impressions','Earlier weekly snapshot'],[`${i.baseline.indexed} → ${i.latest.indexed}`,'pages indexed by Google'],[h.topThreeQueries,'non-brand queries in positions 1–3',range(h.rankingsRange)],[`${h.technicalHealth.score}/${h.technicalHealth.maximum}`,'technical health score',`${h.technicalHealth.errors} errors · Ahrefs · ${date(h.technicalHealth.date)}`]]);
-    html+=`<div class="seo-result-group"><h3>Weekly impressions</h3>${chart('seo-weekly','Weekly appearances in Google results',h.weekly,[{key:'value',label:'Impressions'}],{bars:true,weekly:true})}${caption('Google Search Console',{start:h.weekly[0].date,end:h.weekly.at(-1).date},null,asset)}<p class="note">The final bar covers ${e(h.weekly.at(-1).partialDays)} days.</p></div>`;
-    html+=`<section class="seo-result-group" aria-labelledby="performance-title"><h3 id="performance-title">Search performance</h3>${stats([[t.impressionsExact ?? t.impressionsDisplay,'Impressions'],[t.clicks,'Clicks'],[t.ctr+'%','CTR'],[t.averagePosition,'Average position']])}<p>${e(copy.performance)}</p>${p.series.length?chart('seo-impressions','Daily impressions',p.series,[{key:'impressions',label:'Impressions'}])+caption(p.source,p.range,m.screenshots.performance,asset)+chart('seo-clicks','Daily clicks',p.series,[{key:'clicks',label:'Clicks'}],{bars:true}):''}${caption(p.source,p.range,m.screenshots.performance,asset)}${p.rangeWarning?`<p class="note">${e(p.rangeWarning)}</p>`:''}</section>`;
-    html+=`<section class="seo-result-group" aria-labelledby="indexing-title"><h3 id="indexing-title">Pages on Google</h3>${stats([[i.latest.indexed,'Indexed pages'],[i.latest.notIndexed,'Not indexed'],[i.baseline.indexed,'Indexed at baseline',date(i.baseline.date)]])}<p>${e(copy.indexing)}</p>${i.series.length?chart('seo-indexing','Indexing over time',i.series,[{key:'indexed',label:'Indexed'},{key:'notIndexed',label:'Not indexed'}],{step:true}):''}${caption(i.source,i.series.length?{start:i.series[0].date,end:i.series.at(-1).date}:{},m.screenshots.indexing,asset)}${i.rangeWarning?`<p class="note">${e(i.rangeWarning)}</p>`:''}<p class="note">Earlier baseline: ${e(h.initialNotIndexed)} pages not indexed; the noindex setting blocked ${e(h.blockedPagesMinimum)}+ pages and posts. Google decides when to index each page; the readings alone do not establish the timing or cause of a particular jump.</p></section>`;
-    html+=`<section class="seo-result-group" aria-labelledby="analytics-title"><h3 id="analytics-title">Google Analytics</h3>${stats([[a.activeUsers,'Active users'],[a.newUsers,'New users'],[engagement,'Average engagement per active user']])}<p class="note">${e(a.eventCount)} events recorded.</p><p>${e(copy.analytics)}</p>${chart('seo-first-visits','First visits by source',a.firstVisits,[{key:'value',label:'Active users'}],{horizontal:true})}${caption(a.source,a.range,m.screenshots.analytics,asset)}${chart('seo-sessions','Top sources by sessions',a.sessions,[{key:'value',label:'Sessions'}],{horizontal:true})}${caption(a.source,a.range,m.screenshots.analytics,asset)}</section>`;
-    return html;
+
+  function horizontal(id, title, rows) {
+    const width = 700, left = 320, right = 45, rowH = 52, top = 16, height = top + rows.length * rowH + 8, max = Math.max(...rows.map((r) => r.value));
+    const bars = rows.map((r, i) => {
+      const y = top + i * rowH, w = (r.value / max) * (width - left - right);
+      const words = r.label.split(" "), lines = []; let line = "";
+      words.forEach((word) => { if ((line + " " + word).trim().length > 19 && line) { lines.push(line); line = word; } else line = (line + " " + word).trim(); });
+      if (line) lines.push(line);
+      const label = lines.map((part, index) => `<tspan x="0" dy="${index ? 17 : 0}">${esc(part)}</tspan>`).join("");
+      return `<g class="seo-horizontal-row" tabindex="0" role="img" aria-label="${esc(r.label)}: ${r.value}"><text class="seo-row-label" x="0" y="${y+17}">${label}</text><rect class="seo-bar horizontal ${r.highlight ? "is-highlight" : "is-muted"}" x="${left}" y="${y+12}" width="${w}" height="22" style="--bar-delay:${i*40}ms;--bar-scale:${r.value/max}"/><text class="seo-value" x="${left+w+10}" y="${y+29}">${r.value}</text></g>`;
+    }).join("");
+    const table = `<div class="sr-only"><table><caption>${esc(title)}</caption><tbody>${rows.map((r) => `<tr><th>${esc(r.label)}</th><td>${r.value}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<section class="seo-chart-block seo-small-chart"><h3>${esc(title)}</h3><div class="seo-native-chart"><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(title)}">${bars}</svg></div>${table}</section>`;
   }
+
+  function render(m) {
+    return `${weekly(m)}<section class="seo-result-group"><h2 class="section-title">AI search</h2><div class="seo-ai-charts">${horizontal("sessions-chart", "Website sessions by source, last 90 days", m.sessions)}${horizontal("citations-chart", "Copilot citations by page, 3 months", m.copilotCitations)}</div><p class="seo-ai-summary">AI assistants sent 75 sessions in 90 days, more than Google organic search (56). Most citations (20 of 32) go to one answer-first guide.</p><p class="note">GA4 to 22 Nov 2026; Bing Webmaster Tools.</p></section>`;
+  }
+
   function init() {
-    const reduced=matchMedia('(prefers-reduced-motion: reduce)'), cleanups=[];
-    const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('chart-drawn');observer.unobserve(entry.target);}}),{threshold:.2}):null;
-    document.querySelectorAll('.seo-native-chart').forEach(el=>{
-      const model=models.get(el.id);if(!model)return;
-      if(observer&&!reduced.matches){el.classList.add('chart-ready');observer.observe(el);}
-      let selected=0;const output=el.querySelector('output');
-      const show=index=>{selected=Math.max(0,Math.min(model.points.length-1,index));const p=model.points[selected];output.textContent=`${p.label || date(p.date)}${p.partialDays?' (partial week: '+p.partialDays+' days)':''}: ${model.keys.map(k=>`${k.label}: ${p[k.key]}`).join(' · ')}`;output.hidden=false;};
-      const move=event=>{const box=el.getBoundingClientRect(),vx=(event.clientX-box.left)/box.width*720,vy=(event.clientY-box.top)/box.height*(model.bottom+52);show(model.horizontal?Math.round((vy-model.top-13)/48):model.points.reduce((best,p,n)=>Math.abs(model.x(p,n)-vx)<Math.abs(model.x(model.points[best],best)-vx)?n:best,0));};
-      const key=event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Escape'].includes(event.key))return;event.preventDefault();if(event.key==='Escape'){output.hidden=true;return;}show(event.key==='Home'?0:event.key==='End'?model.points.length-1:selected+(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1));};
-      const focus=()=>show(selected),hide=()=>{output.hidden=true;};
-      [['pointermove',move],['pointerleave',hide],['keydown',key],['focus',focus],['blur',hide]].forEach(([name,fn])=>{el.addEventListener(name,fn);cleanups.push(()=>el.removeEventListener(name,fn));});
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const chart = document.querySelector("#weekly-chart");
+    if (!chart) return () => {};
+    const weeks = window.SEO_METRICS.weeks;
+    const tabs = [...document.querySelectorAll(".chart-tab")];
+    const output = chart.querySelector("output");
+    let metric = "impressions", selected = 0;
+    const setMetric = (next, focus = false) => {
+      metric = next;
+      tabs.forEach((tab) => { const active = tab.dataset.metric === metric; tab.classList.toggle("is-active", active); tab.setAttribute("aria-selected", String(active)); tab.tabIndex = active ? 0 : -1; if (focus && active) tab.focus(); });
+      chart.dataset.metric = metric;
+      chart.classList.add("chart-chart-switching");
+      const max = metric === "clicks" ? 12 : 1000;
+      chart.querySelectorAll("[data-tick]").forEach((item) => {
+        const index = Number(item.dataset.tick), value = max * index / 4, y = 300 - 260 * index / 4;
+        if (item.tagName.toLowerCase() === "line") { item.setAttribute("y1", String(y)); item.setAttribute("y2", String(y)); }
+        else { item.setAttribute("y", String(y + 5)); item.textContent = fmt(value); }
+      });
+      chart.querySelectorAll(".seo-week-bar").forEach((group, i) => {
+        const rect = group.querySelector("rect");
+        const value = weeks[i][metric], max = metric === "clicks" ? 12 : 1000;
+        const barHeight = 260 * value / max, y = 300 - barHeight;
+        rect.style.setProperty("--bar-scale", String(value / max));
+        group.querySelector(".seo-value").textContent = fmt(value); group.querySelector(".seo-value").setAttribute("y", String(Math.max(32, y-8)));
+        group.setAttribute("aria-label", `Week of ${weeks[i].label}: ${fmt(value)} ${metric}`);
+      });
+      setTimeout(() => chart.classList.remove("chart-chart-switching"), reduced.matches ? 0 : 400);
+    };
+    tabs.forEach((tab, i) => tab.addEventListener("keydown", (event) => { if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return; event.preventDefault(); const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length-1 : (i + (event.key === "ArrowRight" ? 1 : tabs.length-1)) % tabs.length; setMetric(tabs[next].dataset.metric, true); }));
+    tabs.forEach((tab) => tab.addEventListener("click", () => setMetric(tab.dataset.metric)));
+    chart.querySelectorAll(".seo-week-bar").forEach((group, i, all) => {
+      const show = () => { selected = i; output.textContent = `Week of ${weeks[i].label}: ${fmt(weeks[i][metric])} ${metric}`; output.hidden = false; };
+      group.addEventListener("mouseenter", show); group.addEventListener("focus", show); group.addEventListener("mouseleave", () => { output.hidden = true; }); group.addEventListener("blur", () => { output.hidden = true; });
+      group.addEventListener("keydown", (event) => { if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return; event.preventDefault(); const next = event.key === "Home" ? 0 : event.key === "End" ? all.length-1 : Math.max(0, Math.min(all.length-1, i + (event.key === "ArrowRight" ? 1 : -1))); all[next].focus(); });
     });
-    const finish=()=>{if(reduced.matches){document.querySelectorAll('.seo-native-chart').forEach(el=>el.classList.add('chart-drawn'));observer?.disconnect();}};
-    reduced.addEventListener('change',finish);
-    return ()=>{observer?.disconnect();reduced.removeEventListener('change',finish);cleanups.forEach(fn=>fn());models.clear();};
+    const charts = [...document.querySelectorAll(".seo-native-chart")];
+    charts.forEach((item) => item.classList.add("chart-ready"));
+    if (!reduced.matches && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add("chart-drawn"); observer.unobserve(entry.target); } }), { threshold: .15 });
+      charts.forEach((item) => observer.observe(item));
+    } else charts.forEach((item) => item.classList.add("chart-drawn"));
+    return () => {};
   }
-  return {render,init};
+  return { render, init };
 })();

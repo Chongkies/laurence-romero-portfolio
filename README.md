@@ -11,7 +11,7 @@ The home page asks "What are you hiring for?" and opens a portfolio matched to t
 
 | Path | What you'll find |
 | --- | --- |
-| **SEO** | A case study on a new UK B2B site (Prolink Property Support): weekly Google impressions grew from 8 to 692 and indexed pages from 10 to 74 after fixing a site-wide noindex block. Includes before/after tables, rankings, tools and honest limits. |
+| **SEO** | A case study on Prolink Property Support: 5,206 Google impressions, 38 clicks, 74 indexed pages and 32 Copilot citations, with weekly charts and clear limits. |
 | **Software Developer** | Credit Scoring Platform (thesis project with predictive analysis, built with React, Laravel and MySQL, tested for internal validation and research, not deployed in production), an internal encoding system for an LGU treasurer's office, and a pickleball player platform. |
 | **Multimedia** | Posters, logos, thumbnails, photography and other design work in a filterable gallery with a full-screen viewer. |
 
@@ -59,4 +59,4 @@ Save original Search Console exports as `data/gsc-performance-dates.csv` (Date, 
 
 Dates may be ISO, English month names, or slash-separated; ambiguous slash dates default to month/day/year. Use `node scripts/import-search-console.cjs --date-order dmy` for day/month/year. Quoted fields, comma-separated thousands and percentage values are supported; CTR is stored in percentage points. Rows are validated, sorted, and duplicate dates rejected. Missing exports keep their series empty on the initial import; existing imported data is preserved if a file is later unavailable. No daily charts appear without observations. Screenshot totals remain supplied readings; mismatched CSV ranges produce a warning and retain both the CSV summary and supplied totals for review. The importer confirms an exact impression total only when it matches the supplied rounded display and click total.
 
-TODO: supply both CSVs; confirm the performance end date, latest indexing date, GA4 reporting range, and exact booking dates/definition. The current Search Console screenshots are earlier readings, labelled accordingly. Add `images/seo/ga4-snapshot.png` when available and re-run the importer to enable its source link. Keep confidential information out of screenshots and exports.
+TODO: add current Search Console exports and confirm the exact GA4 and booking reporting ranges. The chart values are weekly and the supplied headline total differs by five impressions. Keep confidential information out of screenshots and exports.

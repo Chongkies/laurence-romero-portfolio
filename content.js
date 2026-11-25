@@ -113,8 +113,6 @@ window.SITE = {
   // TODO: update the booking value and date range when the client's records change; confirm the booking definition and reporting dates.
   results: {
     bookings: seoMetrics.bookings, // TODO: update value and exact booking dates in data/seo-metrics.js.
-    impressions: `weekly Google impressions grew from ${seoMetrics.historical.weekly[0].value} to ${seoMetrics.historical.weekly.filter(w => !w.partialDays).at(-1).value} on a new site`,
-    indexed: `${seoMetrics.indexing.latest.indexed} pages indexed on Google`,
   },
 
   hero: {
@@ -179,22 +177,12 @@ window.SITE = {
     /* ------------------------------------------------------------ SEO */
     seo: {
       testimonials: [],
-      howIWork: {
-        "title": "How I work",
-        "steps": [
-          "Audit your site and tracking.",
-          "Fix technical and on-page issues.",
-          "Track results in Google Search Console and GA4.",
-          "Send a simple report in plain English."
-        ]
-      },
       nav: "SEO",
       title: "SEO",
       kicker: "SEO Specialist",
-      headline: "Technical SEO, content strategy and clear reporting",
-      summary:
-        "I plan keywords, improve on-page content and fix technical SEO issues, with the web development background to implement changes myself.",
-      blurb: "Technical SEO, content strategy and clear reporting for small businesses. I fix search issues, improve content and track what changes.",
+      headline: "SEO and AI search for small businesses",
+      summary: "I help small UK businesses get found on Google and in AI answers, using free tools.",
+      blurb: "Technical SEO, content and reporting. Took a new UK business site from 7 to 5,206 Google impressions in about ten weeks.",
       ctaSubject: "SEO / marketing work",
 
       // TODO: add the Semrush completion date when provided; title and certificate links are verified.
@@ -210,7 +198,7 @@ window.SITE = {
       // These quotes are copied from public Google reviews and must stay verbatim.
       clientReviews: {
         "title": "What Prolink's customers say on Google",
-        "note": "Public Google reviews of Prolink Property Support, the business I do SEO for. These are reviews of the business, not of my own work.",
+        "note": "Public Google reviews of the business I do SEO for; not reviews of my work.",
         "items": [
           {
             "name": "Olivia L.",
@@ -221,81 +209,11 @@ window.SITE = {
             "quote": "We have worked along side Pro Link for a couple of years now and we can honestly say they are among the best clients we have worked with. They are really helpful when it comes to assisting us with getting access information or further details regarding the jobs etc. The whole team are a pleasure to work with."
           }
         ],
-        "summary": "Three 5-star Google reviews so far."
-      },
-
-      caseStudy: {
-        title: "Case study: Prolink Property Support",
-        meta: "Prolink Property Support · UK B2B · Wix website · Sept – early Nov 2026",
-        brief:
-          "A newly launched UK service business needed to appear in property-management support searches. I worked part-time on setup, technical SEO, on-page content and reporting.",
-        pdf: "", // e.g. "docs/seo-case-study.pdf" to show a download button
-        chartCopy: {
-          performance: `Impressions started near zero in September and have grown through October and November. Visibility is growing faster than clicks: ${seoMetrics.performance.totals.clicks} clicks so far at an average position of ${seoMetrics.performance.totals.averagePosition} means many pages are still on page 2 or 3. Next I will improve titles, content and internal links on the pages just off page 1.`,
-          indexing: `At the start only ${seoMetrics.indexing.baseline.indexed} pages were on Google. After I fixed a site-wide noindex setting and re-submitted pages, indexed pages grew to ${seoMetrics.indexing.latest.indexed}; ${seoMetrics.indexing.latest.notIndexed} are still not indexed and I keep checking them.`,
-          analytics: `AI assistants are already sending visitors. ChatGPT was the largest source of first visits (${seoMetrics.analytics.firstVisits.find(s => s.source === 'chatgpt.com').value} of ${seoMetrics.analytics.activeUsers} active users), ahead of direct visits (${seoMetrics.analytics.firstVisits.find(s => s.source === 'direct').value}) and Google organic search (${seoMetrics.analytics.firstVisits.find(s => s.source === 'google organic').value}), and Gemini adds a few more. Visitors spend an average of ${seoMetrics.analytics.engagementSeconds / 60} minutes on the site.`,
-        },
-        beforeAfter: [
-          [
-            "Measurement",
-            "No search or analytics tracking",
-            "Search Console, GA4 and Bing Webmaster Tools live; monthly client reporting"
-          ],
-          [
-            "On-page SEO",
-            "Missing and duplicate titles and descriptions; stray code visible on pages",
-            "Titles and descriptions written for key pages; stray code removed"
-          ],
-          [
-            "Technical",
-            "Duplicate posts, broken links, redirect gaps, no business schema",
-            "301 redirects, broken links fixed, LocalBusiness-type schema added"
-          ],
-          [
-            "Authority",
-            "Brand-new domain",
-            `${seoMetrics.historical.referringDomains} referring domains; first links and citations in progress`
-          ]
-        ],
-        rankingsTitle: "Rankings snapshot",
-        rankingsNote: `Earlier snapshot: Google Search Console, 8 Sep–15 Oct 2026; a different range from the daily report. The site appeared for ${seoMetrics.historical.queryCount} queries; ${seoMetrics.historical.topTenQueries} non-brand queries reached the top 10. The strongest rankings are mostly low-volume, long-tail searches.`,
-        rankings: seoMetrics.historical.rankings,
-        did: [
-          [
-            "Setup and tracking",
-            "Verified Search Console and Bing; connected GA4 through Wix."
-          ],
-          [
-            "Technical SEO",
-            "Diagnosed crawl issues and implemented the fixes shown in the comparison above."
-          ],
-          [
-            "On-page SEO",
-            "Wrote alt text, set blog categories and internal links, and removed duplicate navigation items."
-          ],
-          [
-            "Content quality",
-            "Audited AI-written posts for leaked drafting notes, repetition and off-topic content."
-          ],
-          [
-            "Opportunity analysis",
-            "Used query and page data to find page-2 opportunities and rewrote titles to improve click-through."
-          ],
-          [
-            "Reporting",
-            "Sent monthly reports in plain English to a non-technical client."
-          ]
-        ],
-        honest:
-          `${seoMetrics.bookings.value} bookings were made through the client's website in ${seoMetrics.bookings.period}; their traffic sources are not confirmed. Search clicks are still small. I am setting up GA4 key-event tracking, improving page-2 posts, rebuilding the city page, and growing local citations and reviews.`,
+        "summary": ""
       },
 
       skills: [
-        { group: "SEO skills", items: ["Keyword research & strategy", "On-page SEO", "Technical SEO", "Content audits", "Internal linking & site structure", "Structured data (JSON-LD)", "Analytics & reporting"] },
-        { group: "Tools", items: ["Google Search Console", "Google Analytics 4", "Bing Webmaster Tools", "Ahrefs Webmaster Tools", "Screaming Frog", "Semrush (free)", "GrandRanker", "Wix SEO tools", "Rich Results Test"] },
-        { group: "Marketing & social", items: ["Social media management", "Meta Business Suite", "Canva"] },
-        { group: "AI-assisted workflow", items: ["ChatGPT", "Google Gemini", "Claude", "GitHub Copilot", "Microsoft Copilot", "Cursor"] },
-        { group: "Communication & documentation", items: ["Loom", "Notion", "Discord", "Microsoft Office", "Google Workspace"] },
+        { group: "Tools", items: ["Google Search Console", "Google Analytics 4", "Bing Webmaster Tools", "Ahrefs Webmaster Tools", "Screaming Frog", "Semrush (free)", "Wix SEO tools", "schema.org JSON-LD", "ChatGPT", "Google Gemini", "Microsoft Copilot"] },
       ],
 
       experience: [
@@ -304,8 +222,8 @@ window.SITE = {
           org: "Prolink Property Support",
           dates: "Sept 2026 – Present",
           bullets: [
-            `Lead AI-assisted keyword and content strategy with GrandRanker, managing a ${seoMetrics.historical.keywordLibraryMinimum}+ keyword library.`,
-            "Run on-page SEO audits covering meta tags, internal linking and content structure, and improve navigation and UX to strengthen conversion paths.",
+            `Plan AI-assisted keyword and content strategy with GrandRanker, managing a ${seoMetrics.keywordLibraryMinimum}+ keyword library.`,
+            "Ran on-page SEO audits covering meta tags, internal linking and content structure, and improved navigation and UX to strengthen conversion paths.",
             "Set up Google Search Console, GA4 and Bing Webmaster Tools to track search visibility and site activity.",
             "Resolved indexing blocks, duplicate-post redirects and broken links, and added structured data.",
             "Reviewed AI-written posts for repeated text, drafting notes and off-topic content.",
@@ -318,33 +236,23 @@ window.SITE = {
     /* ------------------------------------------------------------ DEV */
     dev: {
       testimonials: [],
-      howIWork: {
-        "title": "How I work",
-        "steps": [
-          "Understand the workflow and who uses it.",
-          "Plan the features and data.",
-          "Build and test with real users.",
-          "Improve it from feedback."
-        ]
-      },
       nav: "Developer",
       title: "Software Developer",
       kicker: "Software Developer",
       headline: "Web applications for real business workflows",
-      summary:
-        "Computer Engineering graduate building interfaces, back ends, databases and APIs around business workflows. I test with users and automated checks, and direct AI coding assistants while reviewing and testing their output.",
-      blurb: "Full-stack web developer building practical systems: a credit scoring platform tested with a bank, a data-entry system for a local government treasurer's office, and a player-rating platform for pickleball. I plan with the people who will use it, build the interface and the back end, test it with real users, and improve it from their feedback.",
+      summary: "Computer Engineering graduate building web apps with React and Laravel. I plan with the people who use them, test with real users, and review AI-assisted code before it ships.",
+      blurb: "Full-stack web apps with React and Laravel: a credit scoring thesis tested with a bank, and a collections system for a local government office.",
       ctaSubject: "Software development work",
 
       projects: [
         {
           title: "Credit Scoring Platform",
-          subtitle: "Undergraduate group thesis · internal validation and research",
+          subtitle: "Thesis project, validated with a partner rural bank",
           stack: ["React.js", "Laravel", "MySQL", "Tailwind CSS"],
           bullets: [
-            "Wrote most of the later implementation for a dynamic credit scoring platform: lenders configure models and predictive-analysis tiers without code changes, alongside audit logs and PDF reports.",
-            "Completed with a three-person thesis team and refined through three UAT rounds and panel feedback.",
-            "Accepted by the partner bank for internal validation and research; not a live production deployment.",
+            "Built most of the later implementation of a configurable scoring platform: lenders adjust models and risk tiers without code changes.",
+            "Refined through 3 UAT rounds with bank staff and a thesis panel.",
+            "Includes audit logs and PDF reports. Not a live deployment.",
           ],
           caseStudy: {
             "path": "developer/credit-scoring/",
@@ -645,11 +553,9 @@ window.SITE = {
           subtitle: "Full-stack app for a municipal Treasurer's Office in the Philippines; in development ahead of a pilot",
           stack: ["Laravel", "React", "TypeScript", "Inertia.js", "Tailwind CSS", "shadcn/ui", "MySQL"],
           bullets: [
-            "Translated paper receipts, monthly reports and office business rules into a local-network app for encoding, fund sharing and supervisor review.",
-            "Built keyboard-first entry with account lookup, live total checks and duplicate-serial detection, plus configurable fund splits rounded to the centavo.",
-            "Added role-based verification, audit logs and encrypted personal names; encoders cannot approve their own entries.",
-            "Tested with 50,000 simulated receipts and 25 simulated users, including concurrent duplicate serials and edits. Pilot results are not yet available.",
-            "Led discovery, requirements, data modeling and security decisions, and validated each phase against office documents with staff. Claude and Codex generated much of the implementation under my direction.",
+            "Local-network app for encoding receipts, sharing funds and supervisor review, built from the office's paper forms and rules.",
+            "Keyboard-first entry, live total checks, duplicate-serial detection, role-based verification and audit logs.",
+            "Tested with 50,000 simulated receipts and 25 simulated users; in development ahead of a pilot. Built with Claude and Codex under my direction.",
           ],
           // TODO before publishing: obtain written office permission to describe the project and confirm code ownership.
           // TODO after the pilot: add measured results if available. Use fake data in any future screenshots.
@@ -668,9 +574,8 @@ window.SITE = {
           subtitle: "Player profiles, skill ratings and matchmaking",
           stack: ["React.js", "Firebase", "Tailwind CSS"],
           bullets: [
-            "Web platform with player profiles, skill ratings and matchmaking inspired by DUPR.",
-            "Responsive interfaces built from reusable React components.",
-            "Designed to improve player discovery and community engagement.",
+            "Player profiles, skill ratings and matchmaking inspired by DUPR.",
+            "Responsive interfaces built with reusable React components.",
           ],
           github: "",
           demo: "",
@@ -678,6 +583,7 @@ window.SITE = {
         },
         {
           // TODO: choose the app's final name; add repository, demo and screenshots when available.
+          hidden: true,
           title: "Pickleball Match Recorder & Auto-Editor",
           subtitle: "Planned iOS and Android app — development not started; stack listed below is proposed",
           stack: ["React Native", "Expo", "Python", "FFmpeg", "Audio signal processing"],
@@ -694,15 +600,11 @@ window.SITE = {
       ],
 
       skills: [
-        { group: "Languages", items: ["JavaScript", "TypeScript", "PHP", "Python", "C", "C++"] },
-        { group: "Frontend", items: ["React.js", "HTML5", "CSS3", "Tailwind CSS", "shadcn/ui", "Inertia.js", "Vite"] },
-        { group: "Backend & APIs", items: ["Laravel", "REST APIs"] },
-        { group: "Databases", items: ["MySQL", "Firebase"] },
+        { group: "Languages", items: ["JavaScript", "TypeScript", "PHP", "Python"] },
+        { group: "Frontend", items: ["React.js", "Tailwind CSS", "shadcn/ui", "Inertia.js", "HTML5", "CSS3"] },
+        { group: "Backend and data", items: ["Laravel", "REST APIs", "MySQL", "Firebase"] },
         { group: "Tools", items: ["Git", "GitHub", "VS Code"] },
-        { group: "AI-assisted development", items: ["GitHub Copilot", "Microsoft Copilot", "Claude Code", "Codex", "Cursor", "Windsurf", "ChatGPT", "Google Gemini"] },
-        { group: "Technical operations", items: ["IT troubleshooting", "System documentation", "Data quality / validation", "User acceptance testing", "Technical support"] },
-        { group: "Planned project technologies (not yet used)", items: ["React Native", "Expo", "FFmpeg", "Audio signal processing"] },
-        { group: "Communication & documentation", items: ["Loom", "Notion", "Discord", "Microsoft Office", "Google Workspace"] },
+        { group: "AI-assisted development", items: ["Claude Code", "Codex", "GitHub Copilot", "Cursor"] },
       ],
 
       experience: [
@@ -739,28 +641,17 @@ window.SITE = {
     /* ----------------------------------------------------- MULTIMEDIA */
     multimedia: {
       testimonials: [],
-      howIWork: {
-        "title": "How I work",
-        "steps": [
-          "Learn the goal, audience and style.",
-          "Share a first draft.",
-          "Revise with your feedback.",
-          "Deliver files ready for print and social media."
-        ]
-      },
       nav: "Multimedia",
       title: "Multimedia",
       kicker: "Graphic Design · Video Editing · Photography",
       headline: "Graphic design, video and photography",
-      summary:
-        "Self-taught designer and editor creating work for bike shops, pet stores and local events, from early hobby projects to client commissions.",
-      blurb: "I design posters, logos, social media graphics and YouTube thumbnails, edit videos, and take photos, mostly for small businesses, local events and community groups. Clean work that matches your brand and is ready for print or social media.",
+      summary: "Self-taught designer and editor creating work for small businesses, local events and community groups.",
+      blurb: "Posters, logos, thumbnails, video edits and photos for small businesses, local events and community groups.",
       ctaSubject: "Design / video project",
 
       toolGroups: [
         { group: "Graphic design", items: ["Canva", "Adobe Photoshop", "Adobe Lightroom", "Adobe Illustrator", "Figma"] },
         { group: "Video editing", items: ["CapCut", "Filmora", "DaVinci Resolve", "Adobe Premiere Pro", "Adobe After Effects"] },
-        { group: "Communication & documentation", items: ["Loom", "Notion", "Discord", "Microsoft Office", "Google Workspace"] },
       ],
 
       // Gallery: add or remove entries freely. { src, alt } for each image.
