@@ -31,7 +31,7 @@
   function renderNav() {
     $("#nav").innerHTML = `
       <div class="wrap nav-in">
-        <a class="brand" href="${url("home")}"><span class="mono">${esc(S.initials)}</span><span class="brand-name">${esc(S.name)}</span></a>
+        <a class="brand" href="${url("home")}" aria-label="Jose Laurence Romero home"><img class="brand-mark brand-mark-dark" src="${esc(asset("images/logo/logo-transparent.png"))}" alt="Jose Laurence Romero"><img class="brand-mark brand-mark-light" src="${esc(asset("images/logo/logo-light.png"))}" alt="" aria-hidden="true"><span class="brand-name">${esc(S.name)}</span></a>
         <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span></button>
         <nav class="links" id="navlinks">
           <div class="nav-pages">
@@ -706,7 +706,8 @@
       <g class="intro-node intro-node-seo"><circle cx="130" cy="100" r="28"/><circle cx="127" cy="97" r="9"/><path d="m134 104 8 8"/></g>
       <g class="intro-node intro-node-dev"><circle cx="470" cy="100" r="28"/><path d="m460 93-8 7 8 7m20-14 8 7-8 7m-7-18-6 22"/></g>
       <g class="intro-node intro-node-camera"><circle cx="300" cy="280" r="28"/><rect x="285" y="270" width="30" height="22" rx="4"/><circle cx="300" cy="281" r="7"/><path d="M291 270v-4h10v4"/></g>
-      <g class="intro-monogram"><circle cx="300" cy="180" r="55" stroke="var(--accent)" stroke-width="1.5"/><g stroke="var(--accent)" stroke-width="2"><path d="m300 125 38 41-18 51m32-65-17 53-54 10m37 19-56-12-19-52m10 48-7-55 44-32m-43 32 49-27 43 32"/></g><text x="300" y="192" fill="var(--ink)" text-anchor="middle" font-size="34" font-family="system-ui" font-weight="700">LR</text></g>
+      <image class="intro-monogram intro-logo-dark" href="${esc(asset("images/logo/logo-transparent.png"))}" x="234" y="114" width="132" height="132" preserveAspectRatio="xMidYMid meet"/>
+      <image class="intro-monogram intro-logo-light" href="${esc(asset("images/logo/logo-light.png"))}" x="234" y="114" width="132" height="132" preserveAspectRatio="xMidYMid meet"/>
     </svg>`;
     const skip = document.createElement('button');
     skip.className = 'intro-skip'; skip.type = 'button'; skip.textContent = 'Skip';

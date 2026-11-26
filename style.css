@@ -58,6 +58,8 @@ button, a, [tabindex] { -webkit-tap-highlight-color: transparent; }
 .nav-in { display: flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 88px; }
 .brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .mono { display: none; }
+.brand-mark { width: auto; height: 30px; flex: 0 0 auto; }
+.brand-mark-light { display: none; }
 .links, .nav-pages, .nav-actions { display: flex; align-items: center; gap: 28px; }
 .links a, .theme, .burger, .meta, .contact-link-label { font-size: 12px; font-weight: 600; letter-spacing: 0; text-transform: none; }
 .links a { position: relative; padding-block: 8px; color: var(--muted); white-space: nowrap; }
@@ -391,6 +393,13 @@ html:not(.js-motion) .bar { transform: scaleY(1); }
 .intro-node-dev { animation: intro-node-in var(--intro-traces) var(--ease) forwards, intro-dev var(--intro-merge) var(--ease) var(--intro-traces) forwards; }
 .intro-node-camera { animation: intro-node-in var(--intro-traces) var(--ease) forwards, intro-camera var(--intro-merge) var(--ease) var(--intro-traces) forwards; }
 .intro-monogram { opacity: 0; transform-origin: 300px 180px; animation: intro-logo var(--intro-merge) var(--ease) var(--intro-traces) forwards; }
+.intro-logo-light { display: none; }
+:root[data-theme="dark"] .brand-mark-dark, :root[data-theme="dark"] .intro-logo-dark { display: none; }
+:root[data-theme="dark"] .brand-mark-light, :root[data-theme="dark"] .intro-logo-light { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand-mark-dark, :root:not([data-theme="light"]) .intro-logo-dark { display: none; }
+  :root:not([data-theme="light"]) .brand-mark-light, :root:not([data-theme="light"]) .intro-logo-light { display: block; }
+}
 .intro-skip { position: fixed; z-index: 201; right: 24px; top: 24px; border: 1px solid var(--ink); border-radius: 999px; padding: 8px 20px; color: var(--ink); background: var(--paper); font: 16px/1.65 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; cursor: pointer; }
 @keyframes intro-trace { to { stroke-dashoffset: 0; } }
 @keyframes intro-node-in { from { opacity: 0; } 65%, to { opacity: 1; } }
