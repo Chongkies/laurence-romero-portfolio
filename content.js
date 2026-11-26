@@ -20,7 +20,7 @@ window.SITE = {
   initials: "LR",
 
   // Single URL setting: after changing this, run node scripts/update-metadata.cjs.
-  baseUrl: "https://chongkies.github.io/laurence-romero-portfolio/",
+  baseUrl: "https://laurenceromero.xyz/",
 
   // Logos shown beside organization names in education and experience.
   organizationLogos: {

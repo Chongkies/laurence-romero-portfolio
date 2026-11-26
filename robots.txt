@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chongkies.github.io/laurence-romero-portfolio/sitemap.xml
+Sitemap: https://laurenceromero.xyz/sitemap.xml
