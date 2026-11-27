@@ -135,6 +135,10 @@ button, a, [tabindex] { -webkit-tap-highlight-color: transparent; }
 
 /* Role page mastheads. */
 .page-head { position: relative; overflow: clip; padding: 52px 0 64px; }
+.cv-download-row { display: flex; justify-content: flex-end; margin-top: 20px; margin-bottom: 16px; }
+.cv-download-row .cv-download { min-height: 44px; flex-wrap: nowrap; white-space: nowrap; text-decoration: none; }
+.cv-download-row svg { display: block; width: 16px; height: 16px; flex: 0 0 16px; }
+.js-motion .cv-download-row.reveal:not(.in) { transform: translateY(8px); transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out); }
 .page-head > .wrap { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 24px var(--gap); padding-bottom: 36px; border: 0; }
 .back { grid-column: 1 / -1; width: fit-content; font-size: 12px; color: var(--muted); }
 .back:hover { color: var(--accent); text-decoration: underline; }

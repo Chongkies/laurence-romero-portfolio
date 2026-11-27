@@ -245,8 +245,9 @@
     const others = ROLE_IDS.filter((x) => x !== id)
       .map((x) => `<a class="btn btn--secondary btn--sm" data-role="${x}" href="${url(x)}">${esc(S.roles[x].nav)}</a>`)
       .join("");
-    const resume = S.resumes[id] ? `<a class="btn btn--secondary" href="${asset(S.resumes[id])}" target="_blank" rel="noopener">Download CV</a>` : "";
+    const cv = r.cv ? `<div class="cv-download-row wrap reveal"><a class="btn btn--secondary cv-download" href="${esc(asset(r.cv.href))}" download="${esc(r.cv.filename)}" type="application/pdf" aria-label="Download CV for ${esc(r.cv.label)} (PDF)" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 17v3h14v-3"/></svg>Download CV</a></div>` : "";
     return `
+      ${cv}
       <section class="page-head">
         <div class="wrap">
           <a class="back reveal" href="${url("home", "#portfolios")}">←︎ All portfolios</a>
@@ -256,7 +257,6 @@
             <a class="btn btn--primary" href="#contact">Contact me</a>
             ${id === "multimedia" && r.videos && r.videos.length ? `<a class="btn btn--secondary" href="#videos">${esc(r.videoLink)}</a>` : ""}
             ${id === "multimedia" ? `<a class="btn btn--secondary" href="#designs">${esc(r.galleryLink)}</a>` : ""}
-            ${resume}
           </div>
           <div class="switch reveal"><span>Also see:</span>${others}</div>
         </div>
@@ -651,7 +651,13 @@
     motionCleanups = [];
   }
   function wireTimeline() {
-    $$(".timeline-toggle").forEach(button => M.timeline(button, document.getElementById(button.getAttribute("aria-controls"))));
+    $$(".timeline-toggle").forEach(button => {
+      const controlledPanel = button.getAttribute("aria-controls");
+      const panel = controlledPanel
+        ? document.getElementById(controlledPanel)
+        : button.closest("details")?.querySelector(":scope > .bullets");
+      if (panel) M.timeline(button, panel);
+    });
   }
   function enhanceScroll() {
     const alternating = $$('.skill.reveal, .did.reveal, .project.reveal, .tl-item.reveal, .exp.reveal, .role-card.reveal');

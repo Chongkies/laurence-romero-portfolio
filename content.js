@@ -98,10 +98,6 @@ window.SITE = {
   email: { user: "laurence.romero64", domain: "gmail.com" },
   phone: "+639562913209",
 
-  // Put resume PDFs in /docs/ and fill the paths to show "Download resume" buttons.
-  // (Resume PDFs include your phone number, so they will be public once uploaded.)
-  resumes: { seo: "", dev: "", multimedia: "" },
-
   // Links shown per page. Empty url = hidden. "roles" says where each link appears.
   links: [
     { label: "LinkedIn", url: "https://www.linkedin.com/in/jose-laurence-romero-a665912b1", roles: ["home", "seo", "dev", "multimedia"] },
@@ -150,7 +146,7 @@ window.SITE = {
   // One master timeline: every job appears once, tagged by area. Newest first.
   timeline: [
     { id: "seo-specialist", title: "SEO and GEO Specialist", org: "B2B Property Management Services Company", dates: "Sept 2026 – Present", tag: "seo" },
-    { id: "software-dev-gip", title: "Software Developer Intern (GIP)", org: "Government Internship Program \u00b7 Municipal Treasurer's Office, LGU Hilongos", dates: "Oct 2026 \u2013 Present", tag: "dev" },
+    { id: "software-dev-gip", title: "Computer Engineer Intern (GIP)", org: "Government Internship Program \u00b7 Municipal Treasurer's Office, LGU Hilongos", dates: "Oct 2026 \u2013 Present", tag: "dev" },
     { id: "it-concentrix", title: "IT Operations Intern", org: "Concentrix", dates: "Mar 2023 – Jun 2023", tag: "dev" },
     { id: "design-freelance", title: "Freelance Graphic Designer", org: "Small businesses and local events", dates: "Freelance", tag: "multimedia" },
     { id: "video-freelance", title: "Freelance Video Editor", org: "Freelance", dates: "Freelance", tag: "multimedia" },
@@ -179,6 +175,7 @@ window.SITE = {
     seo: {
       testimonials: [],
       nav: "SEO",
+      cv: { href: "docs/cv/seo.pdf", filename: "Jose-Laurence-Romero-CV-SEO.pdf", label: "SEO roles" },
       title: "SEO",
       kicker: "SEO and GEO Specialist",
       headline: "SEO and AI search for small businesses",
@@ -237,11 +234,12 @@ window.SITE = {
     dev: {
       testimonials: [],
       nav: "Developer",
+      cv: { href: "docs/cv/comeng.pdf", filename: "Jose-Laurence-Romero-CV-Computer-Engineering.pdf", label: "Computer Engineering roles" },
       title: "Software Developer",
-      kicker: "Software Developer",
+      kicker: "Computer Engineer",
       headline: "Web applications for real business workflows",
-      summary: "Computer Engineering graduate building web apps with React and Laravel. I plan with the people who use them, test with real users, and review AI-assisted code before it ships.",
-      blurb: "Full-stack web apps with React and Laravel: a credit scoring thesis tested with a bank, and a collections system for a local government office.",
+      summary: "Computer engineer building web apps with React and Laravel. I plan with the people who use them, test with real users, and review and test AI-assisted code before it ships.",
+      blurb: "Computer engineer building full-stack web apps with React and Laravel: a credit scoring thesis tested with a bank, and a collections system for a local government office.",
       ctaSubject: "Software development work",
 
       projects: [
@@ -555,7 +553,7 @@ window.SITE = {
           bullets: [
             "Local-network app for encoding receipts, sharing funds and supervisor review, built from the office's paper forms and rules.",
             "Keyboard-first entry, live total checks, duplicate-serial detection, role-based verification and audit logs.",
-            "Tested with 50,000 simulated receipts and 25 simulated users; in development ahead of a pilot. Built with Claude and Codex under my direction.",
+            "Owned discovery, requirements, data modeling and security design, validating each phase against office documents with staff. Used AI coding tools (Claude, Codex) for implementation; I reviewed and tested the output.",
           ],
           // TODO before publishing: obtain written office permission to describe the project and confirm code ownership.
           // TODO after the pilot: add measured results if available. Use fake data in any future screenshots.
@@ -609,13 +607,14 @@ window.SITE = {
 
       experience: [
         {
-          title: "Software Developer Intern (GIP)",
+          title: "Computer Engineer Intern (GIP)",
           org: "Government Internship Program \u00b7 Municipal Treasurer's Office, LGU Hilongos",
           dates: "Oct 2026 \u2013 Present",
           bullets: [
             "Front end: built the interface in React, TypeScript, Inertia.js, Tailwind CSS and shadcn/ui, with keyboard-first entry, account lookup and live total checks.",
             "Back end: built the Laravel back end with role-based verification, audit logs, duplicate-serial detection and fund splits rounded to the centavo.",
             "Database: designed the MySQL data model from paper receipts, monthly reports and office rules; encrypted personal names.",
+            "Owned requirements, data model and security design; used AI coding tools for implementation, reviewed and tested each phase with office staff.",
           ],
         },
         {
@@ -652,6 +651,7 @@ window.SITE = {
     multimedia: {
       testimonials: [],
       nav: "Multimedia",
+      cv: { href: "docs/cv/multimedia.pdf", filename: "Jose-Laurence-Romero-CV-Multimedia.pdf", label: "Multimedia roles" },
       title: "Multimedia",
       kicker: "Graphic Design · Video Editing · Photography",
       headline: "Graphic design, video and photography",
