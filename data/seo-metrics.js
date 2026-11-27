@@ -1,6 +1,5 @@
 /* SEO case study values. Keep this plain JS so the site also works from file://. */
 window.SEO_METRICS = {
-  keywordLibraryMinimum: 450,
   bookings: {
     value: 30,
     label: "bookings made through the client's website in the first month and a half",

@@ -55,8 +55,8 @@ window.renderCreditScoringCaseStudy = function ({ S, esc, asset, url, chips }) {
           <div class="thesis-carousel-track" id="thesis-carousel-track" tabindex="0" aria-label="Screenshot gallery; use left and right arrow keys">
             ${c.gallery.map((image, i) => `<figure class="thesis-carousel-slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${c.gallery.length}: ${esc(image.title)}"><a href="${esc(asset(image.src))}" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: ${esc(image.title)}"><img src="${esc(asset(image.src))}" alt="${esc(image.alt)}" width="${image.width}" height="${image.height}" loading="lazy" decoding="async"></a><figcaption><strong>${esc(image.title)}</strong></figcaption></figure>`).join("")}
           </div>
-          <button class="thesis-carousel-arrow previous" type="button" id="thesis-carousel-prev" aria-label="Previous screenshot" aria-controls="thesis-carousel-track">‹</button>
-          <button class="thesis-carousel-arrow next" type="button" id="thesis-carousel-next" aria-label="Next screenshot" aria-controls="thesis-carousel-track">›</button>
+          <button class="thesis-carousel-arrow previous" type="button" id="thesis-carousel-prev" aria-label="Previous screenshot" aria-controls="thesis-carousel-track"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
+          <button class="thesis-carousel-arrow next" type="button" id="thesis-carousel-next" aria-label="Next screenshot" aria-controls="thesis-carousel-track"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg></button>
         </div>
         <p class="note" id="thesis-carousel-status" aria-live="polite" aria-atomic="true">1 / ${c.gallery.length} — ${esc(c.gallery[0].title)}</p>
       </div>
@@ -100,7 +100,7 @@ window.renderCreditScoringCaseStudy = function ({ S, esc, asset, url, chips }) {
       <h2 class="section-title reveal">Project context</h2>
       <dl class="thesis-credits reveal"><div><dt>Institution</dt><dd>Computer Engineering, University of San Carlos, Cebu City</dd></div><div><dt>Partner institution</dt><dd>${esc(c.partner)}</dd></div></dl>
       <p class="note reveal">${esc(c.confidentiality)}</p>
-      <div class="btn-row reveal"><a class="btn ghost" href="${url("dev")}">← Back to developer portfolio</a></div>
+      <div class="btn-row reveal"><a class="btn ghost" href="${url("dev")}">←︎ Back to developer portfolio</a></div>
     </div></section>
   </article>`;
   const track = document.getElementById("thesis-carousel-track");

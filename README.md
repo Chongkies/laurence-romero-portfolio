@@ -11,7 +11,7 @@ The home page asks "What are you hiring for?" and opens a portfolio matched to t
 
 | Path | What you'll find |
 | --- | --- |
-| **SEO** | A case study on Prolink Property Support: 5,206 Google impressions, 38 clicks, 74 indexed pages and 32 Copilot citations, with weekly charts and clear limits. |
+| **SEO** | A case study on the B2B property-management services company: 5,206 Google impressions, 38 clicks, 74 indexed pages and 32 Copilot citations, with weekly charts and clear limits. |
 | **Software Developer** | Credit Scoring Platform (thesis project with predictive analysis, built with React, Laravel and MySQL, tested for internal validation and research, not deployed in production), an internal encoding system for an LGU treasurer's office, and a pickleball player platform. |
 | **Multimedia** | Posters, logos, thumbnails, photography and other design work in a filterable gallery with a full-screen viewer. |
 

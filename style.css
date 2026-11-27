@@ -768,3 +768,35 @@ thead th { border-top: 1px solid var(--rule); }
 .seo-result-group:has(#seo-weekly, #performance-title, #indexing-title) {
   border-top: 1px solid var(--rule); padding-top: 28px;
 }
+
+/* Hero CTAs use the shared orange tokens in both themes. */
+.hero .btn.btn--cta {
+  border: 1.5px solid var(--cta);
+  background: var(--cta);
+  color: var(--cta-ink);
+}
+.hero .btn.btn--cta:hover {
+  border-color: var(--cta-hover);
+  background: var(--cta-hover);
+  color: var(--cta-ink);
+}
+.hero .btn.btn--cta-outline {
+  border: 1.5px solid var(--cta);
+  background: transparent;
+  color: var(--cta);
+  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+}
+@media (hover: hover) {
+  .hero .btn.btn--cta-outline:hover {
+    border-color: var(--cta);
+    background: var(--cta);
+    color: var(--cta-ink);
+  }
+}
+.hero .btn.btn--cta-outline:focus-visible {
+  border-color: var(--cta);
+  background: var(--cta);
+  color: var(--cta-ink);
+}
+.hero .link-arrow { width: 16px; height: 16px; margin-left: 0; flex: 0 0 16px; }
+#lb-prev svg, #lb-next svg { display: block; width: 22px; height: 22px; }

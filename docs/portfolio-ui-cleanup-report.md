@@ -251,13 +251,13 @@ Case study: new UK B2B site, from invisible to ranking
 
 **After**
 
-Case study: Prolink Property Support
+Case study: B2B Property Management Services Company
 
 ### roles.seo.caseStudy.brief
 
 **Before**
 
-Prolink Property Support, a newly launched UK service business, needed to appear on Google for property-management support searches. I worked part-time on setup, technical SEO, on-page SEO, content review and reporting.
+The client, a newly launched UK service business, needed to appear on Google for property-management support searches. I worked part-time on setup, technical SEO, on-page SEO, content review and reporting.
 
 **After**
 

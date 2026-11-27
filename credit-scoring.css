@@ -15,7 +15,7 @@
 .thesis-case .panel { min-width: 0; }
 .thesis-case .thesis-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; padding: 0; margin: 24px 0 0; }
 .thesis-case .thesis-flow > li { position: relative; min-width: 0; }
-.thesis-case .thesis-flow > li:not(:last-child)::after { content: "→"; position: absolute; top: 24px; right: -26px; color: var(--accent); font-size: 22px; }
+.thesis-case .thesis-flow > li:not(:last-child)::after { content: "→︎"; position: absolute; top: 24px; right: -26px; color: var(--accent); font-size: 22px; }
 .thesis-case .thesis-flow h3 { color: var(--text); font-size: 1.1rem; }
 .thesis-case .thesis-formulas { margin-top: 24px; }
 .thesis-case .thesis-formula { color: var(--text); padding: 16px; margin: 16px 0; border-radius: 0; background: var(--surface); font-family: Inter, Arial, sans-serif; font-size: 15px; }
@@ -43,7 +43,7 @@
 .thesis-case .thesis-credits dd { margin: 0; }
 @media (max-width: 800px) {
   .thesis-case .thesis-flow, .thesis-case .thesis-two { grid-template-columns: 1fr; }
-  .thesis-case .thesis-flow > li:not(:last-child)::after { content: "↓"; top: auto; bottom: -31px; left: 24px; right: auto; }
+  .thesis-case .thesis-flow > li:not(:last-child)::after { content: "↓︎"; top: auto; bottom: -31px; left: 24px; right: auto; }
   .thesis-case .thesis-credits > div { grid-template-columns: 1fr; gap: 6px; }
   .thesis-case .thesis-risk-list li { grid-template-columns: 65px minmax(0, 1fr) 80px; gap: 8px; font-size: 12px; }
 }
@@ -65,6 +65,7 @@
 .thesis-case .thesis-carousel-arrow.previous { left: 8px; }
 .thesis-case .thesis-carousel-arrow.next { right: 8px; }
 .thesis-case .thesis-carousel-arrow:disabled { opacity: 0.35; cursor: default; }
+.thesis-case .thesis-carousel-arrow svg { display: block; width: 22px; height: 22px; }
 
 /* Shared Swiss typography, with the thesis header kept in reading order. */
 .thesis-case .page-head > .wrap { display: block; }

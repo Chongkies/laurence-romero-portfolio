@@ -96,7 +96,7 @@
     $("#footer").innerHTML = `
       <div class="wrap foot-in">
         <p>© ${new Date().getFullYear()} ${esc(S.name)} · ${esc(S.location)}</p>
-        <a href="#top" class="totop">Back to top ↑</a>
+        <a href="#top" class="totop">Back to top ↑︎</a>
       </div>`;
   }
 
@@ -171,7 +171,7 @@
       return `<li class="tl-item reveal" id="${esc(t.id)}">
         <div><h4>${esc(t.title)}</h4>${organizationName(t.org)}
           ${bullets.length ? `<ul class="bullets">${bullets.slice(0, 3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>${bullets.length > 3 ? `<details class="experience-more"><summary class="timeline-toggle btn btn--secondary btn--sm"><span class="more-label">View</span><span class="less-label">Hide</span></summary><ul class="bullets">${bullets.slice(3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul></details>` : ''}` : ''}
-        </div><span class="tl-date">${esc(t.dates)}</span>
+        </div>${t.dates ? `<span class="tl-date">${esc(t.dates)}</span>` : ""}
       </li>`;
     }).join('');
 
@@ -182,8 +182,8 @@
           <h1 class="reveal">${esc(S.name)}</h1>
           <p class="lead reveal">${esc(S.hero.lead)}</p>
           <div class="btn-row reveal">
-            <a class="btn btn--primary" href="#portfolios">Explore my work<span class="link-arrow" aria-hidden="true">↗</span></a>
-            <a class="btn btn--primary" href="#contact">Get in touch</a>
+            <a class="btn btn--cta" href="#portfolios">Explore my work<svg class="link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+            <a class="btn btn--cta-outline" href="#contact">Get in touch</a>
           </div>
           </div>
           ${S.hero.image ? `<div class="hero-portrait"><img src="${esc(asset(S.hero.image.src))}" alt="${esc(S.hero.image.alt)}" width="1000" height="1333" fetchpriority="high" decoding="async"></div>` : ""}
@@ -249,7 +249,7 @@
     return `
       <section class="page-head">
         <div class="wrap">
-          <a class="back reveal" href="${url("home", "#portfolios")}">← All portfolios</a>
+          <a class="back reveal" href="${url("home", "#portfolios")}">←︎ All portfolios</a>
           <h1 class="reveal">${esc(r.headline)}</h1>
           <p class="lead reveal">${esc(r.summary)}</p>
           <div class="btn-row reveal">
@@ -299,8 +299,7 @@
       ${pageHead("seo")}
       <section class="section">
         <div class="wrap">
-          <h2 class="section-title reveal">Prolink Property Support</h2>
-          <p class="meta reveal">UK B2B · Wix website · 19 Sep – 23 Nov 2026</p>
+          <h2 class="section-title reveal">B2B Property Management Services Company · UK · Wix website · 19 Sep – 23 Nov 2026</h2>
           <p class="reveal narrow">A new UK property-support site that almost nobody could find. The goal: get it onto Google and into AI answers, using free tools only.</p>
           <div class="stats seo-metric-stats reveal" aria-label="Case study results">
             <div class="stat"><strong>5,206</strong><span>Google impressions</span><small>From 7 before the work (UK)</small></div>
@@ -459,7 +458,7 @@
           ${preview.device === "iphone" ? `<span class="phone-hardware" aria-hidden="true"><span class="phone-volume"></span><span class="phone-power"></span><span class="phone-home"></span></span>` : ""}
           ${preview.browser ? `<div class="preview-browser" aria-hidden="true">
             <div class="preview-browser-tabs"><span class="preview-browser-tab">${esc(preview.browser.tab)} <span>×</span></span><span class="preview-browser-new">+</span><span class="preview-browser-window">− &nbsp; □ &nbsp; ×</span></div>
-            <div class="preview-browser-toolbar"><span>← &nbsp; → &nbsp; ↻</span><span class="preview-browser-address">${esc(preview.browser.address)}</span><span>⋮</span></div>
+            <div class="preview-browser-toolbar"><span>←︎ &nbsp; →︎ &nbsp; ↻︎</span><span class="preview-browser-address">${esc(preview.browser.address)}</span><span>⋮</span></div>
           </div>` : ""}
           <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(preview.label)}: open full-size screenshot in a new tab"><img src="${esc(asset(preview.src))}" alt="${esc(preview.alt)}" decoding="async"></a>
         </div>${preview.device !== "iphone" ? `<div class="device-laptop-base" aria-hidden="true"></div>` : ""}<figcaption>${esc(preview.label)} · <a href="${esc(asset(preview.src))}" target="_blank" rel="noopener noreferrer">Open full size</a></figcaption>

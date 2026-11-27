@@ -149,7 +149,8 @@ window.SITE = {
 
   // One master timeline: every job appears once, tagged by area. Newest first.
   timeline: [
-    { id: "seo-prolink", title: "SEO Specialist", org: "Prolink Property Support", dates: "Sept 2026 – Present", tag: "seo" },
+    { id: "seo-specialist", title: "SEO and GEO Specialist", org: "B2B Property Management Services Company", dates: "Sept 2026 – Present", tag: "seo" },
+    { id: "software-dev-gip", title: "Software Developer Intern (GIP)", org: "Government Internship Program \u00b7 Municipal Treasurer's Office, LGU Hilongos", dates: "Oct 2026 \u2013 Present", tag: "dev" },
     { id: "it-concentrix", title: "IT Operations Intern", org: "Concentrix", dates: "Mar 2023 – Jun 2023", tag: "dev" },
     { id: "design-freelance", title: "Freelance Graphic Designer", org: "Small businesses and local events", dates: "Freelance", tag: "multimedia" },
     { id: "video-freelance", title: "Freelance Video Editor", org: "Freelance", dates: "Freelance", tag: "multimedia" },
@@ -179,7 +180,7 @@ window.SITE = {
       testimonials: [],
       nav: "SEO",
       title: "SEO",
-      kicker: "SEO Specialist",
+      kicker: "SEO and GEO Specialist",
       headline: "SEO and AI search for small businesses",
       summary: "I help small UK businesses get found on Google and in AI answers, using free tools.",
       blurb: "Technical SEO, content and reporting. Took a new UK business site from 7 to 5,206 Google impressions in about ten weeks.",
@@ -197,8 +198,8 @@ window.SITE = {
 
       // These quotes are copied from public Google reviews and must stay verbatim.
       clientReviews: {
-        "title": "What Prolink's customers say on Google",
-        "note": "Public Google reviews of the business I do SEO for; not reviews of my work.",
+        "title": "What the company's customers say on Google",
+        "note": "Public Google reviews of the business I do SEO for; these are reviews of the business, not of my work.",
         "items": [
           {
             "name": "Olivia L.",
@@ -206,7 +207,7 @@ window.SITE = {
           },
           {
             "name": "Jeff S.",
-            "quote": "We have worked along side Pro Link for a couple of years now and we can honestly say they are among the best clients we have worked with. They are really helpful when it comes to assisting us with getting access information or further details regarding the jobs etc. The whole team are a pleasure to work with."
+            "quote": "We have worked along side [the company] for a couple of years now and we can honestly say they are among the best clients we have worked with. They are really helpful when it comes to assisting us with getting access information or further details regarding the jobs etc. The whole team are a pleasure to work with."
           }
         ],
         "summary": ""
@@ -218,16 +219,15 @@ window.SITE = {
 
       experience: [
         {
-          title: "SEO Specialist",
-          org: "Prolink Property Support",
+          title: "SEO and GEO Specialist",
+          org: "B2B Property Management Services Company",
           dates: "Sept 2026 – Present",
           bullets: [
-            `Plan AI-assisted keyword and content strategy with GrandRanker, managing a ${seoMetrics.keywordLibraryMinimum}+ keyword library.`,
-            "Ran on-page SEO audits covering meta tags, internal linking and content structure, and improved navigation and UX to strengthen conversion paths.",
-            "Set up Google Search Console, GA4 and Bing Webmaster Tools to track search visibility and site activity.",
-            "Resolved indexing blocks, duplicate-post redirects and broken links, and added structured data.",
-            "Reviewed AI-written posts for repeated text, drafting notes and off-topic content.",
-            "Prepared plain-English monthly reports and used query and page data to identify content opportunities.",
+            "Grew UK site impressions 7 to 5,206 and indexed pages 10 to 74 in ten weeks.",
+            "Fixed issues (duplicate H1s, long titles, missing descriptions, alt text, share images); Ahrefs site health 81 to 100.",
+            "Rewrote titles and meta descriptions for real queries, added internal links and published answer-first guides.",
+            "Structured pages for AI search (direct answers, FAQs, schema); 32 Copilot citations in three months.",
+            "Set up Search Console, GA4 and Bing Webmaster Tools; send monthly one-page reports.",
           ],
         },
       ],
@@ -608,6 +608,16 @@ window.SITE = {
       ],
 
       experience: [
+        {
+          title: "Software Developer Intern (GIP)",
+          org: "Government Internship Program \u00b7 Municipal Treasurer's Office, LGU Hilongos",
+          dates: "Oct 2026 \u2013 Present",
+          bullets: [
+            "Front end: built the interface in React, TypeScript, Inertia.js, Tailwind CSS and shadcn/ui, with keyboard-first entry, account lookup and live total checks.",
+            "Back end: built the Laravel back end with role-based verification, audit logs, duplicate-serial detection and fund splits rounded to the centavo.",
+            "Database: designed the MySQL data model from paper receipts, monthly reports and office rules; encrypted personal names.",
+          ],
+        },
         {
           title: "IT Operations Intern",
           org: "Concentrix",
